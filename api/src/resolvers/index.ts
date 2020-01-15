@@ -1,8 +1,17 @@
 import { GraphQLScalarType, Kind } from 'graphql';
-import { UserInputError } from 'apollo-server-express';
 import { Resolvers } from '../generated/graphql';
 import { DataSources } from '../dataSources';
 import { Loaders } from '../loaders';
+
+const toCursor = (text: string) => {
+  return Buffer.from(`cursor:${text}`).toString('base64');
+};
+
+const fromCursor = (cursor: string) => {
+  const decoded = Buffer.from(cursor, 'base64').toString();
+  const text = decoded.split(':')[1];
+  return text;
+};
 
 interface GQLContext {
   dataSources: DataSources;
@@ -26,36 +35,41 @@ const resolvers: Resolvers<GQLContext> = {
       return null;
     },
   }),
-  // Sample: {
-  //   sampleImages: async (parent, args, { loaders }) => {
-  //     const { sampleImageLoader } = loaders;
-  //     // We are getting id of the "parent". (Which is a "Sample" basically).
-  //     const { id } = parent;
-  //     const sampleImages = await sampleImageLoader.load(id);
-  //     return sampleImages;
-  //   },
-  //   location: async (parent, args, { loaders }) => {
-  //     const { locationLoader, subLocationLoader } = loaders;
-  //     const { subLocationId } = parent;
-  //     const subLocation = await subLocationLoader.load(subLocationId);
-  //     const { locationId } = subLocation;
-  //     const location = await locationLoader.load(locationId);
-  //     return location;
-  //   },
-  //   subLocation: async (parent, args, { loaders }) => {
-  //     const { subLocationLoader } = loaders;
-  //     const { subLocationId } = parent;
-  //     const subLocation = await subLocationLoader.load(subLocationId);
-  //     return subLocation;
-  //   },
-  //   componentType: async (parent, args, { loaders }) => {
-  //     const { componentTypeLoader } = loaders;
-  //     const { componentTypeId } = parent;
-  //     const componentType = await componentTypeLoader.load(componentTypeId);
-  //     return componentType;
-  //   },
-  // },
+  Cursor: new GraphQLScalarType({
+    name: 'Cursor',
+    description: 'Cursor scalar type for pagination',
+    parseValue(value) {
+      return fromCursor(value);
+    },
+    serialize(value) {
+      return toCursor(value);
+    },
+    parseLiteral(ast) {
+      switch (ast.kind) {
+        case Kind.STRING:
+          return fromCursor(ast.value);
+        default:
+          return null;
+      }
+    },
+  }),
   Mutation: {
+    createPost: async (parent, { input }, { dataSources }) => {
+      const { postAPI } = dataSources;
+      const post = await postAPI.createPost(input);
+      if (post) {
+        return {
+          success: true,
+          message: 'Post has been created successfully',
+          post,
+        };
+      }
+
+      return {
+        success: false,
+        message: 'Post could not be created',
+      };
+    },
     // createSample: async (parent, { input }, { dataSources }) => {
     //   const { fileStorageAPI, sampleAPI } = dataSources;
     //   const { sampleImages } = input;
@@ -98,13 +112,14 @@ const resolvers: Resolvers<GQLContext> = {
       loaders.postFileByPostIdLoader.load(id),
   },
   Query: {
-    posts: (parent, args, { dataSources }) => dataSources.postAPI.getPosts(),
+    posts: (parent, args, { dataSources }) =>
+      dataSources.postAPI.getPostConnection(),
     post: (parent, { id }, { dataSources }) =>
       dataSources.postAPI.getPostById(id),
   },
   MutationResponse: {
     __resolveType: () => {
-      // TODO: This __resolveType implementation will be fixed.
+      // TODO: This __resolveType implementation may need a fix.
       // Need to check how to use it with TypeScript (or graphql-codegen).
       return null;
     },

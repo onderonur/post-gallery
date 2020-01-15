@@ -1,6 +1,12 @@
 import { Scalars } from './generated/graphql';
 
 export type ID = Scalars['ID'];
+export type Cursor = Scalars['Cursor'];
+
+export interface Edge<T> {
+  node: T;
+  cursor: Cursor;
+}
 
 // Overriding the default process.env type to have type-safe env variables.
 declare global {

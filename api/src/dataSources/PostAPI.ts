@@ -1,7 +1,8 @@
 import { DataSource } from 'apollo-datasource';
 import { Post } from '../entity/Post';
-import { ID } from '../types';
+import { ID, Edge } from '../types';
 import { getLastOfArray } from '../utils';
+import { CreatePostInput } from '../generated/graphql';
 
 interface UploadedFile {
   filename: string;
@@ -10,18 +11,41 @@ interface UploadedFile {
   mimetype: string;
 }
 
+const getPostCursor = (post: Post) => {
+  return post.createdAt.toISOString();
+};
+
+const createEdges = <T>(
+  array: T[],
+  getCursor: (item: T) => string,
+): Edge<T>[] => {
+  const edges = array.map(item => ({ node: item, cursor: getCursor(item) }));
+  return edges;
+};
+
+const getEndCursor = <T>(edges: Edge<T>[]) => {
+  const lastEdge = getLastOfArray(edges);
+  if (lastEdge) {
+    return lastEdge.cursor;
+  }
+
+  return null;
+};
+
 class PostAPI extends DataSource {
   private Post = Post;
 
-  getPosts = async () => {
-    const [posts, totalCount] = await this.Post.findAndCount();
-    const lastPost = getLastOfArray(posts);
+  getPostConnection = async () => {
+    const [posts, totalCount] = await this.Post.findAndCount({
+      order: { createdAt: 'DESC' },
+    });
+    const edges = createEdges(posts, post => getPostCursor(post));
     const connection = {
       totalCount,
-      edges: posts.map(post => ({ node: post, cursor: post.id })),
+      edges,
       pageInfo: {
         hasNextPage: false,
-        endCursor: lastPost?.id,
+        endCursor: getEndCursor(edges),
       },
     };
     return connection;
@@ -30,6 +54,13 @@ class PostAPI extends DataSource {
   getPostById = async (id: ID) => {
     const post = await this.Post.findOne(id);
     return post || null;
+  };
+
+  createPost = async ({ title }: CreatePostInput) => {
+    const post = new Post();
+    post.title = title;
+    await this.Post.save(post);
+    return post;
   };
 
   deletePost = async (id: ID) => {

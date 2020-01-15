@@ -8,6 +8,7 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+  Cursor: any,
   Date: any,
   Upload: any,
 };
@@ -18,6 +19,18 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+export type CreatePostInput = {
+  title: Scalars['String'],
+};
+
+export type CreatePostMutationsResponse = MutationResponse & {
+   __typename?: 'CreatePostMutationsResponse',
+  success: Scalars['Boolean'],
+  message?: Maybe<Scalars['String']>,
+  post?: Maybe<Post>,
+};
+
+
 
 export type DeletePostMutationResponse = MutationResponse & {
    __typename?: 'DeletePostMutationResponse',
@@ -27,7 +40,13 @@ export type DeletePostMutationResponse = MutationResponse & {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  createPost: CreatePostMutationsResponse,
   deletePost: DeletePostMutationResponse,
+};
+
+
+export type MutationCreatePostArgs = {
+  input: CreatePostInput
 };
 
 
@@ -42,8 +61,14 @@ export type MutationResponse = {
 
 export type PageInfo = {
    __typename?: 'PageInfo',
-  endCursor?: Maybe<Scalars['String']>,
+  endCursor?: Maybe<Scalars['Cursor']>,
   hasNextPage: Scalars['Boolean'],
+};
+
+export type PaginationOptions = {
+   __typename?: 'PaginationOptions',
+  first?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['Cursor']>,
 };
 
 export type Post = {
@@ -63,7 +88,7 @@ export type PostConnection = {
 export type PostEdge = {
    __typename?: 'PostEdge',
   node: Post,
-  cursor: Scalars['String'],
+  cursor: Scalars['Cursor'],
 };
 
 export type PostFile = {
@@ -167,13 +192,17 @@ export type ResolversTypes = ResolversObject<{
   PostConnection: ResolverTypeWrapper<PostConnection>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   PageInfo: ResolverTypeWrapper<PageInfo>,
+  Cursor: ResolverTypeWrapper<Scalars['Cursor']>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   PostEdge: ResolverTypeWrapper<PostEdge>,
   Mutation: ResolverTypeWrapper<{}>,
-  DeletePostMutationResponse: ResolverTypeWrapper<DeletePostMutationResponse>,
+  CreatePostInput: CreatePostInput,
+  CreatePostMutationsResponse: ResolverTypeWrapper<CreatePostMutationsResponse>,
   MutationResponse: ResolverTypeWrapper<MutationResponse>,
+  DeletePostMutationResponse: ResolverTypeWrapper<DeletePostMutationResponse>,
   CacheControlScope: CacheControlScope,
   Date: ResolverTypeWrapper<Scalars['Date']>,
+  PaginationOptions: ResolverTypeWrapper<PaginationOptions>,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
 }>;
 
@@ -187,18 +216,32 @@ export type ResolversParentTypes = ResolversObject<{
   PostConnection: PostConnection,
   Int: Scalars['Int'],
   PageInfo: PageInfo,
+  Cursor: Scalars['Cursor'],
   Boolean: Scalars['Boolean'],
   PostEdge: PostEdge,
   Mutation: {},
-  DeletePostMutationResponse: DeletePostMutationResponse,
+  CreatePostInput: CreatePostInput,
+  CreatePostMutationsResponse: CreatePostMutationsResponse,
   MutationResponse: MutationResponse,
+  DeletePostMutationResponse: DeletePostMutationResponse,
   CacheControlScope: CacheControlScope,
   Date: Scalars['Date'],
+  PaginationOptions: PaginationOptions,
   Upload: Scalars['Upload'],
 }>;
 
 export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = {   maxAge?: Maybe<Maybe<Scalars['Int']>>,
   scope?: Maybe<Maybe<CacheControlScope>> }> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type CreatePostMutationsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatePostMutationsResponse'] = ResolversParentTypes['CreatePostMutationsResponse']> = ResolversObject<{
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType>,
+}>;
+
+export interface CursorScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Cursor'], any> {
+  name: 'Cursor'
+}
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
   name: 'Date'
@@ -210,18 +253,24 @@ export type DeletePostMutationResponseResolvers<ContextType = any, ParentType ex
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createPost?: Resolver<ResolversTypes['CreatePostMutationsResponse'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'input'>>,
   deletePost?: Resolver<ResolversTypes['DeletePostMutationResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>,
 }>;
 
 export type MutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']> = ResolversObject<{
-  __resolveType: TypeResolveFn<'DeletePostMutationResponse', ParentType, ContextType>,
+  __resolveType: TypeResolveFn<'CreatePostMutationsResponse' | 'DeletePostMutationResponse', ParentType, ContextType>,
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 }>;
 
 export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
-  endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  endCursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>,
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+}>;
+
+export type PaginationOptionsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaginationOptions'] = ResolversParentTypes['PaginationOptions']> = ResolversObject<{
+  first?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  after?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>,
 }>;
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
@@ -238,7 +287,7 @@ export type PostConnectionResolvers<ContextType = any, ParentType extends Resolv
 
 export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostEdge'] = ResolversParentTypes['PostEdge']> = ResolversObject<{
   node?: Resolver<ResolversTypes['Post'], ParentType, ContextType>,
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  cursor?: Resolver<ResolversTypes['Cursor'], ParentType, ContextType>,
 }>;
 
 export type PostFileResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostFile'] = ResolversParentTypes['PostFile']> = ResolversObject<{
@@ -259,11 +308,14 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  CreatePostMutationsResponse?: CreatePostMutationsResponseResolvers<ContextType>,
+  Cursor?: GraphQLScalarType,
   Date?: GraphQLScalarType,
   DeletePostMutationResponse?: DeletePostMutationResponseResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   MutationResponse?: MutationResponseResolvers,
   PageInfo?: PageInfoResolvers<ContextType>,
+  PaginationOptions?: PaginationOptionsResolvers<ContextType>,
   Post?: PostResolvers<ContextType>,
   PostConnection?: PostConnectionResolvers<ContextType>,
   PostEdge?: PostEdgeResolvers<ContextType>,

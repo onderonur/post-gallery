@@ -2,21 +2,26 @@ import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
   scalar Date
+  scalar Cursor
 
   interface MutationResponse {
     success: Boolean!
     message: String
   }
 
-  # TODO: Create scalar "cursor" type
+  type PaginationOptions {
+    first: Int
+    after: Cursor
+  }
+
   type PageInfo {
-    endCursor: String
+    endCursor: Cursor
     hasNextPage: Boolean!
   }
 
   type PostEdge {
     node: Post!
-    cursor: String!
+    cursor: Cursor!
   }
 
   type PostConnection {
@@ -30,12 +35,23 @@ const typeDefs = gql`
     posts: PostConnection!
   }
 
+  input CreatePostInput {
+    title: String!
+  }
+
+  type CreatePostMutationsResponse implements MutationResponse {
+    success: Boolean!
+    message: String
+    post: Post
+  }
+
   type DeletePostMutationResponse implements MutationResponse {
     success: Boolean!
     message: String
   }
 
   type Mutation {
+    createPost(input: CreatePostInput!): CreatePostMutationsResponse!
     deletePost(id: ID!): DeletePostMutationResponse!
   }
 

@@ -2,12 +2,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import nanoid from 'nanoid';
 
 export class BaseAbstractEntity extends BaseEntity {
-  @PrimaryColumn('varchar', { default: () => `'${nanoid()}'` })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
