@@ -44,10 +44,10 @@
     "dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpileOnly src/index.ts",
     "prod": "cross-env NODE_ENV=production node dist/index.js",
     "build": "cross-env NODE_ENV=production tsc -p tsconfig.production.json",
-    "start": "cross-env NODE_ENV=development ts-node src/index.ts",
+    "start": "cross-env NODE_ENV=production ts-node src/index.ts",
     "clean": "rimraf dist",
     "typeorm": "cross-env NODE_ENV=development ts-node ./node_modules/typeorm/cli.js",
-    "db:seed": "ts-node src/seed.ts",
+    "db:seed": "cross-env NODE_ENV=development ts-node src/seed.ts",
     "gqlgen:generate": "graphql-codegen --config codegen.yml",
     "eslint:fix": "node_modules/.bin/eslint --fix . --ext .ts,.js"
   }
