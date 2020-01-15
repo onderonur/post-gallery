@@ -1,0 +1,20 @@
+{
+  "name": "post-gallery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:web": "cd web && npm start",
+    "dev:api": "cd api && npm run dev",
+    "dev": "concurrently --kill-others-on-fail \"npm run dev:api\"  \"npm run dev:web\"",
+    "build": "concurrently --kill-others-on-fail \"cd api && npm run build\"  \"cd web && npm run build\"",
+    "start": "cd api && npm run prod",
+    "clean": "rimraf api/dist && rimraf web/build"
+  },
+  "author": "onderonur",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^5.0.2",
+    "rimraf": "^3.0.0"
+  }
+}

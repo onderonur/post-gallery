@@ -1,0 +1,65 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "ignorePatterns": ["generated/"],
+  "extends": [
+    "airbnb-base",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".ts"]
+      }
+    }
+  },
+  "rules": {
+    "prettier/prettier": "warn",
+    "no-console": "warn",
+    "no-unused-vars": "warn",
+    "import/no-dynamic-require": "off",
+    "import/prefer-default-export": "off",
+    "no-plusplus": "off",
+    "no-extra-boolean-cast": "off",
+    "class-methods-use-this": "off",
+    "func-names": "off",
+    "prefer-const": "warn",
+    "no-await-in-loop": "off",
+    "object-shorthand": "warn",
+    "no-else-return": "warn",
+    "no-path-concat": "warn",
+    "import/order": "off",
+    "import/newline-after-import": "warn",
+    "import/no-extraneous-dependencies": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "ts": "never"
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/no-namespace": "off"
+  }
+}
