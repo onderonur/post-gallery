@@ -2,11 +2,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
+  BeforeInsert,
 } from 'typeorm';
+import nanoid from 'nanoid';
 
 export class BaseAbstractEntity extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
 
   @CreateDateColumn({ type: 'timestamp with time zone' })
@@ -14,4 +16,9 @@ export class BaseAbstractEntity extends BaseEntity {
 
   @UpdateDateColumn({ type: 'timestamp with time zone' })
   updatedAt: Date;
+
+  @BeforeInsert()
+  generateNanoId() {
+    this.id = nanoid();
+  }
 }
