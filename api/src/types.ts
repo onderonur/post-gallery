@@ -1,7 +1,14 @@
 import { Scalars } from './generated/graphql';
+import { DataSources } from './dataSources';
+import { Loaders } from './loaders';
 
 export type ID = Scalars['ID'];
 export type Cursor = Scalars['Cursor'];
+
+export interface GQLContext {
+  dataSources: DataSources;
+  loaders: Loaders;
+}
 
 export interface Edge<T> {
   node: T;

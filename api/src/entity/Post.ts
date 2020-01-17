@@ -25,6 +25,7 @@ export class Post extends BaseAbstractEntity {
   @BeforeInsert()
   @BeforeUpdate()
   async validate() {
+    this.title = this.title.trim();
     const errors = await validate(this);
     if (errors.length) {
       const message = getValidationErrorMessage(errors);

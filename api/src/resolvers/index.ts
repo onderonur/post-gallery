@@ -2,6 +2,7 @@ import { GraphQLScalarType, Kind } from 'graphql';
 import { Resolvers } from '../generated/graphql';
 import { DataSources } from '../dataSources';
 import { Loaders } from '../loaders';
+import Mutation from './mutations';
 
 const toCursor = (text: string) => {
   return Buffer.from(`cursor:${text}`).toString('base64');
@@ -53,60 +54,7 @@ const resolvers: Resolvers<GQLContext> = {
       }
     },
   }),
-  Mutation: {
-    createPost: async (parent, { input }, { dataSources }) => {
-      const { postAPI } = dataSources;
-      const post = await postAPI.createPost(input);
-      if (post) {
-        return {
-          success: true,
-          message: 'Post has been created successfully',
-          post,
-        };
-      }
-
-      return {
-        success: false,
-        message: 'Post could not be created',
-      };
-    },
-    // createSample: async (parent, { input }, { dataSources }) => {
-    //   const { fileStorageAPI, sampleAPI } = dataSources;
-    //   const { sampleImages } = input;
-    //   // Checking if the "sampleImages" array is empty.
-    //   if (!sampleImages.length) {
-    //     throw new UserInputError(
-    //       'Please attach at least 1 image to the sample.',
-    //     );
-    //   }
-    //   // Storing the files.
-    //   const uploadResults = await fileStorageAPI.uploadMultiple(sampleImages);
-    //   // After we store the files, we create the "sample" instance.
-    //   const sample = await sampleAPI.createSample({
-    //     ...input,
-    //     sampleImages: uploadResults,
-    //   });
-    //   return {
-    //     success: true,
-    //     message: 'Sample has been created successfully.',
-    //     sample,
-    //   };
-    // },
-    deletePost: async (parent, { id }, { dataSources }) => {
-      const { postAPI } = dataSources;
-      const deleted = await postAPI.deletePost(id);
-      if (deleted) {
-        return {
-          success: true,
-          message: 'Sample has been created successfully.',
-        };
-      }
-      return {
-        success: false,
-        message: 'An error occured while deleting the sample.',
-      };
-    },
-  },
+  Mutation,
   Post: {
     postFiles: ({ id }, args, { loaders }) =>
       loaders.postFileByPostIdLoader.load(id),
