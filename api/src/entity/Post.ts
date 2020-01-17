@@ -1,10 +1,14 @@
-import { Column, OneToMany, Entity } from 'typeorm';
+import { Column, OneToMany, Entity, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { BaseAbstractEntity } from './BaseAbstractEntity';
 import { PostFile } from './PostFile';
+import { MinLength, validate, IsNotEmpty } from 'class-validator';
+import { ApolloError } from 'apollo-server-express';
+import { getValidationErrorMessage } from '../utils';
 
 @Entity()
 export class Post extends BaseAbstractEntity {
   @Column({ length: 200 })
+  @IsNotEmpty()
   title: string;
 
   @OneToMany(
@@ -15,5 +19,16 @@ export class Post extends BaseAbstractEntity {
       cascade: true,
     },
   )
+  @MinLength(1)
   postFiles: PostFile[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async validate() {
+    const errors = await validate(this);
+    if (errors.length) {
+      const message = getValidationErrorMessage(errors);
+      throw new ApolloError(message);
+    }
+  }
 }
