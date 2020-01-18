@@ -94,10 +94,7 @@ export type PostEdge = {
 export type PostFile = {
    __typename?: 'PostFile',
   id: Scalars['ID'],
-  filename: Scalars['String'],
   filepath: Scalars['String'],
-  mimetype: Scalars['String'],
-  encoding: Scalars['String'],
 };
 
 export type Query = {
@@ -292,10 +289,7 @@ export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type PostFileResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostFile'] = ResolversParentTypes['PostFile']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   filepath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  mimetype?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  encoding?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{

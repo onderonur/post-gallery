@@ -4,13 +4,6 @@ import { ID, Edge } from '../types';
 import { getLastOfArray } from '../utils';
 import { CreatePostInput } from '../generated/graphql';
 
-interface UploadedFile {
-  filename: string;
-  filepath: string;
-  encoding: string;
-  mimetype: string;
-}
-
 const getPostCursor = (post: Post) => {
   return post.createdAt.toISOString();
 };

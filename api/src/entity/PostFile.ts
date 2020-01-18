@@ -6,16 +6,7 @@ import { ID } from '../types';
 @Entity()
 export class PostFile extends BaseAbstractEntity {
   @Column()
-  filename: string;
-
-  @Column()
   filepath: string;
-
-  @Column()
-  mimetype: string;
-
-  @Column()
-  encoding: string;
 
   @ManyToOne(
     () => Post,

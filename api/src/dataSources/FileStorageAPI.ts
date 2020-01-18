@@ -76,7 +76,7 @@ class FileStorageAPI extends DataSource {
     // If not, we create it.
     await createStorageIfNotExists();
     const result = await file;
-    const { createReadStream, filename, mimetype, encoding } = result;
+    const { createReadStream, filename, mimetype } = result;
     const isAllowed = isAllowedMimeType(mimetype);
     if (!isAllowed) {
       throw new UserInputError(
@@ -88,23 +88,13 @@ class FileStorageAPI extends DataSource {
     const filepath = `${STORAGE_DIR}/${fileId}${extension}`;
     const stream = createReadStream();
     saveStreamToPath(stream, filepath);
-    return {
-      filename,
-      filepath,
-      mimetype,
-      encoding,
-    };
+    return filepath;
   };
 
   uploadMultiple = async (files: FileUpload[]) => {
-    const uploadResults = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      // eslint-disable-next-line no-await-in-loop
-      const uploadResult = await this.uploadSingle(file);
-      uploadResults.push(uploadResult);
-    }
-    return uploadResults;
+    const uploadPromises = files.map(file => this.uploadSingle(file));
+    const filePaths = await Promise.all(uploadPromises);
+    return filePaths;
   };
 }
 

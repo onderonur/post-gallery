@@ -63,10 +63,7 @@ const typeDefs = gql`
 
   type PostFile {
     id: ID!
-    filename: String!
     filepath: String!
-    mimetype: String!
-    encoding: String!
   }
 `;
 

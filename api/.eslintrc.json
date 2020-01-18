@@ -42,7 +42,6 @@
     "class-methods-use-this": "off",
     "func-names": "off",
     "prefer-const": "warn",
-    "no-await-in-loop": "off",
     "object-shorthand": "warn",
     "no-else-return": "warn",
     "no-path-concat": "warn",
