@@ -1,3 +1,4 @@
 import postMutations from './post';
+import merge from 'lodash.merge';
 
-export default { ...postMutations };
+export default merge(postMutations);
