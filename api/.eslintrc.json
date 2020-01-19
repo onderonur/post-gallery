@@ -26,8 +26,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".ts"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
   },
@@ -48,6 +47,10 @@
     "import/order": "off",
     "import/newline-after-import": "warn",
     "import/no-extraneous-dependencies": "off",
+    // TODO: Will open it later. It gives a warning for
+    // "graphql/tsutils/Maybe" even if the package is installed.
+    // May need some config.
+    "import/no-unresolved": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

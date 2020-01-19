@@ -1,46 +1,26 @@
 import { DataSource } from 'apollo-datasource';
 import { Post } from '../entity/Post';
-import { ID, Edge } from '../types';
-import { getLastOfArray } from '../utils';
-import { CreatePostInput } from '../generated/graphql';
+import { ID } from '../types';
+import { CreatePostInput, QueryPostsArgs } from '../generated/graphql';
+import { findAndGetConnection } from './utils';
+import { LessThan } from 'typeorm';
 
 const getPostCursor = (post: Post) => {
   return post.createdAt.toISOString();
 };
 
-const createEdges = <T>(
-  array: T[],
-  getCursor: (item: T) => string,
-): Edge<T>[] => {
-  const edges = array.map(item => ({ node: item, cursor: getCursor(item) }));
-  return edges;
-};
-
-const getEndCursor = <T>(edges: Edge<T>[]) => {
-  const lastEdge = getLastOfArray(edges);
-  if (lastEdge) {
-    return lastEdge.cursor;
-  }
-
-  return null;
-};
-
 class PostAPI extends DataSource {
   private Post = Post;
 
-  getPostConnection = async () => {
-    const [posts, totalCount] = await this.Post.findAndCount({
+  getPostConnection = async ({ first, after }: QueryPostsArgs) => {
+    const connection = await findAndGetConnection(this.Post, {
+      first,
       order: { createdAt: 'DESC' },
-    });
-    const edges = createEdges(posts, post => getPostCursor(post));
-    const connection = {
-      totalCount,
-      edges,
-      pageInfo: {
-        hasNextPage: false,
-        endCursor: getEndCursor(edges),
+      where: {
+        createdAt: after ? LessThan(after) : undefined,
       },
-    };
+      getCursorFn: getPostCursor,
+    });
     return connection;
   };
 

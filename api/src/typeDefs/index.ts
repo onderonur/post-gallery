@@ -9,11 +9,6 @@ const typeDefs = gql`
     message: String
   }
 
-  type PaginationOptions {
-    first: Int
-    after: Cursor
-  }
-
   type PageInfo {
     endCursor: Cursor
     hasNextPage: Boolean!
@@ -27,12 +22,12 @@ const typeDefs = gql`
   type PostConnection {
     totalCount: Int!
     pageInfo: PageInfo!
-    edges: [PostEdge]!
+    edges: [PostEdge!]!
   }
 
   type Query {
     post(id: ID!): Post
-    posts: PostConnection!
+    posts(first: Int, after: Cursor): PostConnection!
   }
 
   input CreatePostInput {
@@ -58,7 +53,7 @@ const typeDefs = gql`
   type Post {
     id: ID!
     title: String!
-    postFiles: [PostFile]!
+    postFiles: [PostFile!]!
   }
 
   type PostFile {

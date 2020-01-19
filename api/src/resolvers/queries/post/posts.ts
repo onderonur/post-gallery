@@ -5,4 +5,4 @@ export const posts: QueryResolvers<GQLContext>['posts'] = (
   parent,
   args,
   { dataSources },
-) => dataSources.postAPI.getPostConnection();
+) => dataSources.postAPI.getPostConnection(args);

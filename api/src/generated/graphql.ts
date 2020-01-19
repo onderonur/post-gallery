@@ -65,24 +65,18 @@ export type PageInfo = {
   hasNextPage: Scalars['Boolean'],
 };
 
-export type PaginationOptions = {
-   __typename?: 'PaginationOptions',
-  first?: Maybe<Scalars['Int']>,
-  after?: Maybe<Scalars['Cursor']>,
-};
-
 export type Post = {
    __typename?: 'Post',
   id: Scalars['ID'],
   title: Scalars['String'],
-  postFiles: Array<Maybe<PostFile>>,
+  postFiles: Array<PostFile>,
 };
 
 export type PostConnection = {
    __typename?: 'PostConnection',
   totalCount: Scalars['Int'],
   pageInfo: PageInfo,
-  edges: Array<Maybe<PostEdge>>,
+  edges: Array<PostEdge>,
 };
 
 export type PostEdge = {
@@ -106,6 +100,12 @@ export type Query = {
 
 export type QueryPostArgs = {
   id: Scalars['ID']
+};
+
+
+export type QueryPostsArgs = {
+  first?: Maybe<Scalars['Int']>,
+  after?: Maybe<Scalars['Cursor']>
 };
 
 
@@ -186,10 +186,10 @@ export type ResolversTypes = ResolversObject<{
   Post: ResolverTypeWrapper<Post>,
   String: ResolverTypeWrapper<Scalars['String']>,
   PostFile: ResolverTypeWrapper<PostFile>,
-  PostConnection: ResolverTypeWrapper<PostConnection>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
-  PageInfo: ResolverTypeWrapper<PageInfo>,
   Cursor: ResolverTypeWrapper<Scalars['Cursor']>,
+  PostConnection: ResolverTypeWrapper<PostConnection>,
+  PageInfo: ResolverTypeWrapper<PageInfo>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   PostEdge: ResolverTypeWrapper<PostEdge>,
   Mutation: ResolverTypeWrapper<{}>,
@@ -199,7 +199,6 @@ export type ResolversTypes = ResolversObject<{
   DeletePostMutationResponse: ResolverTypeWrapper<DeletePostMutationResponse>,
   CacheControlScope: CacheControlScope,
   Date: ResolverTypeWrapper<Scalars['Date']>,
-  PaginationOptions: ResolverTypeWrapper<PaginationOptions>,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
 }>;
 
@@ -210,10 +209,10 @@ export type ResolversParentTypes = ResolversObject<{
   Post: Post,
   String: Scalars['String'],
   PostFile: PostFile,
-  PostConnection: PostConnection,
   Int: Scalars['Int'],
-  PageInfo: PageInfo,
   Cursor: Scalars['Cursor'],
+  PostConnection: PostConnection,
+  PageInfo: PageInfo,
   Boolean: Scalars['Boolean'],
   PostEdge: PostEdge,
   Mutation: {},
@@ -223,7 +222,6 @@ export type ResolversParentTypes = ResolversObject<{
   DeletePostMutationResponse: DeletePostMutationResponse,
   CacheControlScope: CacheControlScope,
   Date: Scalars['Date'],
-  PaginationOptions: PaginationOptions,
   Upload: Scalars['Upload'],
 }>;
 
@@ -265,21 +263,16 @@ export type PageInfoResolvers<ContextType = any, ParentType extends ResolversPar
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
 }>;
 
-export type PaginationOptionsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaginationOptions'] = ResolversParentTypes['PaginationOptions']> = ResolversObject<{
-  first?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  after?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>,
-}>;
-
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  postFiles?: Resolver<Array<Maybe<ResolversTypes['PostFile']>>, ParentType, ContextType>,
+  postFiles?: Resolver<Array<ResolversTypes['PostFile']>, ParentType, ContextType>,
 }>;
 
 export type PostConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostConnection'] = ResolversParentTypes['PostConnection']> = ResolversObject<{
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
-  edges?: Resolver<Array<Maybe<ResolversTypes['PostEdge']>>, ParentType, ContextType>,
+  edges?: Resolver<Array<ResolversTypes['PostEdge']>, ParentType, ContextType>,
 }>;
 
 export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostEdge'] = ResolversParentTypes['PostEdge']> = ResolversObject<{
@@ -294,7 +287,7 @@ export type PostFileResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>,
-  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType>,
+  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, QueryPostsArgs>,
 }>;
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
@@ -309,7 +302,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>,
   MutationResponse?: MutationResponseResolvers,
   PageInfo?: PageInfoResolvers<ContextType>,
-  PaginationOptions?: PaginationOptionsResolvers<ContextType>,
   Post?: PostResolvers<ContextType>,
   PostConnection?: PostConnectionResolvers<ContextType>,
   PostEdge?: PostEdgeResolvers<ContextType>,
