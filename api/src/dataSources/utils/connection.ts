@@ -1,7 +1,12 @@
-import { Edge, Cursor } from '../../types';
+import { Cursor } from '../../types';
 import { getLastOfArray } from '../../utils';
 import Maybe from 'graphql/tsutils/Maybe';
 import { BaseEntity, FindOneOptions } from 'typeorm';
+
+export interface Edge<T> {
+  node: T;
+  cursor: Cursor;
+}
 
 type GetCursorFn<T> = (item: T) => Cursor;
 

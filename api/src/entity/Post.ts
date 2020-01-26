@@ -8,7 +8,7 @@ import {
   ArrayNotEmpty,
 } from 'class-validator';
 import { ApolloError } from 'apollo-server-express';
-import { getValidationErrorMessage } from '../utils';
+import { getValidationErrorMessage } from './utils';
 
 @Entity()
 export class Post extends BaseAbstractEntity {

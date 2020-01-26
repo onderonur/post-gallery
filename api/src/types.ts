@@ -10,11 +10,6 @@ export interface GQLContext {
   loaders: Loaders;
 }
 
-export interface Edge<T> {
-  node: T;
-  cursor: Cursor;
-}
-
 // Overriding the default process.env type to have type-safe env variables.
 declare global {
   namespace NodeJS {

@@ -13,7 +13,7 @@ import { Post } from './Post';
 import { ID } from '../types';
 import { Media } from './Media';
 import { validate } from 'class-validator';
-import { getValidationErrorMessage } from '../utils';
+import { getValidationErrorMessage } from './utils';
 import { ApolloError } from 'apollo-server-express';
 
 @Entity()

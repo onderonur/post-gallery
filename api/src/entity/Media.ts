@@ -2,7 +2,7 @@ import { Entity, Column, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { BaseAbstractEntity } from './BaseAbstractEntity';
 import { IsNotEmpty, validate } from 'class-validator';
 import { ApolloError } from 'apollo-server-express';
-import { getValidationErrorMessage } from '../utils';
+import { getValidationErrorMessage } from './utils';
 
 @Entity()
 export class Media extends BaseAbstractEntity {
