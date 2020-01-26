@@ -2,7 +2,7 @@ import { DataSource } from 'apollo-datasource';
 import { Post } from '../entity/Post';
 import { ID } from '../types';
 import { QueryPostsArgs } from '../generated/graphql';
-import { findAndGetConnection } from './utils';
+import { findAndGetConnection } from './utils/connection';
 import { LessThan, FindConditions } from 'typeorm';
 import { Media } from '../entity/Media';
 import { PostMedia } from '../entity/PostMedia';

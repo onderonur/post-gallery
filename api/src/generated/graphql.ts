@@ -13,12 +13,6 @@ export type Scalars = {
   Date: any,
 };
 
-
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
-
 export type CreatePostInput = {
   title: Scalars['String'],
   medias: Array<Scalars['Upload']>,
@@ -214,7 +208,6 @@ export type ResolversTypes = ResolversObject<{
   CreatePostMutationsResponse: ResolverTypeWrapper<CreatePostMutationsResponse>,
   MutationResponse: ResolverTypeWrapper<MutationResponse>,
   DeletePostMutationResponse: ResolverTypeWrapper<DeletePostMutationResponse>,
-  CacheControlScope: CacheControlScope,
   Date: ResolverTypeWrapper<Scalars['Date']>,
 }>;
 
@@ -238,12 +231,8 @@ export type ResolversParentTypes = ResolversObject<{
   CreatePostMutationsResponse: CreatePostMutationsResponse,
   MutationResponse: MutationResponse,
   DeletePostMutationResponse: DeletePostMutationResponse,
-  CacheControlScope: CacheControlScope,
   Date: Scalars['Date'],
 }>;
-
-export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = {   maxAge?: Maybe<Maybe<Scalars['Int']>>,
-  scope?: Maybe<Maybe<CacheControlScope>> }> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type CreatePostMutationsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatePostMutationsResponse'] = ResolversParentTypes['CreatePostMutationsResponse']> = ResolversObject<{
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
@@ -347,13 +336,3 @@ export type Resolvers<ContextType = any> = ResolversObject<{
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
 */
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
-export type DirectiveResolvers<ContextType = any> = ResolversObject<{
-  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>,
-}>;
-
-
-/**
-* @deprecated
-* Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
-*/
-export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;
