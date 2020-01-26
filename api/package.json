@@ -12,11 +12,11 @@
     "@types/graphql-upload": "^8.0.3",
     "@types/lodash": "^4.14.149",
     "@types/nanoid": "^2.1.0",
-    "@types/node": "^13.1.7",
-    "@types/sharp": "^0.23.1",
-    "@typescript-eslint/eslint-plugin": "^2.16.0",
-    "@typescript-eslint/parser": "^2.16.0",
-    "cross-env": "^6.0.3",
+    "@types/node": "^13.5.0",
+    "@types/sharp": "^0.24.0",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
+    "cross-env": "^7.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.9.0",
@@ -26,7 +26,7 @@
     "rimraf": "^3.0.0",
     "ts-node": "^8.6.2",
     "ts-node-dev": "^1.0.0-pre.44",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.5"
   },
   "dependencies": {
     "apollo-datasource": "^0.6.4",
@@ -37,10 +37,10 @@
     "express": "^4.17.1",
     "graphql": "^14.5.8",
     "lodash": "^4.17.15",
-    "nanoid": "^2.1.9",
+    "nanoid": "^2.1.10",
     "pg": "^7.17.1",
     "reflect-metadata": "^0.1.10",
-    "sharp": "^0.23.4",
+    "sharp": "^0.24.0",
     "typeorm": "0.2.22"
   },
   "scripts": {
