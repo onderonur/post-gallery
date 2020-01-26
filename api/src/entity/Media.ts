@@ -13,7 +13,7 @@ export class Media extends BaseAbstractEntity {
   thumbnailHeight: number;
 
   @Column()
-  // @IsNotEmpty()
+  @IsNotEmpty()
   thumbnailURL: string;
 
   @Column()

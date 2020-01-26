@@ -1,7 +1,12 @@
 import { Column, OneToMany, Entity, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { BaseAbstractEntity } from './BaseAbstractEntity';
 import { PostMedia } from './PostMedia';
-import { validate, IsNotEmpty, ArrayMinSize } from 'class-validator';
+import {
+  validate,
+  IsNotEmpty,
+  ArrayMaxSize,
+  ArrayNotEmpty,
+} from 'class-validator';
 import { ApolloError } from 'apollo-server-express';
 import { getValidationErrorMessage } from '../utils';
 
@@ -19,7 +24,8 @@ export class Post extends BaseAbstractEntity {
       cascade: true,
     },
   )
-  @ArrayMinSize(1)
+  @ArrayNotEmpty()
+  @ArrayMaxSize(5)
   postMedias: PostMedia[];
 
   @BeforeInsert()

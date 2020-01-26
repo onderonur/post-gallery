@@ -1,6 +1,5 @@
 import fs from 'fs';
-import nanoid from 'nanoid';
-import sharp from 'sharp';
+import sharp, { OutputInfo } from 'sharp';
 import { UserInputError } from 'apollo-server-express';
 import { FileUpload } from 'graphql-upload';
 
@@ -43,24 +42,33 @@ const createStorageIfNotExists = async () => {
   }
 };
 
-type SaveStreamArgs = {
-  stream: ReturnType<FileUpload['createReadStream']>;
+interface SaveStreamOptions {
   fileOut: string;
+  width?: ImageOptions['width'];
+  height?: ImageOptions['height'];
+}
+
+type SaveStreamOutputInfo = OutputInfo & {
+  URL: string;
 };
 
-const saveStreamToPath = (args: SaveStreamArgs): Promise<void> => {
-  const { stream, fileOut } = args;
+const saveStreamToPath = (
+  stream: ReturnType<FileUpload['createReadStream']>,
+  options: SaveStreamOptions,
+): Promise<SaveStreamOutputInfo> => {
+  const { fileOut, width, height } = options;
   const pipeline = sharp();
-  pipeline.jpeg({ quality: DEFAULT_JPG_QUALITY }).toFile(fileOut);
+  pipeline.jpeg({ quality: DEFAULT_JPG_QUALITY });
+  pipeline.resize(width, height);
+  pipeline.toFile(fileOut);
   return new Promise((resolve, reject) => {
-    stream
-      .pipe(pipeline)
-      .on('finish', () => {
-        resolve();
-      })
-      .on('error', () => {
-        reject();
-      });
+    stream.pipe(pipeline).toFile(fileOut, (err, info) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve({ ...info, URL: fileOut });
+      }
+    });
   });
 };
 
@@ -76,7 +84,17 @@ const saveStreamToPath = (args: SaveStreamArgs): Promise<void> => {
 const isAllowedMimeType = (mimetype: string) =>
   ALLOWED_MIME_TYPES.includes(mimetype);
 
-const uploadFile = async (file: FileUpload) => {
+export interface ImageOptions {
+  suffix?: string;
+  width: number;
+  height?: number;
+}
+
+const uploadFile = async (
+  file: FileUpload,
+  fileId: string,
+  options?: ImageOptions,
+) => {
   // Checking if the "upload" directory exists.
   // If not, we create it.
   await createStorageIfNotExists();
@@ -91,11 +109,15 @@ const uploadFile = async (file: FileUpload) => {
     );
   }
 
-  const fileId = nanoid();
-  const fileOut = `${STORAGE_DIR}/${fileId}`;
+  let fileOut = `${STORAGE_DIR}/${fileId}`;
+  const suffix = options?.suffix;
+  if (suffix) {
+    fileOut = `${fileOut}_${suffix}`;
+  }
+
   const stream = createReadStream();
-  await saveStreamToPath({ stream, fileOut });
-  return { width: 100, height: 100, URL: fileOut };
+  const info = await saveStreamToPath(stream, { fileOut, ...options });
+  return info;
 };
 
 export default { uploadFile };

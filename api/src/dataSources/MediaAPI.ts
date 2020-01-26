@@ -1,30 +1,53 @@
 import { DataSource } from 'apollo-datasource';
 import { FileUpload } from 'graphql-upload';
-import fileSystem from './utils/fileSystem';
+import fileSystem, { ImageOptions } from './utils/fileSystem';
 import { Media } from '../entity/Media';
+import nanoid from 'nanoid';
+
+// Order of these configs matters.
+// Results of "Promise.all" in the "MediaAPI.uploadSingle"
+// relies of this.
+const imageOptions: ImageOptions[] = [
+  {
+    suffix: 'thumbnail',
+    width: 150,
+    height: 150,
+  },
+  {
+    suffix: 'small',
+    width: 320,
+  },
+  {
+    width: 640,
+  },
+];
 
 class MediaAPI extends DataSource {
   uploadSingle = async (file: FileUpload) => {
-    const result = await fileSystem.uploadFile(file);
-    const thumbnail = {
-      thumbnailWidth: 100,
-      thumbnailHeight: 200,
-      thumbnailURL: 'ok ok ok',
+    const fileId = nanoid();
+    const promises = imageOptions.map(options =>
+      fileSystem.uploadFile(file, fileId, options),
+    );
+    const [thumbnail, small, standard] = await Promise.all(promises);
+    const thumbnailResolution = {
+      thumbnailWidth: thumbnail.width,
+      thumbnailHeight: thumbnail.height,
+      thumbnailURL: thumbnail.URL,
     };
-    const small = {
-      smallWidth: 100,
-      smallHeight: 200,
-      smallURL: 'ok ok ok',
+    const smallResolution = {
+      smallWidth: small.width,
+      smallHeight: small.height,
+      smallURL: small.URL,
     };
-    const standard = {
-      standardWidth: 100,
-      standardHeight: 200,
-      standardURL: 'ok ok ok',
+    const standardResolution = {
+      standardWidth: standard.width,
+      standardHeight: standard.height,
+      standardURL: standard.URL,
     };
     const media = await Media.create({
-      ...thumbnail,
-      ...small,
-      ...standard,
+      ...thumbnailResolution,
+      ...smallResolution,
+      ...standardResolution,
     }).save();
     return media;
   };
