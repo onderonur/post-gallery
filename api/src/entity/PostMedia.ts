@@ -53,10 +53,6 @@ export class PostMedia extends BaseAbstractEntity {
     }
   }
 
-  static findByPostId(postId: ID) {
-    return this.find({ where: { postId } });
-  }
-
   static findByPostIds(postIds: ID[]) {
     return this.find({ where: { postId: In(postIds) } });
   }
