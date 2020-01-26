@@ -1,4 +1,4 @@
-import { MutationResolvers } from '../../../generated/graphql';
+import { MutationResolvers, MediaOwner } from '../../../generated/graphql';
 import { GQLContext } from '../../../types';
 
 export const createPost: MutationResolvers<GQLContext>['createPost'] = async (
@@ -9,7 +9,7 @@ export const createPost: MutationResolvers<GQLContext>['createPost'] = async (
   const { postAPI, mediaAPI } = dataSources;
 
   const { medias } = input;
-  const savedMedias = await mediaAPI.uploadMultiple(medias);
+  const savedMedias = await mediaAPI.uploadMultiple(medias, MediaOwner.Post);
 
   const { title } = input;
   const post = await postAPI.createPost({ title, medias: savedMedias });

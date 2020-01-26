@@ -3,6 +3,7 @@ import { FileUpload } from 'graphql-upload';
 import fileSystem, { ImageOptions } from './utils/fileSystem';
 import { Media } from '../entity/Media';
 import nanoid from 'nanoid';
+import { MediaOwner } from '../generated/graphql';
 
 // Order of these configs matters.
 // Results of "Promise.all" in the "MediaAPI.uploadSingle"
@@ -23,7 +24,7 @@ const imageOptions: ImageOptions[] = [
 ];
 
 class MediaAPI extends DataSource {
-  uploadSingle = async (file: FileUpload) => {
+  uploadSingle = async (file: FileUpload, owner: MediaOwner) => {
     const fileId = nanoid();
     const promises = imageOptions.map(options =>
       fileSystem.uploadFile(file, fileId, options),
@@ -43,13 +44,15 @@ class MediaAPI extends DataSource {
     media.standardHeight = standard.height;
     media.standardURL = standard.URL;
 
+    media.owner = owner;
+
     await media.save();
 
     return media;
   };
 
-  uploadMultiple = async (files: FileUpload[]) => {
-    const uploadPromises = files.map(file => this.uploadSingle(file));
+  uploadMultiple = async (files: FileUpload[], owner: MediaOwner) => {
+    const uploadPromises = files.map(file => this.uploadSingle(file, owner));
     const medias = await Promise.all(uploadPromises);
     return medias;
   };

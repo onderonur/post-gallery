@@ -3,6 +3,7 @@ import { BaseAbstractEntity } from './BaseAbstractEntity';
 import { IsNotEmpty, validate } from 'class-validator';
 import { ApolloError } from 'apollo-server-express';
 import { getValidationErrorMessage } from './utils';
+import { MediaOwner } from '../generated/graphql';
 
 @Entity()
 export class Media extends BaseAbstractEntity {
@@ -35,6 +36,9 @@ export class Media extends BaseAbstractEntity {
   @Column()
   @IsNotEmpty()
   standardURL: string;
+
+  @Column({ type: 'enum', enum: MediaOwner })
+  owner: MediaOwner;
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -51,6 +51,10 @@ const typeDefs = gql`
     deletePost(id: ID!): DeletePostMutationResponse!
   }
 
+  enum MediaOwner {
+    POST
+  }
+
   type Media {
     id: ID!
     thumbnailWidth: Int!
@@ -62,6 +66,7 @@ const typeDefs = gql`
     standardWidth: Int!
     standardHeight: Int!
     standardURL: String!
+    owner: MediaOwner!
   }
 
   type PostMedia {

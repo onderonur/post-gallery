@@ -45,7 +45,12 @@ export type Media = {
   standardWidth: Scalars['Int'],
   standardHeight: Scalars['Int'],
   standardURL: Scalars['String'],
+  owner: MediaOwner,
 };
+
+export enum MediaOwner {
+  Post = 'POST'
+}
 
 export type Mutation = {
    __typename?: 'Mutation',
@@ -197,6 +202,7 @@ export type ResolversTypes = ResolversObject<{
   PostMedia: ResolverTypeWrapper<PostMedia>,
   Media: ResolverTypeWrapper<Media>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
+  MediaOwner: MediaOwner,
   Cursor: ResolverTypeWrapper<Scalars['Cursor']>,
   PostConnection: ResolverTypeWrapper<PostConnection>,
   PageInfo: ResolverTypeWrapper<PageInfo>,
@@ -220,6 +226,7 @@ export type ResolversParentTypes = ResolversObject<{
   PostMedia: PostMedia,
   Media: Media,
   Int: Scalars['Int'],
+  MediaOwner: MediaOwner,
   Cursor: Scalars['Cursor'],
   PostConnection: PostConnection,
   PageInfo: PageInfo,
@@ -264,6 +271,7 @@ export type MediaResolvers<ContextType = any, ParentType extends ResolversParent
   standardWidth?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   standardHeight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   standardURL?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  owner?: Resolver<ResolversTypes['MediaOwner'], ParentType, ContextType>,
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
