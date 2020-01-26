@@ -2,13 +2,15 @@ import { Resolvers } from '../../generated/graphql';
 import { GQLContext } from '../../types';
 import { GraphQLScalarType, Kind } from 'graphql';
 
+const CURSOR_PREFIX = 'cursor:';
+
 const toCursor = (text: string) => {
-  return Buffer.from(`cursor:${text}`).toString('base64');
+  return Buffer.from(`${CURSOR_PREFIX}${text}`).toString('base64');
 };
 
 const fromCursor = (cursor: string) => {
   const decoded = Buffer.from(cursor, 'base64').toString();
-  const text = decoded.split(':')[1];
+  const text = decoded.replace(CURSOR_PREFIX, '');
   return text;
 };
 

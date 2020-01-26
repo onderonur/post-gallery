@@ -29,26 +29,22 @@ class MediaAPI extends DataSource {
       fileSystem.uploadFile(file, fileId, options),
     );
     const [thumbnail, small, standard] = await Promise.all(promises);
-    const thumbnailResolution = {
-      thumbnailWidth: thumbnail.width,
-      thumbnailHeight: thumbnail.height,
-      thumbnailURL: thumbnail.URL,
-    };
-    const smallResolution = {
-      smallWidth: small.width,
-      smallHeight: small.height,
-      smallURL: small.URL,
-    };
-    const standardResolution = {
-      standardWidth: standard.width,
-      standardHeight: standard.height,
-      standardURL: standard.URL,
-    };
-    const media = await Media.create({
-      ...thumbnailResolution,
-      ...smallResolution,
-      ...standardResolution,
-    }).save();
+    const media = new Media();
+
+    media.thumbnailWidth = thumbnail.width;
+    media.thumbnailHeight = thumbnail.height;
+    media.thumbnailURL = thumbnail.URL;
+
+    media.smallWidth = small.width;
+    media.smallHeight = small.height;
+    media.smallURL = small.URL;
+
+    media.standardWidth = standard.width;
+    media.standardHeight = standard.height;
+    media.standardURL = standard.URL;
+
+    await media.save();
+
     return media;
   };
 

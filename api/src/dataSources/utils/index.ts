@@ -22,19 +22,16 @@ const getEndCursor = <T>(edges: Edge<T>[]) => {
   return null;
 };
 
+interface ConnectionOptions<T> {
+  order: FindOneOptions<T>['order'];
+  where: FindOneOptions<T>['where'];
+  first: Maybe<number>;
+  getCursorFn: GetCursorFn<T>;
+}
+
 export const findAndGetConnection = async <T extends BaseEntity>(
   entity: typeof BaseEntity,
-  {
-    order,
-    where,
-    first,
-    getCursorFn,
-  }: {
-    order: FindOneOptions<T>['order'];
-    where: FindOneOptions<T>['where'];
-    first: Maybe<number>;
-    getCursorFn: GetCursorFn<T>;
-  },
+  { order, where, first, getCursorFn }: ConnectionOptions<T>,
 ) => {
   const [items, totalCount] = await entity.findAndCount({
     order,

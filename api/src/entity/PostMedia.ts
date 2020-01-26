@@ -21,7 +21,7 @@ export class PostMedia extends BaseAbstractEntity {
   @ManyToOne(
     () => Post,
     post => post.postMedias,
-    { onDelete: 'CASCADE' },
+    { onDelete: 'CASCADE', nullable: false },
   )
   post: Post;
 
@@ -31,8 +31,6 @@ export class PostMedia extends BaseAbstractEntity {
 
   @OneToOne(() => Media, {
     eager: true,
-    // To save the media with postMedia entity
-    cascade: true,
     // Default value for "nullable" is "false" for columns.
     // But to make the "one-to-one" relationship mandatory,
     // we need to set this here.

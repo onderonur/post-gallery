@@ -11,11 +11,11 @@ export const deletePost: MutationResolvers<GQLContext>['deletePost'] = async (
   if (deleted) {
     return {
       success: true,
-      message: 'Post has been created successfully.',
+      message: 'Post has been deleted successfully',
     };
   }
   return {
     success: false,
-    message: 'An error occured while deleting the post.',
+    message: 'An error occured while deleting the post',
   };
 };

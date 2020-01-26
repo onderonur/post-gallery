@@ -3,7 +3,7 @@ import { Post } from '../entity/Post';
 import { ID } from '../types';
 import { QueryPostsArgs } from '../generated/graphql';
 import { findAndGetConnection } from './utils';
-import { LessThan } from 'typeorm';
+import { LessThan, FindConditions } from 'typeorm';
 import { Media } from '../entity/Media';
 import { PostMedia } from '../entity/PostMedia';
 
@@ -18,12 +18,15 @@ interface CreatePostArgs {
 
 class PostAPI extends DataSource {
   getPostConnection = async ({ first, after }: QueryPostsArgs) => {
+    const where: FindConditions<Post> = {};
+    if (after) {
+      where.createdAt = LessThan(after);
+    }
+
     const connection = await findAndGetConnection(Post, {
       first,
       order: { createdAt: 'DESC' },
-      where: {
-        createdAt: after ? LessThan(after) : undefined,
-      },
+      where,
       getCursorFn: getPostCursor,
     });
     return connection;
@@ -45,7 +48,8 @@ class PostAPI extends DataSource {
     });
     post.postMedias = postMedias;
 
-    await Post.save(post);
+    await post.save();
+
     return post;
   };
 

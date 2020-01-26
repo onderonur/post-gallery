@@ -52,7 +52,7 @@ type SaveStreamOutputInfo = OutputInfo & {
   URL: string;
 };
 
-const saveStreamToPath = (
+const saveStreamToPath = async (
   stream: ReturnType<FileUpload['createReadStream']>,
   options: SaveStreamOptions,
 ): Promise<SaveStreamOutputInfo> => {
@@ -60,16 +60,8 @@ const saveStreamToPath = (
   const pipeline = sharp();
   pipeline.jpeg({ quality: DEFAULT_JPG_QUALITY });
   pipeline.resize(width, height);
-  pipeline.toFile(fileOut);
-  return new Promise((resolve, reject) => {
-    stream.pipe(pipeline).toFile(fileOut, (err, info) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({ ...info, URL: fileOut });
-      }
-    });
-  });
+  const info = await stream.pipe(pipeline).toFile(fileOut);
+  return { ...info, URL: fileOut };
 };
 
 // This function can be used to get height/width of an image
@@ -109,10 +101,11 @@ const uploadFile = async (
     );
   }
 
-  let fileOut = `${STORAGE_DIR}/${fileId}`;
+  const extension = '.jpg';
+  let fileOut = `${STORAGE_DIR}/${fileId}${extension}`;
   const suffix = options?.suffix;
   if (suffix) {
-    fileOut = `${fileOut}_${suffix}`;
+    fileOut = fileOut.replace(extension, `_${suffix}${extension}`);
   }
 
   const stream = createReadStream();
