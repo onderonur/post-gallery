@@ -6,8 +6,13 @@ export const createPost: MutationResolvers<GQLContext>['createPost'] = async (
   { input },
   { dataSources },
 ) => {
-  const { postAPI } = dataSources;
-  const post = await postAPI.createPost(input);
+  const { postAPI, mediaAPI } = dataSources;
+
+  const { medias } = input;
+  const savedMedias = await mediaAPI.uploadMultiple(medias);
+
+  const { title } = input;
+  const post = await postAPI.createPost({ title, medias: savedMedias });
   if (post) {
     return {
       success: true,

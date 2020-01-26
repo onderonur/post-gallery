@@ -47,7 +47,7 @@ async function runServer() {
   const clientBuildPath = CLIENT_BUILD_PATH;
   const isProduction = process.env.NODE_ENV === 'production';
   if (isProduction) {
-    // Serve any static files
+    // Serve bundled client app files
     app.use(express.static(path.join(__dirname, clientBuildPath)));
     // Handle React routing, return all requests to React app
     app.get('*', function(req, res) {

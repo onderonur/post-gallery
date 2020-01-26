@@ -32,6 +32,7 @@ const typeDefs = gql`
 
   input CreatePostInput {
     title: String!
+    medias: [Upload!]!
   }
 
   type CreatePostMutationsResponse implements MutationResponse {
@@ -50,15 +51,28 @@ const typeDefs = gql`
     deletePost(id: ID!): DeletePostMutationResponse!
   }
 
+  type Media {
+    id: ID!
+    thumbnailWidth: Int!
+    thumbnailHeight: Int!
+    thumbnailURL: String!
+    smallWidth: Int!
+    smallHeight: Int!
+    smallURL: String!
+    standardWidth: Int!
+    standardHeight: Int!
+    standardURL: String!
+  }
+
+  type PostMedia {
+    id: ID!
+    media: Media!
+  }
+
   type Post {
     id: ID!
     title: String!
-    postFiles: [PostFile!]!
-  }
-
-  type PostFile {
-    id: ID!
-    filepath: String!
+    postMedias: [PostMedia!]!
   }
 `;
 

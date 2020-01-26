@@ -44,6 +44,7 @@
     "object-shorthand": "warn",
     "no-else-return": "warn",
     "no-path-concat": "warn",
+    "no-restricted-syntax": "off",
     "import/order": "off",
     "import/newline-after-import": "warn",
     "import/no-extraneous-dependencies": "off",

@@ -1,13 +1,14 @@
 import fs from 'fs';
-import path from 'path';
 import nanoid from 'nanoid';
 import sharp from 'sharp';
-import { DataSource } from 'apollo-datasource';
 import { UserInputError } from 'apollo-server-express';
 import { FileUpload } from 'graphql-upload';
 
-// TODO: There may be a "cron" job to run daily/weekly to clear images of the deleted "samples".
+// A good example: https://github.com/withspectrum/spectrum/blob/alpha/api/utils/file-system.js
 
+// TODO: There may be a "cron" job to run daily/weekly to clear images of the deleted "posts".
+
+const DEFAULT_JPG_QUALITY = 70;
 const { STORAGE_DIR } = process.env;
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png'];
 
@@ -42,19 +43,25 @@ const createStorageIfNotExists = async () => {
   }
 };
 
-const saveStreamToPath = (stream: NodeJS.ReadableStream, filepath: string) => {
-  // Or without using "sharp":
-  // stream.pipe(fs.createWriteStream(filepath));
-  // return new Promise(resolve => {
-  //   stream.on("end", () => {
-  //     resolve();
-  //   });
-  // });
+type SaveStreamArgs = {
+  stream: ReturnType<FileUpload['createReadStream']>;
+  fileOut: string;
+};
 
-  const writer = sharp();
-  writer.toFile(filepath);
-  const info = stream.pipe(writer);
-  return info;
+const saveStreamToPath = (args: SaveStreamArgs): Promise<void> => {
+  const { stream, fileOut } = args;
+  const pipeline = sharp();
+  pipeline.jpeg({ quality: DEFAULT_JPG_QUALITY }).toFile(fileOut);
+  return new Promise((resolve, reject) => {
+    stream
+      .pipe(pipeline)
+      .on('finish', () => {
+        resolve();
+      })
+      .on('error', () => {
+        reject();
+      });
+  });
 };
 
 // This function can be used to get height/width of an image
@@ -69,33 +76,26 @@ const saveStreamToPath = (stream: NodeJS.ReadableStream, filepath: string) => {
 const isAllowedMimeType = (mimetype: string) =>
   ALLOWED_MIME_TYPES.includes(mimetype);
 
-// A good example: https://github.com/withspectrum/spectrum/blob/alpha/api/utils/file-system.js
-class FileStorageAPI extends DataSource {
-  uploadSingle = async (file: FileUpload) => {
-    // Checking if the "upload" directory exists.
-    // If not, we create it.
-    await createStorageIfNotExists();
-    const result = await file;
-    const { createReadStream, filename, mimetype } = result;
-    const isAllowed = isAllowedMimeType(mimetype);
-    if (!isAllowed) {
-      throw new UserInputError(
-        `Files with "${mimetype}" type are not allowed. Please use another type of file.`,
-      );
-    }
-    const fileId = nanoid();
-    const extension = path.extname(filename);
-    const filepath = `${STORAGE_DIR}/${fileId}${extension}`;
-    const stream = createReadStream();
-    saveStreamToPath(stream, filepath);
-    return filepath;
-  };
+const uploadFile = async (file: FileUpload) => {
+  // Checking if the "upload" directory exists.
+  // If not, we create it.
+  await createStorageIfNotExists();
 
-  uploadMultiple = async (files: FileUpload[]) => {
-    const uploadPromises = files.map(file => this.uploadSingle(file));
-    const filePaths = await Promise.all(uploadPromises);
-    return filePaths;
-  };
-}
+  const result = await file;
+  const { createReadStream, mimetype } = result;
 
-export default FileStorageAPI;
+  const isAllowed = isAllowedMimeType(mimetype);
+  if (!isAllowed) {
+    throw new UserInputError(
+      `Files with "${mimetype}" type are not allowed. Please use another type of file.`,
+    );
+  }
+
+  const fileId = nanoid();
+  const fileOut = `${STORAGE_DIR}/${fileId}`;
+  const stream = createReadStream();
+  await saveStreamToPath({ stream, fileOut });
+  return { width: 100, height: 100, URL: fileOut };
+};
+
+export default { uploadFile };

@@ -1,8 +1,8 @@
-import * as postFile from './postFile';
+import * as postMedia from './postMedia';
 
 export const createLoaders = () => {
   return {
-    postFileByPostIdLoader: postFile.createPostFileByPostIdLoader(),
+    postMediaByPostIdLoader: postMedia.createPostMediaByPostIdLoader(),
   };
 };
 

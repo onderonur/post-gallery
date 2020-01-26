@@ -9,8 +9,8 @@ export type Scalars = {
   Int: number,
   Float: number,
   Cursor: any,
-  Date: any,
   Upload: any,
+  Date: any,
 };
 
 
@@ -21,6 +21,7 @@ export enum CacheControlScope {
 
 export type CreatePostInput = {
   title: Scalars['String'],
+  medias: Array<Scalars['Upload']>,
 };
 
 export type CreatePostMutationsResponse = MutationResponse & {
@@ -36,6 +37,20 @@ export type DeletePostMutationResponse = MutationResponse & {
    __typename?: 'DeletePostMutationResponse',
   success: Scalars['Boolean'],
   message?: Maybe<Scalars['String']>,
+};
+
+export type Media = {
+   __typename?: 'Media',
+  id: Scalars['ID'],
+  thumbnailWidth: Scalars['Int'],
+  thumbnailHeight: Scalars['Int'],
+  thumbnailURL: Scalars['String'],
+  smallWidth: Scalars['Int'],
+  smallHeight: Scalars['Int'],
+  smallURL: Scalars['String'],
+  standardWidth: Scalars['Int'],
+  standardHeight: Scalars['Int'],
+  standardURL: Scalars['String'],
 };
 
 export type Mutation = {
@@ -69,7 +84,7 @@ export type Post = {
    __typename?: 'Post',
   id: Scalars['ID'],
   title: Scalars['String'],
-  postFiles: Array<PostFile>,
+  postMedias: Array<PostMedia>,
 };
 
 export type PostConnection = {
@@ -85,10 +100,10 @@ export type PostEdge = {
   cursor: Scalars['Cursor'],
 };
 
-export type PostFile = {
-   __typename?: 'PostFile',
+export type PostMedia = {
+   __typename?: 'PostMedia',
   id: Scalars['ID'],
-  filepath: Scalars['String'],
+  media: Media,
 };
 
 export type Query = {
@@ -185,7 +200,8 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']>,
   Post: ResolverTypeWrapper<Post>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  PostFile: ResolverTypeWrapper<PostFile>,
+  PostMedia: ResolverTypeWrapper<PostMedia>,
+  Media: ResolverTypeWrapper<Media>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   Cursor: ResolverTypeWrapper<Scalars['Cursor']>,
   PostConnection: ResolverTypeWrapper<PostConnection>,
@@ -194,12 +210,12 @@ export type ResolversTypes = ResolversObject<{
   PostEdge: ResolverTypeWrapper<PostEdge>,
   Mutation: ResolverTypeWrapper<{}>,
   CreatePostInput: CreatePostInput,
+  Upload: ResolverTypeWrapper<Scalars['Upload']>,
   CreatePostMutationsResponse: ResolverTypeWrapper<CreatePostMutationsResponse>,
   MutationResponse: ResolverTypeWrapper<MutationResponse>,
   DeletePostMutationResponse: ResolverTypeWrapper<DeletePostMutationResponse>,
   CacheControlScope: CacheControlScope,
   Date: ResolverTypeWrapper<Scalars['Date']>,
-  Upload: ResolverTypeWrapper<Scalars['Upload']>,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -208,7 +224,8 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID'],
   Post: Post,
   String: Scalars['String'],
-  PostFile: PostFile,
+  PostMedia: PostMedia,
+  Media: Media,
   Int: Scalars['Int'],
   Cursor: Scalars['Cursor'],
   PostConnection: PostConnection,
@@ -217,12 +234,12 @@ export type ResolversParentTypes = ResolversObject<{
   PostEdge: PostEdge,
   Mutation: {},
   CreatePostInput: CreatePostInput,
+  Upload: Scalars['Upload'],
   CreatePostMutationsResponse: CreatePostMutationsResponse,
   MutationResponse: MutationResponse,
   DeletePostMutationResponse: DeletePostMutationResponse,
   CacheControlScope: CacheControlScope,
   Date: Scalars['Date'],
-  Upload: Scalars['Upload'],
 }>;
 
 export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = {   maxAge?: Maybe<Maybe<Scalars['Int']>>,
@@ -247,6 +264,19 @@ export type DeletePostMutationResponseResolvers<ContextType = any, ParentType ex
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 }>;
 
+export type MediaResolvers<ContextType = any, ParentType extends ResolversParentTypes['Media'] = ResolversParentTypes['Media']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  thumbnailWidth?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  thumbnailHeight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  thumbnailURL?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  smallWidth?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  smallHeight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  smallURL?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  standardWidth?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  standardHeight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  standardURL?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+}>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createPost?: Resolver<ResolversTypes['CreatePostMutationsResponse'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'input'>>,
   deletePost?: Resolver<ResolversTypes['DeletePostMutationResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>,
@@ -266,7 +296,7 @@ export type PageInfoResolvers<ContextType = any, ParentType extends ResolversPar
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  postFiles?: Resolver<Array<ResolversTypes['PostFile']>, ParentType, ContextType>,
+  postMedias?: Resolver<Array<ResolversTypes['PostMedia']>, ParentType, ContextType>,
 }>;
 
 export type PostConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostConnection'] = ResolversParentTypes['PostConnection']> = ResolversObject<{
@@ -280,9 +310,9 @@ export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversPar
   cursor?: Resolver<ResolversTypes['Cursor'], ParentType, ContextType>,
 }>;
 
-export type PostFileResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostFile'] = ResolversParentTypes['PostFile']> = ResolversObject<{
+export type PostMediaResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostMedia'] = ResolversParentTypes['PostMedia']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  filepath?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  media?: Resolver<ResolversTypes['Media'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -299,13 +329,14 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Cursor?: GraphQLScalarType,
   Date?: GraphQLScalarType,
   DeletePostMutationResponse?: DeletePostMutationResponseResolvers<ContextType>,
+  Media?: MediaResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   MutationResponse?: MutationResponseResolvers,
   PageInfo?: PageInfoResolvers<ContextType>,
   Post?: PostResolvers<ContextType>,
   PostConnection?: PostConnectionResolvers<ContextType>,
   PostEdge?: PostEdgeResolvers<ContextType>,
-  PostFile?: PostFileResolvers<ContextType>,
+  PostMedia?: PostMediaResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Upload?: GraphQLScalarType,
 }>;

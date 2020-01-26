@@ -2,7 +2,7 @@ import { Resolvers } from '../generated/graphql';
 import mutations from './mutations';
 import { GQLContext } from '../types';
 import scalars from './scalars';
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 import queries from './queries';
 
 const resolvers: Resolvers<GQLContext> = merge(

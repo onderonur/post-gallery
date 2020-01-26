@@ -1,6 +1,6 @@
 import { post } from './post';
 import { posts } from './posts';
-import { postFiles } from './postFiles';
+import { postMedias } from './postMedias';
 
 export default {
   Query: {
@@ -8,6 +8,6 @@ export default {
     posts,
   },
   Post: {
-    postFiles,
+    postMedias,
   },
 };

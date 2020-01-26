@@ -1,7 +1,7 @@
 import { Column, OneToMany, Entity, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { BaseAbstractEntity } from './BaseAbstractEntity';
-import { PostFile } from './PostFile';
-import { MinLength, validate, IsNotEmpty } from 'class-validator';
+import { PostMedia } from './PostMedia';
+import { validate, IsNotEmpty, ArrayMinSize } from 'class-validator';
 import { ApolloError } from 'apollo-server-express';
 import { getValidationErrorMessage } from '../utils';
 
@@ -12,15 +12,15 @@ export class Post extends BaseAbstractEntity {
   title: string;
 
   @OneToMany(
-    () => PostFile,
-    postFile => postFile.post,
+    () => PostMedia,
+    postMedia => postMedia.post,
     {
-      // To save the postFiles with post entities
+      // To save the postMedias with post entities
       cascade: true,
     },
   )
-  @MinLength(1)
-  postFiles: PostFile[];
+  @ArrayMinSize(1)
+  postMedias: PostMedia[];
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -1,9 +1,9 @@
-import FileStorageAPI from './FileStorageAPI';
 import PostAPI from './PostAPI';
+import MediaAPI from './MediaAPI';
 
 const dataSources = () => ({
   postAPI: new PostAPI(),
-  fileStorageAPI: new FileStorageAPI(),
+  mediaAPI: new MediaAPI(),
 });
 
 export type DataSources = ReturnType<typeof dataSources>;
