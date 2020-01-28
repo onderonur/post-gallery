@@ -10,6 +10,7 @@ import resolvers from './resolvers';
 import dataSources from './dataSources';
 import { createLoaders } from './loaders';
 import { convertMBToBytes } from './utils';
+import authRouter, { passport } from './routers';
 
 const {
   PORT,
@@ -42,7 +43,15 @@ async function runServer() {
   // To serve static files under the "file-storage" directory.
   app.use('/uploads', express.static(STORAGE_DIR));
 
+  app.use(passport.initialize());
+
+  // Authentication routes
+  app.use('/auth', authRouter);
+
   server.applyMiddleware({ app });
+
+  // TODO: May add a error handler.
+  // Find an example on Spectrum code or Express website
 
   const clientBuildPath = CLIENT_BUILD_PATH;
   const isProduction = process.env.NODE_ENV === 'production';
