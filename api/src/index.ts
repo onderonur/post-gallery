@@ -10,7 +10,8 @@ import resolvers from './resolvers';
 import dataSources from './dataSources';
 import { createLoaders } from './loaders';
 import { convertMBToBytes } from './utils';
-import authRouter, { passport } from './routers';
+import passport from 'passport';
+import authRouter from './routers/auth';
 
 const {
   PORT,
@@ -40,10 +41,10 @@ async function runServer() {
 
   const app = express();
 
+  app.use(passport.initialize());
+
   // To serve static files under the "file-storage" directory.
   app.use('/uploads', express.static(STORAGE_DIR));
-
-  app.use(passport.initialize());
 
   // Authentication routes
   app.use('/auth', authRouter);
