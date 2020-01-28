@@ -28,6 +28,7 @@ declare global {
       CLIENT_BUILD_PATH: string;
       GOOGLE_OAUTH_CLIENT_ID: string;
       GOOGLE_OAUTH_CLIENT_SECRET: string;
+      ACCESS_TOKEN_SECRET: string;
     }
   }
 }

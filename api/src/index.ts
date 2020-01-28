@@ -11,7 +11,8 @@ import dataSources from './dataSources';
 import { createLoaders } from './loaders';
 import { convertMBToBytes } from './utils';
 import passport from 'passport';
-import authRouter from './routers/auth';
+import helmet from 'helmet';
+import routes from './routes';
 
 const {
   PORT,
@@ -41,13 +42,14 @@ async function runServer() {
 
   const app = express();
 
+  app.use(helmet());
+
   app.use(passport.initialize());
 
   // To serve static files under the "file-storage" directory.
   app.use('/uploads', express.static(STORAGE_DIR));
 
-  // Authentication routes
-  app.use('/auth', authRouter);
+  app.use('/', routes);
 
   server.applyMiddleware({ app });
 

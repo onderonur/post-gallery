@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import GoogleOauth20 from 'passport-google-oauth20';
 import passport from 'passport';
+import jwt from 'jsonwebtoken';
+
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
 const GoogleStrategy = new GoogleOauth20.Strategy(
   {
@@ -19,10 +22,10 @@ const GoogleStrategy = new GoogleOauth20.Strategy(
 
 passport.use(GoogleStrategy);
 
-const authRouter = Router();
+const googleRouter = Router();
 
-authRouter.get(
-  '/google',
+googleRouter.get(
+  '/',
   passport.authenticate('google', {
     scope: ['profile', 'email'],
     accessType: 'offline',
@@ -30,18 +33,26 @@ authRouter.get(
   }),
 );
 
-authRouter.get(
-  '/google/callback',
+googleRouter.get(
+  '/callback',
   passport.authenticate('google', {
     failureRedirect: '/login',
     session: false,
   }),
   (req, res) => {
-    console.log('user', req.user);
-    return res.json({ name: 'ok ok ok' });
+    const { user } = req;
+    console.log('user', user);
+    const token = jwt.sign(
+      {
+        user,
+      },
+      accessTokenSecret,
+      { expiresIn: '1h' },
+    );
+    return res.json({ token });
   },
 );
 
 export { passport };
 
-export default authRouter;
+export default googleRouter;
