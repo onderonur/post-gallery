@@ -5,7 +5,7 @@ import scalars from './scalars';
 import merge from 'lodash/merge';
 import queries from './queries';
 
-const mutationResponse: Resolvers<GQLContext>['MutationResponse'] = {
+const MutationResponse: Resolvers<GQLContext>['MutationResponse'] = {
   __resolveType: () => {
     // TODO: This __resolveType implementation may need a fix.
     // Need to check how to use it with TypeScript (or graphql-codegen).
@@ -18,7 +18,7 @@ const resolvers: Resolvers<GQLContext> = merge(
   scalars,
   queries,
   mutations,
-  mutationResponse,
+  { MutationResponse },
 );
 
 export default resolvers;
