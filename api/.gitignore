@@ -5,3 +5,4 @@ tmp/
 temp/
 uploads/
 dist/
+.env
