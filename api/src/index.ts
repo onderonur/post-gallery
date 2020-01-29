@@ -10,13 +10,11 @@ import resolvers from './resolvers';
 import dataSources from './dataSources';
 import { createLoaders } from './loaders';
 import { convertMBToBytes } from './utils';
-import passport from 'passport';
-import helmet from 'helmet';
 import routes from './routes';
+import middlewares from './middlewares';
 
 const {
   PORT,
-  STORAGE_DIR,
   MAX_FILE_SIZE_IN_MB,
   MAX_FILES_COUNT,
   CLIENT_BUILD_PATH,
@@ -42,19 +40,14 @@ async function runServer() {
 
   const app = express();
 
-  app.use(helmet());
+  // Middlewares
+  app.use(middlewares.helmet());
+  app.use(middlewares.passport.initialize());
 
-  app.use(passport.initialize());
-
-  // To serve static files under the "file-storage" directory.
-  app.use('/uploads', express.static(STORAGE_DIR));
-
+  // All the routes except the "/graphql" endpoint
   app.use('/', routes);
 
   server.applyMiddleware({ app });
-
-  // TODO: May add a error handler.
-  // Find an example on Spectrum code or Express website
 
   const clientBuildPath = CLIENT_BUILD_PATH;
   const isProduction = process.env.NODE_ENV === 'production';
@@ -62,10 +55,12 @@ async function runServer() {
     // Serve bundled client app files
     app.use(express.static(path.join(__dirname, clientBuildPath)));
     // Handle React routing, return all requests to React app
-    app.get('*', function(req, res) {
+    app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, clientBuildPath, 'index.html'));
     });
   }
+
+  app.use(middlewares.errorHandler);
 
   app.listen({ port: PORT }, () => {
     // eslint-disable-next-line no-console

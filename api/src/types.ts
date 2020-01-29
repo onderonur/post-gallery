@@ -32,3 +32,8 @@ declare global {
     }
   }
 }
+
+export interface ErrorWithStatus {
+  status?: number;
+  message?: string;
+}

@@ -1,9 +1,7 @@
 import { Router } from 'express';
 import GoogleOauth20 from 'passport-google-oauth20';
 import passport from 'passport';
-import jwt from 'jsonwebtoken';
-
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+import { User } from '../../entity/User';
 
 const GoogleStrategy = new GoogleOauth20.Strategy(
   {
@@ -11,12 +9,25 @@ const GoogleStrategy = new GoogleOauth20.Strategy(
     clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
     callbackURL: '/auth/google/callback',
   },
-  (accessToken, refreshToken, profile, cb) => {
-    // TODO
-    console.log('accessToken', accessToken);
-    console.log('refreshToken', refreshToken);
-    console.log('profile', profile);
-    return cb(undefined, profile);
+  async (accessToken, refreshToken, profile, cb) => {
+    const { id, name, emails } = profile;
+
+    const foundUser = await User.findByGoogleProfileId(id);
+
+    if (foundUser) {
+      return cb(undefined, foundUser);
+    }
+
+    // If we don't find the user with the Google Oauth profile id,
+    // we create a new user.
+    const user = User.create({
+      googleProfileId: id,
+      firstName: name?.givenName,
+      lastName: name?.familyName,
+      email: emails?.length && emails.length > 0 ? emails[0].value : undefined,
+    });
+    await user.save();
+    return cb(undefined, user);
   },
 );
 
@@ -28,8 +39,10 @@ googleRouter.get(
   '/',
   passport.authenticate('google', {
     scope: ['profile', 'email'],
-    accessType: 'offline',
-    prompt: 'consent',
+    // Required for refresh token
+    // accessType: 'offline',
+    // Required for refresh token
+    // prompt: 'consent',
   }),
 );
 
@@ -41,18 +54,16 @@ googleRouter.get(
   }),
   (req, res) => {
     const { user } = req;
-    console.log('user', user);
-    const token = jwt.sign(
-      {
-        user,
-      },
-      accessTokenSecret,
-      { expiresIn: '1h' },
+
+    if (user instanceof User) {
+      const { accessToken, expiresAt } = user.generateAccessToken();
+      return res.json({ accessToken, expiresAt });
+    }
+
+    throw new Error(
+      'An error occured while the login process. Please try again.',
     );
-    return res.json({ token });
   },
 );
-
-export { passport };
 
 export default googleRouter;

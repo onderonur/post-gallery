@@ -12,9 +12,6 @@ import { BaseAbstractEntity } from './BaseAbstractEntity';
 import { Post } from './Post';
 import { ID } from '../types';
 import { Media } from './Media';
-import { validate } from 'class-validator';
-import { getValidationErrorMessage } from './utils';
-import { ApolloError } from 'apollo-server-express';
 
 @Entity()
 export class PostMedia extends BaseAbstractEntity {
@@ -46,11 +43,7 @@ export class PostMedia extends BaseAbstractEntity {
   @BeforeInsert()
   @BeforeUpdate()
   async validate() {
-    const errors = await validate(this);
-    if (errors.length) {
-      const message = getValidationErrorMessage(errors);
-      throw new ApolloError(message);
-    }
+    this.validateAndThrowIfHasErrors();
   }
 
   static findByPostIds(postIds: ID[]) {

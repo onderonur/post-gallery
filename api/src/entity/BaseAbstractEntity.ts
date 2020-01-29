@@ -6,6 +6,9 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import nanoid from 'nanoid';
+import { validate } from 'class-validator';
+import { getValidationErrorMessage } from './utils';
+import { ApolloError } from 'apollo-server-express';
 
 export class BaseAbstractEntity extends BaseEntity {
   @PrimaryColumn()
@@ -18,7 +21,15 @@ export class BaseAbstractEntity extends BaseEntity {
   updatedAt: Date;
 
   @BeforeInsert()
-  generateNanoId() {
+  private generateNanoId() {
     this.id = nanoid();
+  }
+
+  async validateAndThrowIfHasErrors() {
+    const errors = await validate(this);
+    if (errors.length) {
+      const message = getValidationErrorMessage(errors);
+      throw new ApolloError(message);
+    }
   }
 }
