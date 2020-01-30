@@ -3,6 +3,11 @@ import GoogleOauth20 from 'passport-google-oauth20';
 import passport from 'passport';
 import { User } from '../../entity/User';
 
+const encode = (string: string) => Buffer.from(string).toString('base64');
+
+const decode = (base64String: string) =>
+  Buffer.from(base64String, 'base64').toString();
+
 const GoogleStrategy = new GoogleOauth20.Strategy(
   {
     clientID: process.env.GOOGLE_OAUTH_CLIENT_ID,
@@ -35,16 +40,22 @@ passport.use(GoogleStrategy);
 
 const googleRouter = Router();
 
-googleRouter.get(
-  '/',
-  passport.authenticate('google', {
+googleRouter.get('/', (req, res, next) => {
+  const { redirectURL } = req.query;
+  const state = redirectURL
+    ? encode(JSON.stringify({ redirectURL }))
+    : undefined;
+
+  // If we need Google Refresh token,
+  // then we need these two settings too:
+  // accessType: 'offline',
+  // prompt: 'consent',
+  const authenticator = passport.authenticate('google', {
     scope: ['profile', 'email'],
-    // Required for refresh token
-    // accessType: 'offline',
-    // Required for refresh token
-    // prompt: 'consent',
-  }),
-);
+    state,
+  });
+  authenticator(req, res, next);
+});
 
 googleRouter.get(
   '/callback',
@@ -57,6 +68,16 @@ googleRouter.get(
 
     if (user instanceof User) {
       const { accessToken, expiresAt } = user.generateAccessToken();
+
+      const { query } = req;
+      const { state } = query;
+      if (state) {
+        const { redirectURL } = JSON.parse(decode(state));
+        if (redirectURL) {
+          return res.redirect(redirectURL);
+        }
+      }
+
       return res.json({ accessToken, expiresAt });
     }
 

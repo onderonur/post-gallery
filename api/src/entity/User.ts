@@ -13,12 +13,12 @@ interface AccessTokenPayloadUser {
 }
 
 interface AccessTokenPayload {
-  jti: string;
-  sub: string;
   user: AccessTokenPayloadUser;
 }
 
 interface AccessTokenDecodedPayload extends AccessTokenPayload {
+  jti: string;
+  sub: string;
   iat: number;
   exp: number;
 }
@@ -51,8 +51,6 @@ export class User extends BaseAbstractEntity {
   generateAccessToken() {
     const { id, email, firstName, lastName, googleProfileId } = this;
     const payload: AccessTokenPayload = {
-      jti: nanoid(),
-      sub: id,
       user: {
         id,
         email,
@@ -62,6 +60,8 @@ export class User extends BaseAbstractEntity {
       },
     };
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+      jwtid: nanoid(),
+      subject: id,
       expiresIn: '1h',
     });
     const decoded = jwt.decode(accessToken) as AccessTokenDecodedPayload;
