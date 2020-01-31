@@ -183,6 +183,8 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes>;
 
+export type isTypeOfResolverFn = (obj: any, info: GraphQLResolveInfo) => boolean;
+
 export type NextResolverFn<T> = () => Promise<T>;
 
 export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
@@ -245,6 +247,7 @@ export type CreatePostMutationsResponseResolvers<ContextType = any, ParentType e
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn,
 }>;
 
 export interface CursorScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Cursor'], any> {
@@ -258,6 +261,7 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export type DeletePostMutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeletePostMutationResponse'] = ResolversParentTypes['DeletePostMutationResponse']> = ResolversObject<{
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn,
 }>;
 
 export type MediaResolvers<ContextType = any, ParentType extends ResolversParentTypes['Media'] = ResolversParentTypes['Media']> = ResolversObject<{
@@ -272,6 +276,7 @@ export type MediaResolvers<ContextType = any, ParentType extends ResolversParent
   standardHeight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   standardURL?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   owner?: Resolver<ResolversTypes['MediaOwner'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn,
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -288,28 +293,33 @@ export type MutationResponseResolvers<ContextType = any, ParentType extends Reso
 export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
   endCursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>,
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn,
 }>;
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   postMedias?: Resolver<Array<ResolversTypes['PostMedia']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn,
 }>;
 
 export type PostConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostConnection'] = ResolversParentTypes['PostConnection']> = ResolversObject<{
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
   edges?: Resolver<Array<ResolversTypes['PostEdge']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn,
 }>;
 
 export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostEdge'] = ResolversParentTypes['PostEdge']> = ResolversObject<{
   node?: Resolver<ResolversTypes['Post'], ParentType, ContextType>,
   cursor?: Resolver<ResolversTypes['Cursor'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn,
 }>;
 
 export type PostMediaResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostMedia'] = ResolversParentTypes['PostMedia']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   media?: Resolver<ResolversTypes['Media'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn,
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
