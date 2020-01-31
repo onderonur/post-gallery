@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import helmet from 'helmet';
 import passport from 'passport';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import { ErrorWithStatus } from '../types';
 
 const errorHandler = (
@@ -16,4 +18,4 @@ const errorHandler = (
   return response.status(status).json({ status, message });
 };
 
-export default { helmet, passport, errorHandler };
+export default { helmet, passport, bodyParser, cors, errorHandler };

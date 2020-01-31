@@ -42,6 +42,9 @@ async function runServer() {
 
   // Middlewares
   app.use(middlewares.helmet());
+  app.use(middlewares.cors());
+  app.use(middlewares.bodyParser.json());
+  app.use(middlewares.bodyParser.urlencoded({ extended: true }));
   app.use(middlewares.passport.initialize());
 
   // All the routes except the "/graphql" endpoint
