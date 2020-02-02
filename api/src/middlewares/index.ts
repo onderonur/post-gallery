@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import helmet from 'helmet';
-import passport from 'passport';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import { ErrorWithStatus } from '../types';
 
-const errorHandler = (
+interface ErrorWithStatus {
+  status?: number;
+  message?: string;
+}
+
+export const errorHandler = (
   error: ErrorWithStatus,
   request: Request,
   response: Response,
@@ -17,5 +17,3 @@ const errorHandler = (
   const { status = 500, message = 'Oops, something went wrong!' } = error;
   return response.status(status).json({ status, message });
 };
-
-export default { helmet, passport, bodyParser, cors, errorHandler };

@@ -7,3 +7,9 @@ export const getLastOfArray = <T>(array: T[]) => {
   }
   return null;
 };
+
+export const encode = (string: string) =>
+  Buffer.from(string).toString('base64');
+
+export const decode = (base64String: string) =>
+  Buffer.from(base64String, 'base64').toString();

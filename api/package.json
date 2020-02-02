@@ -11,7 +11,6 @@
     "@types/graphql": "^14.5.0",
     "@types/graphql-upload": "^8.0.3",
     "@types/helmet": "0.0.45",
-    "@types/jsonwebtoken": "^8.3.7",
     "@types/lodash": "^4.14.149",
     "@types/nanoid": "^2.1.0",
     "@types/node": "^13.5.1",
@@ -32,6 +31,7 @@
     "typescript": "^3.7.5"
   },
   "dependencies": {
+    "@types/express-session": "^1.15.16",
     "apollo-datasource": "^0.6.4",
     "apollo-server-express": "^2.9.16",
     "body-parser": "^1.19.0",
@@ -40,10 +40,9 @@
     "dataloader": "^2.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "google-auth-library": "^5.9.2",
+    "express-session": "^1.17.0",
     "graphql": "^14.6.0",
     "helmet": "^3.21.2",
-    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "nanoid": "^2.1.10",
     "passport": "^0.4.1",
