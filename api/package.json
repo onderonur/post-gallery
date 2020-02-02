@@ -55,8 +55,9 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development ts-node-dev --inspect --respawn --transpileOnly src/index.ts",
-    "prod": "cross-env NODE_ENV=production node dist/index.js",
     "build": "cross-env NODE_ENV=production tsc -p tsconfig.production.json",
+    "preprod": "npm run build",
+    "prod": "cross-env NODE_ENV=production node dist/index.js",
     "start": "cross-env NODE_ENV=production ts-node src/index.ts",
     "clean": "rimraf dist",
     "typeorm": "cross-env NODE_ENV=development ts-node ./node_modules/typeorm/cli.js",
