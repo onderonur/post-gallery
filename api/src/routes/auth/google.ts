@@ -2,11 +2,7 @@ import { Router } from 'express';
 import GoogleOauth20 from 'passport-google-oauth20';
 import passport from 'passport';
 import { User } from '../../entity/User';
-
-const encode = (string: string) => Buffer.from(string).toString('base64');
-
-const decode = (base64String: string) =>
-  Buffer.from(base64String, 'base64').toString();
+import { toBase64, fromBase64 } from '../../utils';
 
 const GoogleStrategy = new GoogleOauth20.Strategy(
   {
@@ -43,7 +39,7 @@ const googleRouter = Router();
 googleRouter.get('/', (req, res, next) => {
   const { redirectURL } = req.query;
   const state = redirectURL
-    ? encode(JSON.stringify({ redirectURL }))
+    ? toBase64(JSON.stringify({ redirectURL }))
     : undefined;
 
   // If we need Google Refresh token,
@@ -69,7 +65,7 @@ googleRouter.get(
       const { query } = req;
       const { state } = query;
       if (state) {
-        const { redirectURL } = JSON.parse(decode(state));
+        const { redirectURL } = JSON.parse(fromBase64(state));
         if (redirectURL) {
           return res.redirect(redirectURL);
         }
