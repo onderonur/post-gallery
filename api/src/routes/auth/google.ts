@@ -13,7 +13,7 @@ const GoogleStrategy = new GoogleOauth20.Strategy(
   async (accessToken, refreshToken, profile, cb) => {
     const { id, name, emails } = profile;
 
-    const foundUser = await User.findByGoogleProfileId(id);
+    const foundUser = await User.findOneByGoogleProfileId(id);
 
     if (foundUser) {
       return cb(undefined, foundUser);
@@ -21,12 +21,12 @@ const GoogleStrategy = new GoogleOauth20.Strategy(
 
     // If we don't find the user with the Google Oauth profile id,
     // we create a new user.
-    const user = User.create({
-      googleProfileId: id,
-      firstName: name?.givenName,
-      lastName: name?.familyName,
-      email: emails?.length && emails.length > 0 ? emails[0].value : undefined,
-    });
+    const user = new User();
+    user.googleProfileId = id;
+    user.firstName = name?.givenName;
+    user.lastName = name?.familyName;
+    user.email =
+      emails?.length && emails.length > 0 ? emails[0].value : undefined;
     await user.save();
     return cb(undefined, user);
   },

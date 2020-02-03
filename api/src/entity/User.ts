@@ -7,15 +7,19 @@ export class User extends BaseAbstractEntity {
   @Column({ unique: true })
   googleProfileId: string;
 
-  @Column({ nullable: true })
-  firstName: string;
+  // We need to specify the "type" for columns with
+  // "... | null" type.
+  // Otherwise it throws an error.
+  // (At least for PostgreSQL)
+  @Column({ type: 'varchar', nullable: true })
+  firstName?: string | null;
 
-  @Column({ nullable: true })
-  lastName: string;
+  @Column({ type: 'varchar', nullable: true })
+  lastName?: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   @IsEmail()
-  email: string;
+  email?: string | null;
 
   @BeforeInsert()
   @BeforeUpdate()
@@ -23,7 +27,7 @@ export class User extends BaseAbstractEntity {
     this.validateAndThrowIfHasErrors();
   }
 
-  static findByGoogleProfileId(googleProfileId: string) {
+  static findOneByGoogleProfileId(googleProfileId: string) {
     return this.findOne({ where: { googleProfileId } });
   }
 }
