@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
+import GoogleSignInButton from "./GoogleSignInButton";
+import { Container } from "@material-ui/core";
+import AppHeader from "AppHeader";
+import styled from "styled-components";
 
 const GET_VIEWER = gql`
   query GetViewer {
@@ -13,31 +17,43 @@ const GET_VIEWER = gql`
   }
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const AppHeaderOffset = styled.div(({ theme }) => theme.mixins.toolbar as any);
+
 const App = () => {
-  const { data, loading } = useQuery(GET_VIEWER);
+  const { loading } = useQuery(GET_VIEWER);
+
+  // TODO: Listen query string ?logout=...
+  useEffect(() => {
+    const logoutTimeStampKey = "logout";
+    const prevTimeStamp = localStorage.getItem(logoutTimeStampKey);
+    const storageListener = () => {
+      const timeStamp = localStorage.getItem(logoutTimeStampKey);
+      if (prevTimeStamp !== timeStamp) {
+        // Redirect to home page
+        window.location.href = "/";
+      }
+    };
+
+    window.addEventListener("storage", storageListener);
+
+    return () => {
+      window.removeEventListener("storage", storageListener);
+    };
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!data) {
-    return (
-      <div>
-        401
-        <div>
-          <a href={`/auth/google?redirectURL=${window.location.href}`}>Login</a>
-        </div>
-      </div>
-    );
-  }
-  const { viewer } = data;
   return (
-    <div>
-      {`Hello ${viewer.firstName} ${viewer.lastName}`}
-      <div>
-        <a href={`/auth/logout?redirectURL=${window.location.href}`}>Logout</a>
-      </div>
-    </div>
+    <>
+      <AppHeader />
+      <AppHeaderOffset />
+      <Container maxWidth="lg">
+        <GoogleSignInButton />
+      </Container>
+    </>
   );
 };
 

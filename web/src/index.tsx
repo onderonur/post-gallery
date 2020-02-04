@@ -5,13 +5,24 @@ import App from "./App";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import Cookies from "js-cookie";
+import {
+  MuiThemeProvider,
+  StylesProvider,
+  CssBaseline,
+} from "@material-ui/core";
+import theme from "theme";
+import { ThemeProvider } from "styled-components";
+
+interface RequestHeaders {
+  ["x-csrf-token"]?: string;
+}
 
 const client = new ApolloClient({
   uri: "/graphql",
   credentials: "same-origin",
   request: operation => {
     const csrfToken = Cookies.get("csrfToken");
-    const headers: any = {};
+    const headers: RequestHeaders = {};
     if (csrfToken) {
       headers["x-csrf-token"] = csrfToken;
     }
@@ -24,7 +35,14 @@ const client = new ApolloClient({
 const Root = () => {
   return (
     <ApolloProvider client={client}>
-      <App />
+      <StylesProvider injectFirst>
+        <MuiThemeProvider theme={theme}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </MuiThemeProvider>
+      </StylesProvider>
     </ApolloProvider>
   );
 };
