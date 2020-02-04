@@ -4,6 +4,7 @@
     "es6": true,
     "node": true
   },
+  "ignorePatterns": ["src/generated"],
   "extends": [
     "airbnb-base",
     "eslint:recommended",
