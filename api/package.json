@@ -26,6 +26,8 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.0",
     "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.1",
     "ts-node": "^8.6.2",
@@ -56,7 +58,7 @@
     "typeorm": "0.2.22"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development ts-node-dev --inspect --respawn src/index.ts",
+    "dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only --inspect -- src/index.ts",
     "start": "cross-env NODE_ENV=development ts-node src/index.ts",
     "build": "cross-env NODE_ENV=production tsc -p tsconfig.production.json",
     "preprod": "npm run build",
@@ -64,6 +66,17 @@
     "clean": "rimraf dist",
     "typeorm": "cross-env NODE_ENV=development ts-node ./node_modules/typeorm/cli.js",
     "gql:generate": "graphql-codegen --config codegen.yml",
-    "eslint:fix": "node_modules/.bin/eslint --fix . --ext .ts,.js"
+    "lint:fix": "node_modules/.bin/eslint --fix . --ext .ts,.js --max-warnings=0",
+    "typecheck": "tsc --noEmit"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run typecheck && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "npm run lint:fix"
+    ]
   }
 }

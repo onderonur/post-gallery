@@ -12,7 +12,7 @@ import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 import dataSources from './dataSources';
 import { createLoaders } from './loaders';
-import { convertMBToBytes } from './utils';
+import { convertMBToBytes, IS_PROD } from './utils';
 import routes from './routes';
 import helmet from 'helmet';
 import passport from 'passport';
@@ -57,7 +57,6 @@ const {
   SESSION_COOKIE_NAME,
   SESSION_COOKIE_SECRET,
   CLIENT_BUILD_PATH,
-  NODE_ENV,
   PORT,
 } = process.env;
 
@@ -116,10 +115,9 @@ async function runServer() {
   // All the routes except the "/graphql" endpoint
   app.use('/', routes);
 
-  server.applyMiddleware({ app, cors: false });
+  server.applyMiddleware({ app });
 
-  const isProduction = NODE_ENV === 'production';
-  if (isProduction) {
+  if (IS_PROD) {
     // Serve bundled client app files
     app.use(express.static(path.join(__dirname, CLIENT_BUILD_PATH)));
     // Handle React routing, return all requests to React app

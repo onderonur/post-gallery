@@ -1,8 +1,8 @@
 import { Router } from 'express';
+import { IS_PROD } from '../../utils';
 
 const logoutRouter = Router();
 
-const IS_PROD = process.env.NODE_ENV === 'production';
 const HOME = IS_PROD ? '/' : 'http://localhost:3000';
 
 logoutRouter.get('/', (req, res) => {

@@ -1,10 +1,5 @@
 import { RequestHandler, ErrorRequestHandler } from 'express';
 
-interface ErrorWithStatus {
-  status?: number;
-  message?: string;
-}
-
 export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   if (res.headersSent) {
     return next(error);
