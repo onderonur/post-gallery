@@ -25,9 +25,17 @@ const typeDefs = gql`
     edges: [PostEdge!]!
   }
 
+  type Viewer {
+    id: ID!
+    firstName: String
+    lastName: String
+    email: String
+  }
+
   type Query {
     post(id: ID!): Post
     posts(first: Int, after: Cursor): PostConnection!
+    viewer: Viewer!
   }
 
   input CreatePostInput {

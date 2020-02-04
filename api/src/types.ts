@@ -6,13 +6,13 @@ import { User } from './entity/User';
 export type ID = Scalars['ID'];
 export type Cursor = Scalars['Cursor'];
 
+type RequestUser = User;
+
 export interface GQLContext {
-  user?: Express.User;
+  user?: RequestUser;
   dataSources: DataSources;
   loaders: Loaders;
 }
-
-type RequestUser = User;
 
 // Overriding the default process.env type to have type-safe env variables.
 declare global {

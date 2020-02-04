@@ -109,6 +109,7 @@ export type Query = {
    __typename?: 'Query',
   post?: Maybe<Post>,
   posts: PostConnection,
+  viewer: Viewer,
 };
 
 
@@ -122,6 +123,14 @@ export type QueryPostsArgs = {
   after?: Maybe<Scalars['Cursor']>
 };
 
+
+export type Viewer = {
+   __typename?: 'Viewer',
+  id: Scalars['ID'],
+  firstName?: Maybe<Scalars['String']>,
+  lastName?: Maybe<Scalars['String']>,
+  email?: Maybe<Scalars['String']>,
+};
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -210,6 +219,7 @@ export type ResolversTypes = ResolversObject<{
   PageInfo: ResolverTypeWrapper<PageInfo>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   PostEdge: ResolverTypeWrapper<PostEdge>,
+  Viewer: ResolverTypeWrapper<Viewer>,
   Mutation: ResolverTypeWrapper<{}>,
   CreatePostInput: CreatePostInput,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
@@ -234,6 +244,7 @@ export type ResolversParentTypes = ResolversObject<{
   PageInfo: PageInfo,
   Boolean: Scalars['Boolean'],
   PostEdge: PostEdge,
+  Viewer: Viewer,
   Mutation: {},
   CreatePostInput: CreatePostInput,
   Upload: Scalars['Upload'],
@@ -325,11 +336,20 @@ export type PostMediaResolvers<ContextType = any, ParentType extends ResolversPa
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>,
   posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, QueryPostsArgs>,
+  viewer?: Resolver<ResolversTypes['Viewer'], ParentType, ContextType>,
 }>;
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload'
 }
+
+export type ViewerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Viewer'] = ResolversParentTypes['Viewer']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn,
+}>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   CreatePostMutationsResponse?: CreatePostMutationsResponseResolvers<ContextType>,
@@ -346,6 +366,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   PostMedia?: PostMediaResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Upload?: GraphQLScalarType,
+  Viewer?: ViewerResolvers<ContextType>,
 }>;
 
 

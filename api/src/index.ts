@@ -17,10 +17,36 @@ import routes from './routes';
 import helmet from 'helmet';
 import passport from 'passport';
 import bodyParser from 'body-parser';
-import cors from 'cors';
-import { errorHandler } from './middlewares';
+import { errorHandler, passCsrfTokenToClient } from './middlewares';
 import { User } from './entity/User';
 import { GQLContext } from './types';
+import csrf from 'csurf';
+
+const { MAX_FILE_SIZE_IN_MB, MAX_FILES_COUNT } = process.env;
+
+// Apollo
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  dataSources,
+  uploads: {
+    maxFileSize: convertMBToBytes(MAX_FILE_SIZE_IN_MB),
+    maxFiles: MAX_FILES_COUNT,
+  },
+  playground: {
+    settings: {
+      // To send session cookie while using GraphQL Playground
+      'request.credentials': 'same-origin',
+    },
+  },
+  context: ({ req }): Omit<GQLContext, 'dataSources'> => {
+    const { user } = req;
+    return {
+      user,
+      loaders: createLoaders(),
+    };
+  },
+});
 
 const {
   DATABASE_HOST,
@@ -30,8 +56,6 @@ const {
   DATABASE,
   SESSION_COOKIE_NAME,
   SESSION_COOKIE_SECRET,
-  MAX_FILE_SIZE_IN_MB,
-  MAX_FILES_COUNT,
   CLIENT_BUILD_PATH,
   NODE_ENV,
   PORT,
@@ -44,7 +68,7 @@ async function runServer() {
 
   // Middlewares
   app.use(helmet());
-  app.use(cors());
+
   const PgSession = connectPg(session);
   const pgPool = new pg.Pool({
     host: DATABASE_HOST,
@@ -62,8 +86,13 @@ async function runServer() {
       }),
     }),
   );
+
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+
+  const csrfProtection = csrf();
+  app.use(csrfProtection);
+  app.use(passCsrfTokenToClient);
 
   // Passport
   type UserId = User['id'];
@@ -87,34 +116,7 @@ async function runServer() {
   // All the routes except the "/graphql" endpoint
   app.use('/', routes);
 
-  // Apollo
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    dataSources,
-    uploads: {
-      maxFileSize: convertMBToBytes(MAX_FILE_SIZE_IN_MB),
-      maxFiles: MAX_FILES_COUNT,
-    },
-    playground: {
-      settings: {
-        // To send session cookie while using GraphQL Playground
-        'request.credentials': 'same-origin',
-      },
-    },
-    context: ({ req }): Omit<GQLContext, 'dataSources'> => {
-      const { user } = req;
-      if (!user) {
-        throw new AuthenticationError('Invalid credentials');
-      }
-      return {
-        user,
-        loaders: createLoaders(),
-      };
-    },
-  });
-
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: false });
 
   const clientBuildPath = CLIENT_BUILD_PATH;
   const isProduction = NODE_ENV === 'production';

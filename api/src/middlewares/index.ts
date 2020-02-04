@@ -1,19 +1,19 @@
-import { Request, Response, NextFunction } from 'express';
+import { RequestHandler, ErrorRequestHandler } from 'express';
 
 interface ErrorWithStatus {
   status?: number;
   message?: string;
 }
 
-export const errorHandler = (
-  error: ErrorWithStatus,
-  request: Request,
-  response: Response,
-  next: NextFunction,
-) => {
-  if (response.headersSent) {
+export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
+  if (res.headersSent) {
     return next(error);
   }
   const { status = 500, message = 'Oops, something went wrong!' } = error;
-  return response.status(status).json({ status, message });
+  return res.status(status).json({ status, message });
+};
+
+export const passCsrfTokenToClient: RequestHandler = (req, res, next) => {
+  res.cookie('csrfToken', req.csrfToken());
+  return next();
 };
