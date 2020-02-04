@@ -37,10 +37,7 @@
     "eject": "react-scripts eject",
     "clean": "rimraf build",
     "typecheck": "tsc --noEmit",
-    "lint:fix": "eslint --fix --ext .ts,.tsx,.js,.jsx ."
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "lint:fix": "eslint --fix --max-warnings 0 --ext .js,.jsx,.ts,.tsx src/"
   },
   "browserslist": {
     "production": [
@@ -60,7 +57,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "src/**/*.{js,jsx,ts,tsx}": [
       "npm run lint:fix"
     ]
   }
