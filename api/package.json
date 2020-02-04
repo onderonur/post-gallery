@@ -67,7 +67,7 @@
     "typeorm": "cross-env NODE_ENV=development ts-node ./node_modules/typeorm/cli.js",
     "gql:generate": "graphql-codegen --config codegen.yml",
     "lint:fix": "node_modules/.bin/eslint --fix . --ext .ts,.js --max-warnings=0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "husky": {
     "hooks": {
