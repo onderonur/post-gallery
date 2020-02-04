@@ -118,14 +118,13 @@ async function runServer() {
 
   server.applyMiddleware({ app, cors: false });
 
-  const clientBuildPath = CLIENT_BUILD_PATH;
   const isProduction = NODE_ENV === 'production';
   if (isProduction) {
     // Serve bundled client app files
-    app.use(express.static(path.join(__dirname, clientBuildPath)));
+    app.use(express.static(path.join(__dirname, CLIENT_BUILD_PATH)));
     // Handle React routing, return all requests to React app
     app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, clientBuildPath, 'index.html'));
+      res.sendFile(path.join(__dirname, CLIENT_BUILD_PATH, 'index.html'));
     });
   }
 
