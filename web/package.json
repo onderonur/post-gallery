@@ -37,7 +37,7 @@
     "eject": "react-scripts eject",
     "clean": "rimraf build",
     "typecheck": "tsc --noEmit",
-    "lint:fix": "eslint --fix --ext .ts,.tsx,.js,.jsx ."
+    "lint:fix": "eslint --fix --ext .ts,.tsx,.js,.jsx --max-warnings 0 ."
   },
   "eslintConfig": {
     "extends": "react-app"
