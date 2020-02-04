@@ -4,7 +4,7 @@ module.exports = function(app) {
     ["/auth", "/graphql"],
     proxy({
       target: "http://localhost:4000",
-      changeOrigin: true
-    })
+      changeOrigin: true,
+    }),
   );
 };

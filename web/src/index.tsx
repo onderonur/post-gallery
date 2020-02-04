@@ -16,9 +16,9 @@ const client = new ApolloClient({
       headers["x-csrf-token"] = csrfToken;
     }
     operation.setContext({
-      headers
+      headers,
     });
-  }
+  },
 });
 
 const Root = () => {
