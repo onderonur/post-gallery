@@ -19,8 +19,8 @@ const StyledButton = styled(
   cursor: pointer;
   height: 40px;
   border-width: 0;
-  background-color: ${props => props.backgroundColor};
-  color: ${props => props.fontColor};
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  color: ${({ fontColor }) => fontColor};
   border-radius: 5px;
   white-space: nowrap;
   box-shadow: 1px 1px 0px 1px rgba(0, 0, 0, 0.05);
@@ -55,6 +55,9 @@ const StyledText = styled.span`
   padding: 0 24px;
   font-size: 14px;
   font-weight: bold;
+
+  width: 100%;
+  text-align: center;
 `;
 
 type SocialSignInButtonProps = StyledButtonProps & {

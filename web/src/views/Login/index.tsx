@@ -1,21 +1,30 @@
 import React from "react";
-import GoogleSignInButton from "../../GoogleSignInButton";
-import { Container, Typography, Box, IconButton } from "@material-ui/core";
+import GoogleSignInButton from "./components/GoogleSignInButton";
+import { Container, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import { useHiddenAppHeader } from "components/AppLayout";
+import { useHistory } from "react-router-dom";
+import FlexRow from "components/FlexRow";
+import { FlexCol } from "components/FlexCol";
 
 const Login = () => {
+  useHiddenAppHeader();
+  const history = useHistory();
+
   return (
     <div>
-      <Box display="flex" justifyContent="flex-end">
-        <IconButton>
+      <FlexRow justifyContent="flex-end">
+        <IconButton onClick={() => history.goBack()}>
           <CloseIcon />
         </IconButton>
-      </Box>
-      <Container maxWidth="sm">
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <Typography variant="h1">Log in</Typography>
+      </FlexRow>
+      <Container maxWidth="sm" component="main">
+        <FlexCol>
+          <Typography variant="h3" component="h1" align="center" gutterBottom>
+            Log in
+          </Typography>
           <GoogleSignInButton />
-        </Box>
+        </FlexCol>
       </Container>
     </div>
   );

@@ -89,9 +89,11 @@ async function runServer() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  const csrfProtection = csrf();
-  app.use(csrfProtection);
-  app.use(passCsrfTokenToClient);
+  if (IS_PROD) {
+    const csrfProtection = csrf();
+    app.use(csrfProtection);
+    app.use(passCsrfTokenToClient);
+  }
 
   // Passport
   type UserId = User['id'];

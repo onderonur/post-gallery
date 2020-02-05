@@ -71,7 +71,7 @@ googleRouter.get(
         }
       }
 
-      return res.redirect('/');
+      return res.redirect('http://localhost:3000/');
     }
 
     throw new Error(

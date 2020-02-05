@@ -61,7 +61,7 @@ const saveStreamToPath = async (
   pipeline.jpeg({ quality: DEFAULT_JPG_QUALITY });
   pipeline.resize(width, height);
   const info = await stream.pipe(pipeline).toFile(fileOut);
-  return { ...info, URL: fileOut };
+  return { ...info, URL: `/${fileOut}` };
 };
 
 // This function can be used to get height/width of an image
