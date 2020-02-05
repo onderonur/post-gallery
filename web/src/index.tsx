@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import theme from "theme";
 import { ThemeProvider } from "styled-components";
+import { BrowserRouter } from "react-router-dom";
 
 interface RequestHeaders {
   ["x-csrf-token"]?: string;
@@ -39,7 +40,9 @@ const Root = () => {
         <MuiThemeProvider theme={theme}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <App />
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
           </ThemeProvider>
         </MuiThemeProvider>
       </StylesProvider>

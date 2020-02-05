@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
-import GoogleSignInButton from "./GoogleSignInButton";
-import { Container } from "@material-ui/core";
-import AppHeader from "AppHeader";
-import styled from "styled-components";
+import Routes from "Routes";
 
 const GET_VIEWER = gql`
   query GetViewer {
@@ -16,9 +13,6 @@ const GET_VIEWER = gql`
     }
   }
 `;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const AppHeaderOffset = styled.div(({ theme }) => theme.mixins.toolbar as any);
 
 const App = () => {
   const { loading } = useQuery(GET_VIEWER);
@@ -46,15 +40,7 @@ const App = () => {
     return <div>Loading...</div>;
   }
 
-  return (
-    <>
-      <AppHeader />
-      <AppHeaderOffset />
-      <Container maxWidth="lg">
-        <GoogleSignInButton />
-      </Container>
-    </>
-  );
+  return <Routes />;
 };
 
 export default App;

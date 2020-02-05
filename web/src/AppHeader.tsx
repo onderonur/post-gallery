@@ -3,6 +3,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import RouterLink from "./RouterLink";
 import styled from "styled-components";
 
 const Title = styled(Typography)`
@@ -14,7 +15,9 @@ const AppHeader = () => {
     <AppBar position="fixed">
       <Toolbar>
         <Title variant="h6">Post Gallery</Title>
-        <Button color="inherit">Login</Button>
+        <Button color="inherit" to="/login" component={RouterLink}>
+          Login
+        </Button>
       </Toolbar>
     </AppBar>
   );
