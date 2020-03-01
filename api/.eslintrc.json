@@ -1,0 +1,74 @@
+{
+  "root": true,
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb-base",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+  "rules": {
+    "prettier/prettier": "warn",
+    "no-console": "warn",
+    "no-unused-vars": "warn",
+    "import/no-dynamic-require": "off",
+    "import/prefer-default-export": "off",
+    "no-plusplus": "off",
+    "no-extra-boolean-cast": "off",
+    "class-methods-use-this": "off",
+    "func-names": "off",
+    "prefer-const": "warn",
+    "object-shorthand": "warn",
+    "no-else-return": "warn",
+    "no-path-concat": "warn",
+    "no-restricted-syntax": "off",
+    "prefer-template": "warn",
+    "prefer-destructuring": "warn",
+    "no-empty": "warn",
+    "no-useless-computed-key": "off",
+    "spaced-comment": "warn",
+    "import/order": "off",
+    "import/newline-after-import": "warn",
+    "lines-between-class-members": "warn",
+    "import/no-extraneous-dependencies": "off",
+    // TODO: Will open it later. It gives a warning for
+    // "graphql/tsutils/Maybe" even if the package is installed.
+    // May need some config.
+    "import/no-unresolved": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "ts": "never"
+      }
+    ],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/camelcase": "off"
+  }
+}
