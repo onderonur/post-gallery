@@ -117,7 +117,11 @@ async function runServer() {
   // All the routes except the "/graphql" endpoint
   app.use('/', routes);
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({
+    app,
+    // https://www.apollographql.com/docs/apollo-server/api/apollo-server/#apolloserverapplymiddleware
+    cors: false,
+  });
 
   if (IS_PROD) {
     // Serve bundled client app files
