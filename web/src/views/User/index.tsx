@@ -29,7 +29,12 @@ import useRequireOwner from "hooks/useRequireOwner";
 const LARGE_AVATAR_SIZE = 12;
 const SMALL_AVATAR_SIZE = 6;
 
-const DEFAULT_SELECTED_TAB_VALUE = "posts";
+const USER_TAB_VALUES = {
+  posts: "posts",
+  settings: "settings",
+};
+
+const DEFAULT_SELECTED_TAB_VALUE = USER_TAB_VALUES.posts;
 
 interface UserAvatarStyleProps {
   size: number;
@@ -88,6 +93,7 @@ const TabPanel: React.FC<TabPanelProps> = ({
       component="div"
       role="tabpanel"
       hidden={value !== currentValue}
+      // TODO:
       // id={`scrollable-auto-tabpanel-${index}`}
       // aria-labelledby={`scrollable-auto-tab-${index}`}
     >
@@ -170,11 +176,16 @@ const UserView = () => {
           }
           aria-label="user profile tabs"
         >
-          <Tab label={`Posts (${user.posts?.totalCount})`} value="posts" />
-          {requireOwner(<Tab label="Settings" value="settings" />)}
+          <Tab
+            label={`Posts (${user.posts?.totalCount})`}
+            value={USER_TAB_VALUES.posts}
+          />
+          {requireOwner(
+            <Tab label="Settings" value={USER_TAB_VALUES.settings} />,
+          )}
         </Tabs>
       </Paper>
-      <TabPanel currentValue={selectedTab} value="posts">
+      <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.posts}>
         <Container maxWidth="sm">
           <PostList
             loading={loading}
@@ -184,7 +195,7 @@ const UserView = () => {
         </Container>
       </TabPanel>
       {requireOwner(
-        <TabPanel currentValue={selectedTab} value="settings">
+        <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.settings}>
           Settings
         </TabPanel>,
       )}
