@@ -71,9 +71,7 @@ const ConfirmDialogProvider: React.FC = ({ children }) => {
             <BaseButton
               color="primary"
               onClick={() => {
-                if (onConfirm) {
-                  onConfirm();
-                }
+                onConfirm?.();
                 // Closing the confirm dialog after confirm
                 close();
               }}

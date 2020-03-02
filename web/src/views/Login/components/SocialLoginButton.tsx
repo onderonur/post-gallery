@@ -2,6 +2,7 @@ import React from "react";
 import { ButtonProps } from "@material-ui/core";
 import styled, { CSSProperties } from "styled-components";
 import BaseButton from "components/BaseButton";
+import useRequireAuth from "hooks/useRequireAuth";
 
 interface StyledButtonProps {
   backgroundColor: CSSProperties["backgroundColor"];
@@ -76,7 +77,9 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   providerName,
   href,
 }) => {
-  return true ? (
+  const requireAuth = useRequireAuth();
+  return requireAuth(
+    null,
     <StyledButton
       href={href}
       backgroundColor={backgroundColor}
@@ -85,8 +88,8 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
     >
       <StyledIcon>{icon}</StyledIcon>
       <StyledText>Log in with {providerName}</StyledText>
-    </StyledButton>
-  ) : null;
+    </StyledButton>,
+  );
 };
 
 export default SocialLoginButton;

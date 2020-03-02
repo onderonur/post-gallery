@@ -74,12 +74,8 @@ export const BaseMenuList: React.FC = ({ children }) => {
           // TODO: Will check these type
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const onClick = (e: any) => {
-            if (child?.props.onClick) {
-              child.props.onClick(e);
-            }
-            if (closeMenu) {
-              closeMenu(e, "backdropClick");
-            }
+            child?.props.onClick?.(e);
+            closeMenu?.(e, "backdropClick");
           };
 
           return React.cloneElement(child, { onClick });

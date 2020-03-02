@@ -8,21 +8,17 @@ import FlexRow from "components/FlexRow";
 import { FlexCol } from "components/FlexCol";
 import BaseIconButton from "components/BaseIconButton";
 import { BoldText } from "components/Text";
-import { useViewer } from "components/ViewerProvider";
 import URLS from "constants/urls";
+import useRequireAuth from "hooks/useRequireAuth";
 
 const LoginView = () => {
   useHideAppHeader();
   const history = useHistory();
   const theme = useTheme();
-  const viewer = useViewer();
+  const requireAuth = useRequireAuth();
 
-  // User is already logged in
-  if (viewer) {
-    return <Redirect to={URLS.posts} />;
-  }
-
-  return (
+  return requireAuth(
+    <Redirect to={URLS.posts} />,
     <div>
       <FlexRow justifyContent="flex-end">
         <BaseIconButton onClick={() => history.goBack()}>
@@ -46,7 +42,7 @@ const LoginView = () => {
           </FlexCol>
         </FlexCol>
       </Container>
-    </div>
+    </div>,
   );
 };
 
