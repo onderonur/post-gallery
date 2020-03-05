@@ -83,6 +83,9 @@ async function runServer() {
     session({
       name: SESSION_COOKIE_NAME,
       secret: SESSION_COOKIE_SECRET,
+      cookie: {
+        secure: IS_PROD,
+      },
       store: new PgSession({
         pool: pgPool,
       }),

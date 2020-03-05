@@ -10,6 +10,7 @@
     "@types/connect-pg-simple": "^4.2.0",
     "@types/csurf": "^1.9.36",
     "@types/express": "^4.17.2",
+    "@types/express-session": "^1.17.0",
     "@types/graphql": "^14.5.0",
     "@types/graphql-upload": "^8.0.3",
     "@types/helmet": "0.0.45",
@@ -36,7 +37,6 @@
     "typescript": "^3.8.2"
   },
   "dependencies": {
-    "@types/express-session": "^1.15.16",
     "apollo-datasource": "^0.7.0",
     "apollo-server-express": "^2.10.1",
     "body-parser": "^1.19.0",
