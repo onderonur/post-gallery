@@ -68,6 +68,9 @@ async function runServer() {
   // Middlewares
   app.use(helmet());
 
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+
   const PgSession = connectPg(session);
   const pgPool = new pg.Pool({
     host: DATABASE_HOST,
@@ -85,15 +88,6 @@ async function runServer() {
       }),
     }),
   );
-
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
-
-  if (IS_PROD) {
-    const csrfProtection = csrf();
-    app.use(csrfProtection);
-    app.use(passCsrfTokenToClient);
-  }
 
   // Passport
   type UserId = User['id'];
@@ -113,6 +107,12 @@ async function runServer() {
   });
   app.use(passport.initialize());
   app.use(passport.session());
+
+  if (IS_PROD) {
+    const csrfProtection = csrf();
+    app.use(csrfProtection);
+    app.use(passCsrfTokenToClient);
+  }
 
   // All the routes except the "/graphql" endpoint
   app.use('/', routes);
