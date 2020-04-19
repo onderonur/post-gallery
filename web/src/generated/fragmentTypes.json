@@ -1,0 +1,30 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "INTERFACE",
+        "name": "Connection",
+        "possibleTypes": [
+          {
+            "name": "PostConnection"
+          },
+          {
+            "name": "CommentConnection"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Reactable",
+        "possibleTypes": [
+          {
+            "name": "Post"
+          },
+          {
+            "name": "Comment"
+          }
+        ]
+      }
+    ]
+  }
+}

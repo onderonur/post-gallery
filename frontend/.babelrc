@@ -1,0 +1,22 @@
+{
+  // For using absolute imports:
+  // https://medium.com/anna-coding/how-to-use-absolute-module-import-path-in-next-js-dcbc806272e5
+  "presets": [
+    [
+      "next/babel",
+      {
+        "preset-env": {
+          "useBuiltIns": "usage",
+          // We specify the installed core-js version
+          "corejs": 3
+        }
+      }
+    ]
+  ],
+  "plugins": [["module-resolver", { "alias": { "@": "./src" } }]],
+  "env": {
+    "test": {
+      "presets": [["@babel/preset-env", { "modules": false }], "next/babel"]
+    }
+  }
+}

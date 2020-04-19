@@ -1,0 +1,39 @@
+overwrite: true
+schema:
+  - './src/typeDefs/*.ts'
+  # Apollo automatically adds "Upload" scalar type to schema.
+  # But because that we make codegen to use ".ts" files, it is not
+  # added yet. So, codegen throws an error about not finding the "Upload"
+  # type. As a workaround, we defined the scalar type here.
+  - |
+    scalar Upload
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-resolvers'
+    config:
+      # This is needed for apollo
+      # https://github.com/dotansimha/graphql-code-generator/blob/master/docs/plugins/typescript-resolvers.md#intergration-with-apollo-server
+      useIndexSignature: true
+      # Passing the GraphQLContext type automatically to the generated types
+      # https://github.com/dotansimha/graphql-code-generator/blob/master/docs/plugins/typescript-resolvers.md#custom-context-type
+      contextType: ../types#GQLContext
+      # https://graphql-code-generator.com/docs/generated-config/typescript#maybevalue-string-default-value-t--null
+      maybeValue: T | null | undefined
+      # To map our TypeScript model interfaces to GraphQL types
+      # For example, if "Query.post" doesn't return the all fields of "Post" type,
+      # and they have field resolvers like "Post.viewerHasReacted", "Post.likeCount" etc,
+      # TypeScript complains about that the "Query.post" doesn't return the full model.
+      # (Especially if the model has non-null fields).
+      # To solve the differences between TypeScript models and the models which returned by the resolvers,
+      # we use mappers.
+      # https://github.com/dotansimha/graphql-code-generator/blob/master/docs/plugins/typescript-resolvers.md#mappers---overwrite-parents-and-resolved-values
+      # https://github.com/dotansimha/graphql-code-generator/issues/1219#issuecomment-549244957
+      mappers:
+        Post: ../types#PostModel
+        Comment: ../types#CommentModel
+        User: ../types#UserModel
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'

@@ -1,0 +1,29 @@
+overwrite: true
+schema:
+  - "http://localhost:4000/graphql"
+  - "src/gql/typeDefs.ts"
+documents: 
+  - "src/**/*.{ts,tsx}"
+  - "!.next"
+  - "!node_modules"
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+      # This is for our client-side resolver types.
+      - "typescript-resolvers"
+    config:
+      withHooks: true
+      withHOC: false
+      withComponent: false
+      # https://graphql-code-generator.com/docs/generated-config/typescript#maybevalue-string-default-value-t--null
+      maybeValue: T | null | undefined
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"
+  # https://www.apollographql.com/docs/react/data/fragments/#fragments-on-unions-and-interfaces
+  src/generated/fragmentTypes.json:
+    plugins:
+      - fragment-matcher
