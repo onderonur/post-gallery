@@ -8,10 +8,7 @@ interface Response {
   verified: boolean;
 }
 
-const verifyGoogle = async (
-  req: NextApiRequest,
-  res: NextApiResponse<Response>,
-) => {
+const login = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   switch (req.method) {
     case "POST":
       const { provider, providerToken } = req.body;
@@ -45,4 +42,4 @@ const verifyGoogle = async (
   }
 };
 
-export default handleErrors(verifyGoogle);
+export default handleErrors(login);

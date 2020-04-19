@@ -27,7 +27,7 @@ const GoogleLoginButton = () => {
         const authResponse = (response as GoogleLoginResponse).getAuthResponse();
         const idToken = authResponse.id_token;
         axios
-          .post("/api/auth/verify", {
+          .post("/api/auth/login", {
             providerToken: idToken,
             provider: AUTH_PROVIDERS.google,
           })

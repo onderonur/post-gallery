@@ -18,7 +18,7 @@ const FacebookLoginButton = () => {
       callback={(userInfo: ReactFacebookLoginInfo) => {
         const { accessToken } = userInfo;
         axios
-          .post("/api/auth/verify", {
+          .post("/api/auth/login", {
             providerToken: accessToken,
             provider: AUTH_PROVIDERS.facebook,
           })
