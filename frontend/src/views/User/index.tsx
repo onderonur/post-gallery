@@ -25,6 +25,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import useRequireOwner from "@/hooks/useRequireOwner";
 import { useRouter } from "next/router";
 import { NextSeo } from "next-seo";
+import queryString from "query-string";
 
 const LARGE_AVATAR_SIZE = 12;
 const SMALL_AVATAR_SIZE = 6;
@@ -172,8 +173,10 @@ const UserView = () => {
           indicatorColor="primary"
           textColor="primary"
           onChange={(e, value) => {
+            const query = { tabs: value };
+            const stringified = queryString.stringify(query);
             // https://github.com/zeit/next.js/issues/9574#issuecomment-560082865
-            router.push(`${router.pathname}?tabs=${value}`, router.asPath);
+            router.push(`${router.pathname}?${stringified}`, router.asPath);
           }}
           aria-label="user profile tabs"
         >

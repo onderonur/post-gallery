@@ -37,6 +37,7 @@
     "next-with-apollo": "^5.0.0",
     "nookies": "^2.2.2",
     "nprogress": "^0.2.0",
+    "query-string": "^6.12.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-dropzone": "^10.2.2",
