@@ -3,7 +3,7 @@ import nookies from "nookies";
 import { AppProps, AppContext } from "next/app";
 import { NextPageContext } from "next";
 import { Maybe } from "@/generated/graphql";
-import { isServer, convertYearsToSeconds } from "@/utils";
+import { isServer, SAFE_COOKIE_OPTIONS } from "@/utils";
 import Tokens from "csrf";
 
 declare global {
@@ -58,13 +58,12 @@ const withCSRF = (AppComponent: any) => {
       // Query, it fails because of the missing csrfToken.
       if (!csrfSecret) {
         csrfSecret = tokens.secretSync();
-        nookies.set(appContext.ctx, CSRF_SECRET_KEY, csrfSecret, {
-          path: "/",
-          maxAge: convertYearsToSeconds(5),
-          httpOnly: true,
-          sameSite: "strict",
-          secure: process.env.NODE_ENV === "production",
-        });
+        nookies.set(
+          appContext.ctx,
+          CSRF_SECRET_KEY,
+          csrfSecret,
+          SAFE_COOKIE_OPTIONS,
+        );
         appContext.ctx.req.headers.cookie += `; ${CSRF_SECRET_KEY}=${csrfSecret}`;
       }
 

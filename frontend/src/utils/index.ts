@@ -1,9 +1,8 @@
 import produce from "immer";
 import { isNullOrUndefined } from "util";
-import { Maybe } from "@/generated/graphql";
 import URLS from "@/constants/urls";
 import { NextApiResponse } from "next";
-import cookie from "cookie";
+import cookie, { CookieSerializeOptions } from "cookie";
 import { NextApiRequestCookies } from "next/dist/next-server/server/api-utils";
 
 // https://rangle.io/blog/how-to-use-typescript-type-guards/
@@ -62,7 +61,7 @@ export const addEdgeToConnection = <T extends any>(
 export const isServer = () => typeof window === "undefined";
 
 export const extractAuthToken = (cookies: NextApiRequestCookies) => {
-  return cookies.authToken;
+  return cookies[AUTH_TOKEN_COOKIE_NAME];
 };
 
 export const AUTH_HEADER_KEY = "Authorization";
@@ -79,6 +78,11 @@ export const redirectToHome = (logoutTimeStamp?: string) => {
   window.location.href = href;
 };
 
+export const convertYearsToSeconds = (years: number) => {
+  const oneYearAsSeconds = 60 * 60 * 24 * 365;
+  return oneYearAsSeconds * years;
+};
+
 const setCookie = (
   res: NextApiResponse,
   name: string,
@@ -88,29 +92,28 @@ const setCookie = (
   res.setHeader("Set-Cookie", cookie.serialize(name, value, options));
 };
 
+export const SAFE_COOKIE_OPTIONS: CookieSerializeOptions = {
+  // We need to set "path". Otherwise, the cookie will be
+  // set for "/api" path.
+  path: "/",
+  // Cookie life-time: 5 years
+  maxAge: convertYearsToSeconds(5),
+  httpOnly: true,
+  sameSite: "strict",
+  secure: process.env.NODE_ENV === "production",
+};
+
+const AUTH_TOKEN_COOKIE_NAME = "authToken";
+
 export const setAuthTokenCookie = (res: NextApiResponse, authToken: string) => {
-  setCookie(res, "authToken", authToken, {
-    path: "/",
-    maxAge: convertYearsToSeconds(5),
-    httpOnly: true,
-    // We need to set "path". Otherwise, the cookie will be
-    // set for "/api" path.
-    sameSite: "strict",
-    // Cookie life-time: 5 years
-    secure: process.env.NODE_ENV === "production",
-  });
+  setCookie(res, AUTH_TOKEN_COOKIE_NAME, authToken, SAFE_COOKIE_OPTIONS);
 };
 
 export const destroyAuthTokenCookie = (res: NextApiResponse) => {
-  setCookie(res, "authToken", "", {
+  setCookie(res, AUTH_TOKEN_COOKIE_NAME, "", {
     // We need to set "path". Otherwise, the cookie will be
     // set for "/api" path.
     path: "/",
     maxAge: -1,
   });
-};
-
-export const convertYearsToSeconds = (years: number) => {
-  const oneYearAsSeconds = 60 * 60 * 24 * 365;
-  return oneYearAsSeconds * years;
 };
