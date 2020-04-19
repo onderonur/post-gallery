@@ -1,8 +1,6 @@
-import { createProxyMiddleware } from "http-proxy-middleware";
-import { NextApiRequest, NextApiResponse } from "next";
-import { addAuthHeader, extractAuthToken } from "@/utils";
+import { extractAuthToken, AUTH_HEADER_KEY, getAuthHeaderValue } from "@/utils";
 import csrfProtection from "@/middlewares/csrfProtection";
-import runMiddleware from "@/middlewares/runMiddleware";
+import proxy from "@/middlewares/proxy";
 
 export const config = {
   api: {
@@ -10,30 +8,15 @@ export const config = {
   },
 };
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
-  switch (req.method) {
-    case "POST":
+export default csrfProtection(
+  proxy({
+    target: process.env.API_URL,
+    pathRewrite: { "^/api": "" },
+    onProxyReq: (proxyReq, req, res) => {
       const authToken = extractAuthToken(req.cookies);
-
-      // Run the middleware
-      await runMiddleware(
-        req,
-        res,
-        // https://www.npmjs.com/package/http-proxy-middleware#example
-        createProxyMiddleware({
-          target: process.env.API_URL,
-          pathRewrite: { "^/api": "" },
-          headers: addAuthHeader({}, authToken),
-        }),
-      );
-
-      // Rest of the API logic
-      res.end();
-      break;
-    default:
-      // Method Not Allowed
-      res.status(405).end();
-  }
-}
-
-export default csrfProtection(handler);
+      if (authToken) {
+        proxyReq.setHeader(AUTH_HEADER_KEY, getAuthHeaderValue(authToken));
+      }
+    },
+  }),
+);

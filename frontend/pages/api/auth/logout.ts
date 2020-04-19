@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 import {
-  addAuthHeader,
   destroyAuthTokenCookie,
   extractAuthToken,
+  AUTH_HEADER_KEY,
+  getAuthHeaderValue,
 } from "@/utils";
 import handleErrors from "@/middlewares/handleErrors";
 
@@ -14,12 +15,12 @@ interface Response {
 const logout = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   switch (req.method) {
     case "POST":
+      const headers: Record<string, string> = {};
       const authToken = extractAuthToken(req.cookies);
-      await axios.post(
-        `${process.env.API_URL}/auth/logout`,
-        {},
-        { headers: addAuthHeader({}, authToken) },
-      );
+      if (authToken) {
+        headers[AUTH_HEADER_KEY] = getAuthHeaderValue(authToken);
+      }
+      await axios.post(`${process.env.API_URL}/auth/logout`, {}, { headers });
       destroyAuthTokenCookie(res);
       res.json({ success: true });
       break;

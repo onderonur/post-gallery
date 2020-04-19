@@ -172,10 +172,8 @@ const UserView = () => {
           indicatorColor="primary"
           textColor="primary"
           onChange={(e, value) => {
-            router.push(router.pathname, {
-              pathname: `/users/${user.id}`,
-              query: { tabs: value },
-            });
+            // https://github.com/zeit/next.js/issues/9574#issuecomment-560082865
+            router.push(`${router.pathname}?tabs=${value}`, router.asPath);
           }}
           aria-label="user profile tabs"
         >

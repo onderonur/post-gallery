@@ -65,17 +65,10 @@ export const extractAuthToken = (cookies: NextApiRequestCookies) => {
   return cookies.authToken;
 };
 
-export const addAuthHeader = (
-  headers: Record<string, string>,
-  authToken: Maybe<string>,
-) => {
-  if (!authToken) {
-    return headers;
-  }
-  return {
-    ...headers,
-    Authorization: `Bearer ${authToken}`,
-  };
+export const AUTH_HEADER_KEY = "Authorization";
+
+export const getAuthHeaderValue = (authToken: string) => {
+  return `Bearer ${authToken}`;
 };
 
 export const redirectToHome = (logoutTimeStamp?: string) => {
