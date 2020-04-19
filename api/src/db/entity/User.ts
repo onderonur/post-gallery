@@ -8,8 +8,11 @@ import { AuthToken } from './AuthToken';
 
 @Entity()
 export class User extends BaseAbstractEntity {
-  @Column({ unique: true })
-  googleProfileId: string;
+  @Column({ unique: true, nullable: true })
+  googleProfileId?: string;
+
+  @Column({ unique: true, nullable: true })
+  facebookProfileId?: string;
 
   @Column()
   displayName: string;
@@ -25,28 +28,16 @@ export class User extends BaseAbstractEntity {
   @Column({ type: 'varchar', nullable: true })
   thumbnailUrl?: string | null;
 
-  @OneToMany(
-    () => Reaction,
-    reaction => reaction.user,
-  )
+  @OneToMany(() => Reaction, (reaction) => reaction.user)
   reactions: Reaction[];
 
-  @OneToMany(
-    () => Post,
-    post => post.user,
-  )
+  @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
 
-  @OneToMany(
-    () => Comment,
-    comment => comment.user,
-  )
+  @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 
-  @OneToMany(
-    () => AuthToken,
-    authToken => authToken.user,
-  )
+  @OneToMany(() => AuthToken, (authToken) => authToken.user)
   authTokens: AuthToken[];
 
   @BeforeInsert()
@@ -57,5 +48,9 @@ export class User extends BaseAbstractEntity {
 
   static findOneByGoogleProfileId(googleProfileId: string) {
     return this.findOne({ where: { googleProfileId } });
+  }
+
+  static findOneByFacebookProfileId(facebookProfileId: string) {
+    return this.findOne({ where: { facebookProfileId } });
   }
 }
