@@ -1,8 +1,9 @@
 import React from "react";
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles, Theme, Box } from "@material-ui/core";
 import BaseButton, { BaseButtonProps } from "@/components/BaseButton";
 import useRequireAuth from "@/hooks/useRequireAuth";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import VerifiedLoginInfo from "./VerifiedLoginInfo";
 
 interface StyleProps {
   backgroundColor: CSSProperties["backgroundColor"];
@@ -12,6 +13,7 @@ interface StyleProps {
 
 const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
   button: {
+    width: "100%",
     height: 40,
     borderWidth: 0,
     backgroundColor: ({ backgroundColor }) => backgroundColor,
@@ -55,6 +57,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => ({
 type SocialLoginButtonProps = StyleProps & {
   icon: React.ReactNode;
   providerName: string;
+  isLoginVerified: boolean;
   disabled: BaseButtonProps["disabled"];
   onClick: BaseButtonProps["onClick"];
 };
@@ -66,6 +69,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   fontColor,
   activeBackgroundColor,
   providerName,
+  isLoginVerified,
   disabled,
   onClick,
 }) => {
@@ -77,14 +81,19 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   const requireAuth = useRequireAuth();
   return requireAuth(
     null,
-    <BaseButton
-      className={classes.button}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      <span className={classes.icon}>{icon}</span>
-      <span className={classes.text}>Log in with {providerName}</span>
-    </BaseButton>,
+    <div>
+      <BaseButton
+        className={classes.button}
+        disabled={disabled}
+        onClick={onClick}
+      >
+        <span className={classes.icon}>{icon}</span>
+        <span className={classes.text}>Log in with {providerName}</span>
+      </BaseButton>
+      <Box marginTop={0.5}>
+        <VerifiedLoginInfo isVerified={isLoginVerified} />
+      </Box>
+    </div>,
   );
 };
 

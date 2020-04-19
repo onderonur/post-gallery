@@ -117,3 +117,8 @@ export const destroyAuthTokenCookie = (res: NextApiResponse) => {
     maxAge: -1,
   });
 };
+
+export const AUTH_PROVIDERS = {
+  facebook: "Facebook",
+  google: "Google",
+};

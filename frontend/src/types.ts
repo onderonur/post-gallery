@@ -11,6 +11,7 @@ declare global {
     interface ProcessEnv {
       API_URL: string;
       GOOGLE_OAUTH_CLIENT_ID: string;
+      FACEBOOK_OAUTH_APP_ID: string;
     }
   }
 }

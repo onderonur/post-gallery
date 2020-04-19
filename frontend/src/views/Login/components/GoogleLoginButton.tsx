@@ -4,8 +4,7 @@ import { colors } from "@material-ui/core";
 import GoogleIcon from "./GoogleIcon";
 import GoogleLogin, { GoogleLoginResponse } from "react-google-login";
 import axios from "axios";
-import { redirectToHome } from "@/utils";
-import VerifiedLoginInfo from "./VerifiedLoginInfo";
+import { redirectToHome, AUTH_PROVIDERS } from "@/utils";
 
 const GoogleLoginButton = () => {
   const [isLoginVerified, setIsLoginVerified] = useState<boolean>(false);
@@ -13,30 +12,34 @@ const GoogleLoginButton = () => {
     <GoogleLogin
       clientId={process.env.GOOGLE_OAUTH_CLIENT_ID}
       render={({ onClick, disabled }) => (
-        <>
-          <SocialLoginButton
-            providerName="Google"
-            icon={<GoogleIcon />}
-            backgroundColor={colors.common.white}
-            fontColor="#737373"
-            activeBackgroundColor="#e5e5e5"
-            disabled={disabled}
-            onClick={onClick}
-          />
-          <VerifiedLoginInfo isVerified={isLoginVerified} />
-        </>
+        <SocialLoginButton
+          providerName={AUTH_PROVIDERS.google}
+          isLoginVerified={isLoginVerified}
+          icon={<GoogleIcon />}
+          backgroundColor={colors.common.white}
+          fontColor="#737373"
+          activeBackgroundColor="#e5e5e5"
+          disabled={disabled}
+          onClick={onClick}
+        />
       )}
       onSuccess={(response) => {
-        const idToken = (response as GoogleLoginResponse).getAuthResponse()
-          .id_token;
-        axios.post("/api/auth/google", { idToken }).then(({ data }) => {
-          const { verified } = data;
-          setIsLoginVerified(verified);
-          if (verified) {
-            redirectToHome();
-          }
-        });
+        const authResponse = (response as GoogleLoginResponse).getAuthResponse();
+        const idToken = authResponse.id_token;
+        axios
+          .post("/api/auth/verify", {
+            providerToken: idToken,
+            provider: AUTH_PROVIDERS.google,
+          })
+          .then(({ data }) => {
+            const { verified } = data;
+            setIsLoginVerified(verified);
+            if (verified) {
+              redirectToHome();
+            }
+          });
       }}
+      // eslint-disable-next-line no-console
       onFailure={(error) => console.log(error)}
       cookiePolicy="none"
     />

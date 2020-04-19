@@ -1,6 +1,7 @@
 import React from "react";
 import GoogleLoginButton from "./components/GoogleLoginButton";
-import { Container, Divider, useTheme } from "@material-ui/core";
+import FacebookLoginButton from "./components/FacebookLoginButton";
+import { Container, Divider, useTheme, makeStyles } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { useHideAppHeader } from "@/components/AppLayout";
 import FlexRow from "@/components/FlexRow";
@@ -12,11 +13,20 @@ import { useRouter } from "next/router";
 import Redirect from "@/components/Redirect";
 import URLS from "@/constants/urls";
 
+const useStyles = makeStyles((theme) => ({
+  buttonsContainer: {
+    "& > *": {
+      margin: theme.spacing(0.5, 0),
+    },
+  },
+}));
+
 const LoginView = () => {
-  useHideAppHeader();
+  const classes = useStyles();
   const router = useRouter();
   const theme = useTheme();
   const requireAuth = useRequireAuth();
+  useHideAppHeader();
 
   return requireAuth(
     <Redirect href={URLS.posts} replace />,
@@ -38,8 +48,13 @@ const LoginView = () => {
             Post Gallery
           </BoldText>
           <Divider />
-          <FlexCol marginY={3} border={theme.shadows[20]}>
+          <FlexCol
+            className={classes.buttonsContainer}
+            marginY={3}
+            border={theme.shadows[20]}
+          >
             <GoogleLoginButton />
+            <FacebookLoginButton />
           </FlexCol>
         </FlexCol>
       </Container>
