@@ -40,36 +40,37 @@ const withCSRF = (AppComponent: any) => {
   WithCSRF.getInitialProps = async (
     appContext: NextPageContext & AppContext,
   ) => {
-    let csrfToken: Maybe<string> = undefined;
+    let csrfToken: Maybe<string>;
     if (isServer() && appContext.ctx.req && appContext.ctx.res) {
       // Get all cookies from the request
       const currentCookies = nookies.get(appContext.ctx);
       // Check if there is a csrfSecret
       let csrfSecret = currentCookies[CSRF_SECRET_KEY];
       const tokens = new Tokens();
-      // If there is no csrfSecret, first create it.
-      // Then, set it in a httpOnly cookie for later use.
-      // Lastly, add it to the current request cookies.
-      // This is important if a user opens the app for the first time,
-      // without any csrfSecret cookie.
-      // This is required, because "apollo-upload-client" doesn't support
-      // "GET" requests for GraphQL Queries. It only supports "POST".
-      // So, when we server-rendering the app and if there is any
-      // Query, it fails because of the missing csrfToken.
       if (!csrfSecret) {
+        // If there is no csrfSecret, first create it.
         csrfSecret = tokens.secretSync();
+        // Then, set it in a httpOnly cookie for later use.
         nookies.set(
           appContext.ctx,
           CSRF_SECRET_KEY,
           csrfSecret,
           SAFE_COOKIE_OPTIONS,
         );
+        // Lastly, add it to the current request cookies.
+        // This is important if a user opens the app for the first time,
+        // without any csrfSecret cookie.
+        // This is required, because "apollo-upload-client" doesn't support
+        // "GET" requests for GraphQL Queries. It only supports "POST".
+        // So, when we server-rendering the app and if there is any
+        // Query, it fails because of the missing csrfToken.
         appContext.ctx.req.headers.cookie += `; ${CSRF_SECRET_KEY}=${csrfSecret}`;
       }
 
       // Create a csrfToken
       csrfToken = tokens.create(csrfSecret);
       // Store it in the response to use in later HOCs etc.
+      // This is also required because of GraphQL Queries made bu "POST" requests.
       appContext.ctx.res.locals = { csrfToken };
     }
     // Get initial pageProps.
