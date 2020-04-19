@@ -7,8 +7,8 @@ const createPostConnectionLoader = createLoader<
   ConnectionOptions,
   PostConnectionByKey
 >(
-  args => Post.findConnections(args as ConnectionOptions[]),
-  result => result.key,
+  (args) => Post.findConnections(args as ConnectionOptions[]),
+  (result) => result.key,
 );
 
 const postLoaders = (viewer: Maybe<RequestUser>) => ({

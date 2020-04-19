@@ -21,12 +21,12 @@ const createViewerReactionByReactableIdLoader = createLoader<ID, Reaction>(
 
     return reactions;
   },
-  reaction => reaction.reactableId,
+  (reaction) => reaction.reactableId,
 );
 
 const createReactionsByReactableIdLoader = createLoader<ID, ReactableReactions>(
-  reactableIds => Reaction.findReactionsByReactableIds(reactableIds as ID[]),
-  reaction => reaction.reactableId,
+  (reactableIds) => Reaction.findReactionsByReactableIds(reactableIds as ID[]),
+  (reaction) => reaction.reactableId,
 );
 
 const reactionLoaders = (viewer: Maybe<RequestUser>) => ({

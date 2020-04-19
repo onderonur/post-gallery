@@ -11,8 +11,8 @@ const createCommentConnectionByPostIdLoader = createLoader<
   CommentConnectionOptions,
   CommentConnectionByKey
 >(
-  args => Comment.findConnections(args as CommentConnectionOptions[]),
-  result => result.key,
+  (args) => Comment.findConnections(args as CommentConnectionOptions[]),
+  (result) => result.key,
 );
 
 const commentLoaders = (viewer: Maybe<RequestUser>) => ({

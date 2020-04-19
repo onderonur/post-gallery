@@ -15,11 +15,7 @@ export class Media extends BaseAbstractEntity {
   @Column(() => Image)
   standardImage: Image;
 
-  @OneToOne(
-    () => Post,
-    post => post.media,
-    { onDelete: 'CASCADE' },
-  )
+  @OneToOne(() => Post, (post) => post.media, { onDelete: 'CASCADE' })
   @JoinColumn()
   post: Post;
 

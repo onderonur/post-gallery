@@ -17,11 +17,11 @@ export function createLoader<Key, Data>(
 ) {
   return (viewer: Maybe<RequestUser>) => {
     return new DataLoader<Key, Maybe<Data>, DataLoaderCacheKey>(
-      async keys => {
+      async (keys) => {
         const results = await batchFn(keys, viewer);
-        const mappedResults = keys.map(key =>
+        const mappedResults = keys.map((key) =>
           results.find(
-            data =>
+            (data) =>
               mapperField(data) ===
               (typeof key === 'object' ? getDataLoaderCacheKey(key) : key),
           ),
@@ -44,11 +44,11 @@ export function createMultiLoader<Key, Data>(
 ) {
   return (viewer: Maybe<RequestUser>) => {
     return new DataLoader<Key, Data[], DataLoaderCacheKey>(
-      async keys => {
+      async (keys) => {
         const results = await batchFn(keys, viewer);
-        const mappedResults = keys.map(key =>
+        const mappedResults = keys.map((key) =>
           results.filter(
-            data =>
+            (data) =>
               mapperField(data) ===
               (typeof key === 'object' ? getDataLoaderCacheKey(key) : key),
           ),

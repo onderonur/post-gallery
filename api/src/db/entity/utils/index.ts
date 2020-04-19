@@ -2,7 +2,7 @@ import { ValidationError } from 'class-validator';
 import { getManager, ObjectLiteral } from 'typeorm';
 
 export const getValidationErrorMessage = (errors: ValidationError[]) =>
-  errors.map(error => error.toString()).join('');
+  errors.map((error) => error.toString()).join('');
 
 export const runRawSQL = async <T>(
   query: string,
@@ -23,5 +23,5 @@ export const runRawSQL = async <T>(
 };
 
 export const unionAllQueries = (queries: string[]) => {
-  return queries.map(query => `(${query})`).join(' UNION ALL ');
+  return queries.map((query) => `(${query})`).join(' UNION ALL ');
 };

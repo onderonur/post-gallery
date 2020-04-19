@@ -17,17 +17,12 @@ export class Reaction extends BaseAbstractEntity {
   @Column()
   reactableId: ID;
 
-  @ManyToOne(
-    () => Reactable,
-    reactable => reactable.reactions,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => Reactable, (reactable) => reactable.reactions, {
+    onDelete: 'CASCADE',
+  })
   reactable: Reactable;
 
-  @ManyToOne(
-    () => User,
-    user => user.reactions,
-  )
+  @ManyToOne(() => User, (user) => user.reactions)
   user: User;
 
   @Column()
@@ -53,7 +48,7 @@ export class Reaction extends BaseAbstractEntity {
     for (let i = 0; i < reactionTypes.length; i++) {
       const reactionType = reactionTypes[i];
       queryBuilder.addSelect(
-        subQuery =>
+        (subQuery) =>
           subQuery
             .select('COUNT(likeReaction.id)', 'likeCount')
             .from(this, 'likeReaction')

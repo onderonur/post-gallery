@@ -28,11 +28,11 @@ export const mapConnectionsByHashes = <T extends ConnectionQueryRow>({
   args: ConnectionOptions[];
 }) => {
   const connectionsByKey = hashes.map((key, i) => {
-    const nodes = rows.filter(row => row.key === key);
+    const nodes = rows.filter((row) => row.key === key);
     const totalCount = getLastOfArray(nodes)?.totalCount || 0;
     const { first } = args[i];
     const hasNextPage = first ? nodes.length > first : false;
-    let edges = nodes.map(node => ({
+    let edges = nodes.map((node) => ({
       cursor: getCursorFn(node),
       node,
     }));

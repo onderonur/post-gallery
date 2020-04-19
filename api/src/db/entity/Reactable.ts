@@ -27,25 +27,16 @@ export class Reactable extends BaseAbstractEntity {
   @Column({ type: 'enum', enum: ReactableType })
   type: ReactableType;
 
-  @OneToMany(
-    () => Reaction,
-    reaction => reaction.reactable,
-  )
+  @OneToMany(() => Reaction, (reaction) => reaction.reactable)
   reactions: Reaction[];
 
-  @OneToOne(
-    () => PostEntity,
-    post => post.reactable,
-    { onDelete: 'CASCADE' },
-  )
+  @OneToOne(() => PostEntity, (post) => post.reactable, { onDelete: 'CASCADE' })
   @JoinColumn()
   post: PostEntity;
 
-  @OneToOne(
-    () => CommentEntity,
-    comment => comment.reactable,
-    { onDelete: 'CASCADE' },
-  )
+  @OneToOne(() => CommentEntity, (comment) => comment.reactable, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   comment: CommentEntity;
 }

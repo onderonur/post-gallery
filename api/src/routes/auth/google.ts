@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { OAuth2Client } from 'google-auth-library';
+import { OAuth2Client, LoginTicket } from 'google-auth-library';
 import { User } from '../../db/entity/User';
 import { AuthToken } from '../../db/entity/AuthToken';
+import { Maybe } from '../../generated/graphql';
 
 const googleRouter = Router();
 
@@ -12,10 +13,17 @@ googleRouter.post('/verify', async (req, res) => {
     process.env.GOOGLE_OAUTH_CLIENT_ID,
     process.env.GOOGLE_OAUTH_CLIENT_SECRET,
   );
-  const ticket = await client.verifyIdToken({
-    idToken,
-    audience: process.env.GOOGLE_OAUTH_CLIENT_ID,
-  });
+
+  let ticket: Maybe<LoginTicket>;
+  try {
+    ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_OAUTH_CLIENT_ID,
+    });
+  } catch {
+    return res.json({ success: false });
+  }
+
   const payload = ticket.getPayload();
 
   if (!payload) {

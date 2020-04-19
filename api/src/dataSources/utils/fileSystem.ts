@@ -17,8 +17,8 @@ const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png'];
 // the folder is already created. There is no need to "reject" here on error.
 // Otherwise, we would need to use "try/catch", when we want to check if a folder exists.
 const dirExists = (dirPath: string) =>
-  new Promise(resolve =>
-    fs.access(dirPath, fs.constants.F_OK, error => resolve(!error)),
+  new Promise((resolve) =>
+    fs.access(dirPath, fs.constants.F_OK, (error) => resolve(!error)),
   );
 
 // Promisifying the "fs.mkdir" method which works with callbacks.
@@ -27,7 +27,7 @@ const createDir = (dirPath: string) =>
     // About "recursive":
     // https://stackoverflow.com/questions/28498296/enoent-no-such-file-or-directory-on-fs-mkdirsync/53730012#53730012
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fs.mkdir(dirPath, { recursive: true } as any, error => {
+    fs.mkdir(dirPath, { recursive: true } as any, (error) => {
       if (error) {
         reject(error);
       }

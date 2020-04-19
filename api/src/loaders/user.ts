@@ -4,8 +4,8 @@ import { User } from '../db/entity/User';
 import Maybe from 'graphql/tsutils/Maybe';
 
 const createUserByIdLoader = createLoader<ID, User>(
-  userIds => User.findByIds(userIds as ID[]),
-  user => user.id,
+  (userIds) => User.findByIds(userIds as ID[]),
+  (user) => user.id,
 );
 
 const userLoaders = (viewer: Maybe<RequestUser>) => ({

@@ -42,21 +42,14 @@ const getPostCursor = (post: PostConnectionQueryRow) => {
 
 @Entity()
 export class Post extends BaseAbstractEntity {
-  @OneToOne(
-    () => Reactable,
-    reactable => reactable.post,
-    { cascade: true },
-  )
+  @OneToOne(() => Reactable, (reactable) => reactable.post, { cascade: true })
   reactable: Reactable;
 
   @Column({ length: 200 })
   @IsNotEmpty()
   title: string;
 
-  @ManyToOne(
-    () => User,
-    user => user.posts,
-  )
+  @ManyToOne(() => User, (user) => user.posts)
   user: User;
 
   @Column()
@@ -71,14 +64,11 @@ export class Post extends BaseAbstractEntity {
     // Otherwise, "post.media = media" doesn't work, when the "JoinColumn"
     // is on the "Post" entity.
     // https://github.com/typeorm/typeorm/blob/master/docs/one-to-one-relations.md
-    media => media.post,
+    (media) => media.post,
   )
   media: Media;
 
-  @OneToMany(
-    () => Comment,
-    comment => comment.post,
-  )
+  @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
   @BeforeInsert()
@@ -114,7 +104,7 @@ export class Post extends BaseAbstractEntity {
         .addSelect(`${alias}.userId`, 'userId')
         .addSelect(`${alias}.createdAt`, 'createdAt')
         .addSelect(`'${cacheKey}'`, 'key')
-        .addSelect(subQuery =>
+        .addSelect((subQuery) =>
           subQuery.select(`COUNT(${alias}.id)`, 'totalCount').from(this, alias),
         );
 

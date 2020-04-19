@@ -37,31 +37,22 @@ export type CommentConnectionByKey = {
 
 @Entity()
 export class Comment extends BaseAbstractEntity {
-  @OneToOne(
-    () => Reactable,
-    reactable => reactable.comment,
-    { cascade: true },
-  )
+  @OneToOne(() => Reactable, (reactable) => reactable.comment, {
+    cascade: true,
+  })
   reactable: Reactable;
 
   @Column({ length: 1000 })
   @IsNotEmpty()
   text: string;
 
-  @ManyToOne(
-    () => Post,
-    post => post.comments,
-    { onDelete: 'CASCADE' },
-  )
+  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
   post: Post;
 
   @Column()
   postId: ID;
 
-  @ManyToOne(
-    () => User,
-    user => user.comments,
-  )
+  @ManyToOne(() => User, (user) => user.comments)
   user: User;
 
   @Column()
@@ -97,7 +88,7 @@ export class Comment extends BaseAbstractEntity {
 
       // "WHERE" conditions those are other than the pagination.
       // This is shared by both pagination query and totalCount query.
-      const where = new Brackets(qb =>
+      const where = new Brackets((qb) =>
         qb.where(`${alias}.postId = :postId${i}`),
       );
       Object.assign(parameters, { [`postId${i}`]: postId });
@@ -112,7 +103,7 @@ export class Comment extends BaseAbstractEntity {
         .addSelect(`${alias}.createdAt`, 'createdAt')
         .addSelect(`${alias}.userId`, 'userId')
         .addSelect(`'${cacheKey}'`, 'key')
-        .addSelect(subQuery =>
+        .addSelect((subQuery) =>
           subQuery
             .select(`COUNT(${alias}.id)`, 'totalCount')
             .from(this, alias)
