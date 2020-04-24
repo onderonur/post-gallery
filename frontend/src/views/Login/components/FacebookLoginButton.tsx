@@ -7,8 +7,9 @@ import SocialLoginButton from "./SocialLoginButton";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { ReactFacebookLoginInfo } from "react-facebook-login";
 import axios from "axios";
-import { redirectToHome, AUTH_PROVIDERS } from "@/utils";
+import { redirectToHome } from "@/utils";
 import FacebookIcon from "./FacebookIcon";
+import authProviders from "@/constants/authProviders";
 
 const FacebookLoginButton = () => {
   const [isLoginVerified, setIsLoginVerified] = useState<boolean>(false);
@@ -20,7 +21,7 @@ const FacebookLoginButton = () => {
         axios
           .post("/api/auth/login", {
             providerToken: accessToken,
-            provider: AUTH_PROVIDERS.facebook,
+            provider: authProviders.facebook,
           })
           .then(({ data }) => {
             const { verified } = data;
@@ -33,7 +34,7 @@ const FacebookLoginButton = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       render={({ isDisabled, onClick }: any) => (
         <SocialLoginButton
-          providerName={AUTH_PROVIDERS.facebook}
+          providerName={authProviders.facebook}
           isLoginVerified={isLoginVerified}
           icon={<FacebookIcon />}
           backgroundColor="#4267b2"

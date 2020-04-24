@@ -1,8 +1,6 @@
-const URLS = {
+export default {
   login: "/login",
   user: "/users/[userId]",
   post: "/[postId]",
   posts: "/",
 };
-
-export default URLS;

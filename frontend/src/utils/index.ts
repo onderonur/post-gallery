@@ -89,7 +89,20 @@ const setCookie = (
   value: string,
   options: cookie.CookieSerializeOptions,
 ) => {
-  res.setHeader("Set-Cookie", cookie.serialize(name, value, options));
+  const currentCookies = res.getHeader("Set-Cookie") || [];
+  const serializedCookie = cookie.serialize(name, value, options);
+  let finalCookies;
+  if (currentCookies) {
+    if (Array.isArray(currentCookies)) {
+      finalCookies = [...currentCookies, serializedCookie];
+    } else {
+      finalCookies = [currentCookies, serializedCookie];
+    }
+  } else {
+    finalCookies = [serializedCookie];
+  }
+  finalCookies = finalCookies.map((v) => v.toString());
+  res.setHeader("Set-Cookie", finalCookies);
 };
 
 export const SAFE_COOKIE_OPTIONS: CookieSerializeOptions = {
@@ -116,9 +129,4 @@ export const destroyAuthTokenCookie = (res: NextApiResponse) => {
     path: "/",
     maxAge: -1,
   });
-};
-
-export const AUTH_PROVIDERS = {
-  facebook: "Facebook",
-  google: "Google",
 };

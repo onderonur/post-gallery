@@ -4,7 +4,8 @@ import { colors } from "@material-ui/core";
 import GoogleIcon from "./GoogleIcon";
 import GoogleLogin, { GoogleLoginResponse } from "react-google-login";
 import axios from "axios";
-import { redirectToHome, AUTH_PROVIDERS } from "@/utils";
+import { redirectToHome } from "@/utils";
+import authProviders from "@/constants/authProviders";
 
 const GoogleLoginButton = () => {
   const [isLoginVerified, setIsLoginVerified] = useState<boolean>(false);
@@ -13,7 +14,7 @@ const GoogleLoginButton = () => {
       clientId={process.env.GOOGLE_OAUTH_CLIENT_ID}
       render={({ onClick, disabled }) => (
         <SocialLoginButton
-          providerName={AUTH_PROVIDERS.google}
+          providerName={authProviders.google}
           isLoginVerified={isLoginVerified}
           icon={<GoogleIcon />}
           backgroundColor={colors.common.white}
@@ -29,7 +30,7 @@ const GoogleLoginButton = () => {
         axios
           .post("/api/auth/login", {
             providerToken: idToken,
-            provider: AUTH_PROVIDERS.google,
+            provider: authProviders.google,
           })
           .then(({ data }) => {
             const { verified } = data;

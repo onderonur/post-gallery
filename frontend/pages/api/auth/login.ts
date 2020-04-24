@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
-import { setAuthTokenCookie, AUTH_PROVIDERS } from "@/utils";
+import { setAuthTokenCookie } from "@/utils";
 import handleErrors from "@/middlewares/handleErrors";
 import { Maybe } from "@/generated/graphql";
+import authProviders from "@/constants/authProviders";
 
 interface Response {
   verified: boolean;
@@ -14,14 +15,14 @@ const login = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
       const { provider, providerToken } = req.body;
       let token: Maybe<string>;
       switch (provider) {
-        case AUTH_PROVIDERS.google:
+        case authProviders.google:
           const googleResponse = await axios.post(
             `${process.env.API_URL}/auth/google/verify`,
             { idToken: providerToken },
           );
           token = googleResponse.data.token;
           break;
-        case AUTH_PROVIDERS.facebook:
+        case authProviders.facebook:
           const facebookResponse = await axios.post(
             `${process.env.API_URL}/auth/facebook/verify`,
             { accessToken: providerToken },
