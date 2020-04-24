@@ -14,6 +14,7 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import { errorHandler, authenticate } from './middlewares';
 import { GQLContext } from './types';
+import useragent from 'express-useragent';
 
 const { MAX_FILE_SIZE_IN_MB, MAX_FILES_COUNT } = process.env;
 
@@ -47,6 +48,9 @@ async function runServer() {
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+
+  // TODO: Will save the "user-agent" with "auth token" requests
+  app.use(useragent.express());
 
   app.use(authenticate);
 
