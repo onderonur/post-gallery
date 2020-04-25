@@ -8,7 +8,7 @@ const googleRouter = Router();
 
 // https://developers.google.com/identity/sign-in/web/backend-auth
 googleRouter.post('/verify', async (req, res) => {
-  const { idToken } = req.body;
+  const { providerToken } = req.body;
   const client = new OAuth2Client(
     process.env.GOOGLE_OAUTH_CLIENT_ID,
     process.env.GOOGLE_OAUTH_CLIENT_SECRET,
@@ -17,7 +17,7 @@ googleRouter.post('/verify', async (req, res) => {
   let ticket: Maybe<LoginTicket>;
   try {
     ticket = await client.verifyIdToken({
-      idToken,
+      idToken: providerToken,
       audience: process.env.GOOGLE_OAUTH_CLIENT_ID,
     });
   } catch {
@@ -42,13 +42,18 @@ googleRouter.post('/verify', async (req, res) => {
     // TODO: Will provide a default displayName algorithm if provider
     // doesn't return a displayName.
     const { given_name, family_name, email, picture } = payload;
+
+    if (!email) {
+      throw new Error("Couldn't find an e-mail to create your account.");
+    }
+
     foundUser.displayName = `${given_name} ${family_name}`;
     foundUser.email = email;
     foundUser.thumbnailUrl = picture;
     await foundUser.save();
   }
 
-  const token = await AuthToken.signAndSave(foundUser);
+  const token = await AuthToken.signAndSave(req, foundUser);
 
   return res.json({ token });
 });

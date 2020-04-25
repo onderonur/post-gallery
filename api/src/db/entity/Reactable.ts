@@ -5,6 +5,8 @@ import {
   OneToOne,
   JoinColumn,
   Check,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { BaseAbstractEntity } from './BaseAbstractEntity';
 import { Reaction } from './Reaction';
@@ -39,4 +41,10 @@ export class Reactable extends BaseAbstractEntity {
   })
   @JoinColumn()
   comment: CommentEntity;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private async validate() {
+    await this.baseValidate();
+  }
 }

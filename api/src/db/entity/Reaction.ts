@@ -1,4 +1,11 @@
-import { Entity, ManyToOne, Column, Index } from 'typeorm';
+import {
+  Entity,
+  ManyToOne,
+  Column,
+  Index,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
 import { BaseAbstractEntity } from './BaseAbstractEntity';
 import { Reactable } from './Reactable';
 import { User } from './User';
@@ -30,6 +37,12 @@ export class Reaction extends BaseAbstractEntity {
 
   @Column({ type: 'enum', enum: ViewerReactionType })
   type: ViewerReactionType;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private async validate() {
+    await this.baseValidate();
+  }
 
   static async findReactionsByReactableIds(
     reactableIds: ID[],

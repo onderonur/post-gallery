@@ -3,7 +3,7 @@ import { ID } from '../types';
 import { Comment } from '../db/entity/Comment';
 import { AddPostCommentInput, PostCommentsArgs } from '../generated/graphql';
 import { AuthenticationError, ApolloError } from 'apollo-server-express';
-import { emptyConnection } from '../db/entity/utils/connection';
+import { EMPTY_CONNECTION } from '../db/entity/utils/connection';
 import { Reactable, ReactableType } from '../db/entity/Reactable';
 
 class CommentAPI extends BaseDataSource {
@@ -55,7 +55,7 @@ class CommentAPI extends BaseDataSource {
       first,
       after,
     });
-    return result?.connection || emptyConnection;
+    return result?.connection || EMPTY_CONNECTION;
   }
 }
 

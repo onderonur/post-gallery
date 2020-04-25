@@ -2,7 +2,7 @@ import { Post, PostConnectionOptions } from '../db/entity/Post';
 import { ID } from '../types';
 import { Media } from '../db/entity/Media';
 import BaseDataSource from './BaseDataSource';
-import { emptyConnection } from '../db/entity/utils/connection';
+import { EMPTY_CONNECTION } from '../db/entity/utils/connection';
 import { AuthenticationError, ApolloError } from 'apollo-server-express';
 import { Reactable, ReactableType } from '../db/entity/Reactable';
 
@@ -15,7 +15,7 @@ class PostAPI extends BaseDataSource {
   async findPostConnection(args: PostConnectionOptions) {
     const { loaders } = this.context;
     const result = await loaders.post.postConnection.load(args);
-    return result?.connection || emptyConnection;
+    return result?.connection || EMPTY_CONNECTION;
   }
 
   async findPostById(id: ID) {

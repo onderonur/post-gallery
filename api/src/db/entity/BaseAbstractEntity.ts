@@ -4,7 +4,6 @@ import {
   BaseEntity,
   PrimaryColumn,
   BeforeInsert,
-  BeforeUpdate,
 } from 'typeorm';
 import { nanoid } from 'nanoid';
 import { validate } from 'class-validator';
@@ -28,13 +27,7 @@ export class BaseAbstractEntity extends BaseEntity {
     }
   }
 
-  @BeforeInsert()
-  @BeforeUpdate()
-  private async validate() {
-    await this.validateAndThrowIfHasErrors();
-  }
-
-  private async validateAndThrowIfHasErrors() {
+  async baseValidate() {
     const errors = await validate(this);
     if (errors.length) {
       const message = getValidationErrorMessage(errors);

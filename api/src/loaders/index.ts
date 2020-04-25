@@ -5,6 +5,7 @@ import reactionLoaders from './reaction';
 import postLoaders from './post';
 import mediaLoaders from './media';
 import commentLoaders from './comment';
+import sessionLoaders from './session';
 
 export const createLoaders = (viewer: Maybe<RequestUser>) => {
   return {
@@ -13,6 +14,7 @@ export const createLoaders = (viewer: Maybe<RequestUser>) => {
     post: postLoaders(viewer),
     media: mediaLoaders(viewer),
     comment: commentLoaders(viewer),
+    session: sessionLoaders(viewer),
   };
 };
 

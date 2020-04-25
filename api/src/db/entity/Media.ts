@@ -1,4 +1,12 @@
-import { Entity, Column, OneToOne, JoinColumn, In } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToOne,
+  JoinColumn,
+  In,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
 import { BaseAbstractEntity } from './BaseAbstractEntity';
 import { Image } from './Image';
 import { Post } from './Post';
@@ -21,6 +29,12 @@ export class Media extends BaseAbstractEntity {
 
   @Column({ nullable: true })
   postId: ID;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private async validate() {
+    await this.baseValidate();
+  }
 
   static async findByPostIds(postIds: ID[]) {
     const medias = await this.find({ where: { postId: In(postIds) } });

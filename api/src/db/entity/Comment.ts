@@ -65,8 +65,9 @@ export class Comment extends BaseAbstractEntity {
 
   @BeforeInsert()
   @BeforeUpdate()
-  private format() {
+  private async format() {
     this.text = this.text.trim();
+    await this.baseValidate();
   }
 
   // To get the cursor, passed object should contain a "createdAt" property

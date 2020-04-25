@@ -9,9 +9,10 @@ const VERIFY_TOKEN_URL =
   'https://graph.facebook.com/me?fields=id,email,name,gender,picture&access_token=';
 
 facebookRouter.post('/verify', async (req, res) => {
-  const { accessToken } = req.body;
-  const response = await axios.get(`${VERIFY_TOKEN_URL}${accessToken}`);
+  const { providerToken } = req.body;
+  const response = await axios.get(`${VERIFY_TOKEN_URL}${providerToken}`);
   const { data } = response;
+
   // TODO: Handle errors;
   //   if (!payload) {
   //     return res.json({ success: false });
@@ -35,7 +36,7 @@ facebookRouter.post('/verify', async (req, res) => {
     await foundUser.save();
   }
 
-  const token = await AuthToken.signAndSave(foundUser);
+  const token = await AuthToken.signAndSave(req, foundUser);
 
   return res.json({ token });
 });

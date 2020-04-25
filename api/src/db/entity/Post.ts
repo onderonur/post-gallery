@@ -78,10 +78,11 @@ export class Post extends BaseAbstractEntity {
 
   @BeforeInsert()
   @BeforeUpdate()
-  private format() {
+  private async format() {
     // TODO: Make the first char of the title uppercase,
     // according to the users culture.
     this.title = this.title.trim();
+    await this.baseValidate();
   }
 
   static async findConnections(args: PostConnectionOptions[]) {

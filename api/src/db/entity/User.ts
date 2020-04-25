@@ -1,6 +1,6 @@
 import { BaseAbstractEntity } from './BaseAbstractEntity';
 import { Entity, Column, OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
-import { IsEmail } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 import { Comment } from './Comment';
 import { Reaction } from './Reaction';
 import { Post } from './Post';
@@ -15,16 +15,17 @@ export class User extends BaseAbstractEntity {
   facebookProfileId?: string;
 
   @Column()
+  @IsNotEmpty()
   displayName: string;
+
+  @Column()
+  @IsEmail()
+  email: string;
 
   // We need to specify the "type" for columns with
   // "... | null" type.
   // Otherwise it throws an error.
   // (At least for PostgreSQL)
-  @Column({ type: 'varchar', nullable: true })
-  @IsEmail()
-  email?: string | null;
-
   @Column({ type: 'varchar', nullable: true })
   thumbnailUrl?: string | null;
 
@@ -42,8 +43,9 @@ export class User extends BaseAbstractEntity {
 
   @BeforeInsert()
   @BeforeUpdate()
-  format() {
+  private async format() {
     this.displayName = this.displayName.trim();
+    await this.baseValidate();
   }
 
   static findOneByGoogleProfileId(googleProfileId: string) {

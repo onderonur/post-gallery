@@ -85,6 +85,7 @@ export type Mutation = {
   deletePost: Scalars['Boolean'];
   removePostComment: Scalars['Boolean'];
   removeReaction: RemoveReactionPayload;
+  updateUser: User;
 };
 
 
@@ -116,6 +117,11 @@ export type MutationRemovePostCommentArgs = {
 
 export type MutationRemoveReactionArgs = {
   reactableId: Scalars['ID'];
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
 };
 
 export type PageInfo = {
@@ -198,18 +204,53 @@ export type RemoveReactionPayload = {
   viewerReaction?: Maybe<ViewerReactionType>;
 };
 
+export type Session = {
+   __typename?: 'Session';
+  id: Scalars['ID'];
+  browser?: Maybe<Scalars['String']>;
+  platform?: Maybe<Scalars['String']>;
+  os?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+};
+
+export type SessionConnection = Connection & {
+   __typename?: 'SessionConnection';
+  totalCount: Scalars['Int'];
+  pageInfo: PageInfo;
+  edges: Array<SessionEdge>;
+};
+
+export type SessionEdge = {
+   __typename?: 'SessionEdge';
+  node: Session;
+  cursor: Scalars['Cursor'];
+};
+
+export type UpdateUserInput = {
+  id: Scalars['ID'];
+  displayName: Scalars['String'];
+  email: Scalars['String'];
+};
+
 
 export type User = {
    __typename?: 'User';
   id: Scalars['ID'];
   displayName: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   thumbnailUrl?: Maybe<Scalars['String']>;
   posts?: Maybe<PostConnection>;
+  sessions?: Maybe<SessionConnection>;
 };
 
 
 export type UserPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['Cursor']>;
+};
+
+
+export type UserSessionsArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['Cursor']>;
 };
@@ -308,9 +349,12 @@ export type ResolversTypes = ResolversObject<{
   User: ResolverTypeWrapper<UserModel>,
   Cursor: ResolverTypeWrapper<Scalars['Cursor']>,
   PostConnection: ResolverTypeWrapper<Omit<PostConnection, 'edges'> & { edges: Array<ResolversTypes['PostEdge']> }>,
-  Connection: ResolversTypes['PostConnection'] | ResolversTypes['CommentConnection'],
+  Connection: ResolversTypes['PostConnection'] | ResolversTypes['SessionConnection'] | ResolversTypes['CommentConnection'],
   PageInfo: ResolverTypeWrapper<PageInfo>,
   PostEdge: ResolverTypeWrapper<Omit<PostEdge, 'node'> & { node: ResolversTypes['Post'] }>,
+  SessionConnection: ResolverTypeWrapper<SessionConnection>,
+  SessionEdge: ResolverTypeWrapper<SessionEdge>,
+  Session: ResolverTypeWrapper<Session>,
   CommentConnection: ResolverTypeWrapper<Omit<CommentConnection, 'edges'> & { edges: Array<ResolversTypes['CommentEdge']> }>,
   CommentEdge: ResolverTypeWrapper<Omit<CommentEdge, 'node'> & { node: ResolversTypes['Comment'] }>,
   Comment: ResolverTypeWrapper<CommentModel>,
@@ -320,6 +364,7 @@ export type ResolversTypes = ResolversObject<{
   CreatePostInput: CreatePostInput,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
   RemoveReactionPayload: ResolverTypeWrapper<RemoveReactionPayload>,
+  UpdateUserInput: UpdateUserInput,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -339,9 +384,12 @@ export type ResolversParentTypes = ResolversObject<{
   User: UserModel,
   Cursor: Scalars['Cursor'],
   PostConnection: Omit<PostConnection, 'edges'> & { edges: Array<ResolversParentTypes['PostEdge']> },
-  Connection: ResolversParentTypes['PostConnection'] | ResolversParentTypes['CommentConnection'],
+  Connection: ResolversParentTypes['PostConnection'] | ResolversParentTypes['SessionConnection'] | ResolversParentTypes['CommentConnection'],
   PageInfo: PageInfo,
   PostEdge: Omit<PostEdge, 'node'> & { node: ResolversParentTypes['Post'] },
+  SessionConnection: SessionConnection,
+  SessionEdge: SessionEdge,
+  Session: Session,
   CommentConnection: Omit<CommentConnection, 'edges'> & { edges: Array<ResolversParentTypes['CommentEdge']> },
   CommentEdge: Omit<CommentEdge, 'node'> & { node: ResolversParentTypes['Comment'] },
   Comment: CommentModel,
@@ -351,6 +399,7 @@ export type ResolversParentTypes = ResolversObject<{
   CreatePostInput: CreatePostInput,
   Upload: Scalars['Upload'],
   RemoveReactionPayload: RemoveReactionPayload,
+  UpdateUserInput: UpdateUserInput,
 }>;
 
 export type AddReactionPayloadResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['AddReactionPayload'] = ResolversParentTypes['AddReactionPayload']> = ResolversObject<{
@@ -383,7 +432,7 @@ export type CommentEdgeResolvers<ContextType = GQLContext, ParentType extends Re
 }>;
 
 export type ConnectionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Connection'] = ResolversParentTypes['Connection']> = ResolversObject<{
-  __resolveType: TypeResolveFn<'PostConnection' | 'CommentConnection', ParentType, ContextType>,
+  __resolveType: TypeResolveFn<'PostConnection' | 'SessionConnection' | 'CommentConnection', ParentType, ContextType>,
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
 }>;
@@ -419,6 +468,7 @@ export type MutationResolvers<ContextType = GQLContext, ParentType extends Resol
   deletePost?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>,
   removePostComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemovePostCommentArgs, 'id'>>,
   removeReaction?: Resolver<ResolversTypes['RemoveReactionPayload'], ParentType, ContextType, RequireFields<MutationRemoveReactionArgs, 'reactableId'>>,
+  updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>,
 }>;
 
 export type PageInfoResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
@@ -479,6 +529,28 @@ export type RemoveReactionPayloadResolvers<ContextType = GQLContext, ParentType 
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
+export type SessionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Session'] = ResolversParentTypes['Session']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  browser?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  platform?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  os?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type SessionConnectionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['SessionConnection'] = ResolversParentTypes['SessionConnection']> = ResolversObject<{
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
+  edges?: Resolver<Array<ResolversTypes['SessionEdge']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type SessionEdgeResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['SessionEdge'] = ResolversParentTypes['SessionEdge']> = ResolversObject<{
+  node?: Resolver<ResolversTypes['Session'], ParentType, ContextType>,
+  cursor?: Resolver<ResolversTypes['Cursor'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload'
 }
@@ -486,9 +558,10 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type UserResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   thumbnailUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   posts?: Resolver<Maybe<ResolversTypes['PostConnection']>, ParentType, ContextType, RequireFields<UserPostsArgs, 'first'>>,
+  sessions?: Resolver<Maybe<ResolversTypes['SessionConnection']>, ParentType, ContextType, RequireFields<UserSessionsArgs, 'first'>>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -511,6 +584,9 @@ export type Resolvers<ContextType = GQLContext> = ResolversObject<{
   Reactable?: ReactableResolvers,
   Reactions?: ReactionsResolvers<ContextType>,
   RemoveReactionPayload?: RemoveReactionPayloadResolvers<ContextType>,
+  Session?: SessionResolvers<ContextType>,
+  SessionConnection?: SessionConnectionResolvers<ContextType>,
+  SessionEdge?: SessionEdgeResolvers<ContextType>,
   Upload?: GraphQLScalarType,
   User?: UserResolvers<ContextType>,
 }>;

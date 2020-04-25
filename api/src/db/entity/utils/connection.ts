@@ -2,7 +2,7 @@ import { ConnectionOptions, Connection } from '../../../types';
 import { getLastOfArray } from '../../../utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const emptyConnection: Connection<any> = {
+export const EMPTY_CONNECTION: Connection<any> = {
   edges: [],
   pageInfo: {
     hasNextPage: false,
