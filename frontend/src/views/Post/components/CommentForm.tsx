@@ -26,14 +26,18 @@ const CommentFormFallback = () => {
   );
 };
 
-const CommentForm: React.FC<CommentFormProps> = ({ onSubmit }) => {
+const INITIAL_VALUES = { text: "" };
+
+const VALIDATION_SCHEMA = Yup.object().shape<CommentFormValues>({
+  text: Yup.string().transform(trimString).required(),
+});
+
+const CommentForm = React.memo<CommentFormProps>(({ onSubmit }) => {
   const requireAuth = useRequireAuth();
   return requireAuth(
     <Formik<CommentFormValues>
-      initialValues={{ text: "" }}
-      validationSchema={Yup.object().shape<CommentFormValues>({
-        text: Yup.string().transform(trimString).required(),
-      })}
+      initialValues={INITIAL_VALUES}
+      validationSchema={VALIDATION_SCHEMA}
       onSubmit={onSubmit}
       validateOnMount
     >
@@ -48,7 +52,6 @@ const CommentForm: React.FC<CommentFormProps> = ({ onSubmit }) => {
               placeholder="Add a comment..."
               multiline
               fullWidth
-              margin="normal"
               // We hide "error" indicators on the comment input
               InputProps={{
                 error: false,
@@ -65,6 +68,6 @@ const CommentForm: React.FC<CommentFormProps> = ({ onSubmit }) => {
     </Formik>,
     <CommentFormFallback />,
   );
-};
+});
 
 export default CommentForm;

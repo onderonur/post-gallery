@@ -39,7 +39,7 @@ export const PostListFragments = {
   `,
 };
 
-interface PostListProps {
+export interface PostListProps {
   loading: boolean;
   postConnection: Maybe<PostList_PostConnectionFragment>;
   onFetchMore: (after: Cursor) => void;

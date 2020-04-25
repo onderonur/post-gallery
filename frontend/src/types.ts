@@ -1,5 +1,6 @@
 import { Scalars } from "@/generated/graphql";
 import { DataProxy } from "apollo-cache";
+import { FormikConfig } from "formik";
 
 export type ID = Scalars["ID"];
 export type Cursor = Scalars["Cursor"];
@@ -15,3 +16,5 @@ declare global {
     }
   }
 }
+
+export type OnSubmit<FormValues> = FormikConfig<FormValues>["onSubmit"];

@@ -94,6 +94,7 @@ export type Mutation = {
   removePostComment: Scalars['Boolean'];
   addReaction: AddReactionPayload;
   removeReaction: RemoveReactionPayload;
+  updateUser: User;
 };
 
 
@@ -125,6 +126,11 @@ export type MutationAddReactionArgs = {
 
 export type MutationRemoveReactionArgs = {
   reactableId: Scalars['ID'];
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
 };
 
 export type PageInfo = {
@@ -205,6 +211,11 @@ export type RemoveReactionPayload = {
    __typename?: 'RemoveReactionPayload';
   reactableId: Scalars['ID'];
   viewerReaction?: Maybe<ViewerReactionType>;
+};
+
+export type UpdateUserInput = {
+  id: Scalars['ID'];
+  displayName: Scalars['String'];
 };
 
 
@@ -454,6 +465,34 @@ export type GetPostsQuery = (
   ) }
 );
 
+export type UserHeader_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'thumbnailUrl' | 'displayName'>
+);
+
+export type UserSeo_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
+);
+
+export type UserSettings_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'displayName'>
+);
+
+export type UpdateUserMutationVariables = {
+  input: UpdateUserInput;
+};
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: (
+    { __typename?: 'User' }
+    & UserSettings_UserFragment
+  ) }
+);
+
 export type GetUserQueryVariables = {
   id: Scalars['ID'];
   after?: Maybe<Scalars['Cursor']>;
@@ -464,12 +503,13 @@ export type GetUserQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
     & { posts?: Maybe<(
       { __typename?: 'PostConnection' }
       & Pick<PostConnection, 'totalCount'>
       & PostList_PostConnectionFragment
     )> }
+    & UserSeo_UserFragment
+    & UserHeader_UserFragment
   )> }
 );
 
@@ -581,6 +621,26 @@ export const PostView_PostFragmentDoc = gql`
 ${Post_CommentsFragmentDoc}
 ${CommentList_CommentEdgeFragmentDoc}
 ${CommentList_PageInfoFragmentDoc}`;
+export const UserHeader_UserFragmentDoc = gql`
+    fragment UserHeader_user on User {
+  id
+  thumbnailUrl
+  displayName
+}
+    `;
+export const UserSeo_UserFragmentDoc = gql`
+    fragment UserSEO_user on User {
+  id
+  displayName
+  thumbnailUrl
+}
+    `;
+export const UserSettings_UserFragmentDoc = gql`
+    fragment UserSettings_user on User {
+  id
+  displayName
+}
+    `;
 export const CreatePostDocument = gql`
     mutation CreatePost($title: String!, $media: Upload!) {
   createPost(input: {title: $title, media: $media}) {
@@ -876,19 +936,52 @@ export function useGetPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
 export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
 export type GetPostsQueryResult = ApolloReactCommon.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    ...UserSettings_user
+  }
+}
+    ${UserSettings_UserFragmentDoc}`;
+export type UpdateUserMutationFn = ApolloReactCommon.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = ApolloReactCommon.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const GetUserDocument = gql`
     query GetUser($id: ID!, $after: Cursor) {
   user(id: $id) {
-    id
-    displayName
-    thumbnailUrl
+    ...UserSEO_user
+    ...UserHeader_user
     posts(first: 10, after: $after) {
       totalCount
       ...PostList_postConnection
     }
   }
 }
-    ${PostList_PostConnectionFragmentDoc}`;
+    ${UserSeo_UserFragmentDoc}
+${UserHeader_UserFragmentDoc}
+${PostList_PostConnectionFragmentDoc}`;
 
 /**
  * __useGetUserQuery__
@@ -1016,6 +1109,7 @@ export type ResolversTypes = {
   AddPostCommentInput: AddPostCommentInput,
   AddReactionPayload: ResolverTypeWrapper<AddReactionPayload>,
   RemoveReactionPayload: ResolverTypeWrapper<RemoveReactionPayload>,
+  UpdateUserInput: UpdateUserInput,
   CacheControlScope: CacheControlScope,
 };
 
@@ -1048,6 +1142,7 @@ export type ResolversParentTypes = {
   AddPostCommentInput: AddPostCommentInput,
   AddReactionPayload: AddReactionPayload,
   RemoveReactionPayload: RemoveReactionPayload,
+  UpdateUserInput: UpdateUserInput,
   CacheControlScope: CacheControlScope,
 };
 
@@ -1117,6 +1212,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   removePostComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRemovePostCommentArgs, 'id'>>,
   addReaction?: Resolver<ResolversTypes['AddReactionPayload'], ParentType, ContextType, RequireFields<MutationAddReactionArgs, 'reactableId' | 'type'>>,
   removeReaction?: Resolver<ResolversTypes['RemoveReactionPayload'], ParentType, ContextType, RequireFields<MutationRemoveReactionArgs, 'reactableId'>>,
+  updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>,
 };
 
 export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = {

@@ -30,12 +30,12 @@ type CreatePostFormValues = {
   media: CreatePostInput["media"] | null;
 };
 
-const validationSchema = Yup.object().shape<CreatePostFormValues>({
+const VALIDATION_SCHEMA = Yup.object().shape<CreatePostFormValues>({
   title: Yup.string().label("Title").transform(trimString).required(),
   media: Yup.mixed().label("Media").required(),
 });
 
-const initialValues = { title: "", media: null };
+const INITIAL_VALUES = { title: "", media: null };
 
 const CreatePostDialog = () => {
   const router = useRouter();
@@ -61,8 +61,8 @@ const CreatePostDialog = () => {
       </BaseIconButton>
       <BaseDialog open={isOpen} maxWidth="sm" onClose={close}>
         <Formik<CreatePostFormValues>
-          initialValues={initialValues}
-          validationSchema={validationSchema}
+          initialValues={INITIAL_VALUES}
+          validationSchema={VALIDATION_SCHEMA}
           validateOnMount
           onSubmit={(values) => createPost({ variables: values })}
           onReset={close}
@@ -82,7 +82,7 @@ const CreatePostDialog = () => {
                   <ImageUploader name="media" />
                 </BaseDialogContent>
                 <DialogActions>
-                  <BaseFormActions />
+                  <BaseFormActions marginY={0} />
                 </DialogActions>
               </Form>
             );
