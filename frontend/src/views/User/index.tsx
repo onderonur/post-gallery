@@ -13,7 +13,7 @@ import queryString from "query-string";
 import UserHeader, { UserHeaderFragments } from "./components/UserHeader";
 import UserSEO, { UserSEOFragments } from "./components/UserSEO";
 import TabPanel from "@/components/TabPanel";
-import UserSettings from "./components/UserSettings";
+import UserSettings, { UserSettingsFragments } from "./components/UserSettings";
 
 const USER_TAB_VALUES = {
   posts: "posts",
@@ -27,6 +27,7 @@ const GET_USER = gql`
     user(id: $id) {
       ...UserSEO_user
       ...UserHeader_user
+      ...UserSettings_user
       posts(first: 10, after: $after) {
         totalCount
         ...PostList_postConnection
@@ -35,6 +36,7 @@ const GET_USER = gql`
   }
   ${UserSEOFragments.user}
   ${UserHeaderFragments.user}
+  ${UserSettingsFragments.user}
   ${PostListFragments.postConnection}
 `;
 

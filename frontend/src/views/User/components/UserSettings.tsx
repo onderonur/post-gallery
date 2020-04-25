@@ -10,13 +10,19 @@ import BaseFormActions from "@/components/BaseFormActions";
 import { OnSubmit } from "@/types";
 import * as Yup from "yup";
 import { Container } from "@material-ui/core";
+import { trimString } from "@/utils";
 
 interface UserSettingsFormValues {
   displayName: string;
+  email: string;
 }
 
 const VALIDATION_SCHEMA = Yup.object().shape<UserSettingsFormValues>({
-  displayName: Yup.string().label("Display Name").required(),
+  displayName: Yup.string()
+    .label("Display Name")
+    .transform(trimString)
+    .required(),
+  email: Yup.string().label("E-mail").required(),
 });
 
 export const UserSettingsFragments = {
@@ -24,6 +30,7 @@ export const UserSettingsFragments = {
     fragment UserSettings_user on User {
       id
       displayName
+      email
     }
   `,
 };
@@ -44,15 +51,17 @@ interface UserSettingsProps {
 const UserSettings = React.memo<UserSettingsProps>(({ user }) => {
   const [updateUser] = useUpdateUserMutation({ mutation: UPDATE_USER });
 
-  const initialValues = useMemo(() => ({ displayName: user.displayName }), [
-    user.displayName,
-  ]);
+  const initialValues = useMemo(
+    () => ({ displayName: user.displayName, email: user.email }),
+    [user.displayName, user.email],
+  );
 
   const handleSubmit = useCallback<OnSubmit<UserSettingsFormValues>>(
     async (values, formikHelpers) => {
       const input = { ...values, id: user.id };
       await updateUser({ variables: { input } });
       formikHelpers.setSubmitting(false);
+      formikHelpers.resetForm();
     },
     [updateUser, user.id],
   );
@@ -73,6 +82,15 @@ const UserSettings = React.memo<UserSettingsProps>(({ user }) => {
                 required
                 fullWidth
                 autoFocus
+                margin="normal"
+              />
+              <BaseTextField
+                name="email"
+                label="E-mail"
+                required
+                fullWidth
+                disabled
+                margin="normal"
               />
               <BaseFormActions />
             </Form>

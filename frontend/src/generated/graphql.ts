@@ -216,6 +216,7 @@ export type RemoveReactionPayload = {
 export type UpdateUserInput = {
   id: Scalars['ID'];
   displayName: Scalars['String'];
+  email: Scalars['String'];
 };
 
 
@@ -223,7 +224,7 @@ export type User = {
    __typename?: 'User';
   id: Scalars['ID'];
   displayName: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   thumbnailUrl?: Maybe<Scalars['String']>;
   posts?: Maybe<PostConnection>;
 };
@@ -477,7 +478,7 @@ export type UserSeo_UserFragment = (
 
 export type UserSettings_UserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'displayName'>
+  & Pick<User, 'id' | 'displayName' | 'email'>
 );
 
 export type UpdateUserMutationVariables = {
@@ -510,6 +511,7 @@ export type GetUserQuery = (
     )> }
     & UserSeo_UserFragment
     & UserHeader_UserFragment
+    & UserSettings_UserFragment
   )> }
 );
 
@@ -639,6 +641,7 @@ export const UserSettings_UserFragmentDoc = gql`
     fragment UserSettings_user on User {
   id
   displayName
+  email
 }
     `;
 export const CreatePostDocument = gql`
@@ -973,6 +976,7 @@ export const GetUserDocument = gql`
   user(id: $id) {
     ...UserSEO_user
     ...UserHeader_user
+    ...UserSettings_user
     posts(first: 10, after: $after) {
       totalCount
       ...PostList_postConnection
@@ -981,6 +985,7 @@ export const GetUserDocument = gql`
 }
     ${UserSeo_UserFragmentDoc}
 ${UserHeader_UserFragmentDoc}
+${UserSettings_UserFragmentDoc}
 ${PostList_PostConnectionFragmentDoc}`;
 
 /**
@@ -1280,7 +1285,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   thumbnailUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   posts?: Resolver<Maybe<ResolversTypes['PostConnection']>, ParentType, ContextType, RequireFields<UserPostsArgs, 'first'>>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,

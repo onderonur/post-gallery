@@ -5,6 +5,10 @@ import handleErrors from "@/middlewares/handleErrors";
 import { Maybe } from "@/generated/graphql";
 import authProviders from "@/constants/authProviders";
 
+interface ProviderResponse {
+  token: string;
+}
+
 interface Response {
   verified: boolean;
 }
@@ -13,27 +17,24 @@ const login = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
   switch (req.method) {
     case "POST":
       const { provider, providerToken } = req.body;
-      let token: Maybe<string>;
+      const input = { providerToken };
+      let url: Maybe<string>;
       switch (provider) {
         case authProviders.google:
-          const googleResponse = await axios.post(
-            `${process.env.API_URL}/auth/google/verify`,
-            { idToken: providerToken },
-          );
-          token = googleResponse.data.token;
+          url = `${process.env.API_URL}/auth/google/verify`;
           break;
         case authProviders.facebook:
-          const facebookResponse = await axios.post(
-            `${process.env.API_URL}/auth/facebook/verify`,
-            { accessToken: providerToken },
-          );
-          token = facebookResponse.data.token;
+          url = `${process.env.API_URL}/auth/facebook/verify`;
           break;
-        default:
       }
-      if (!token) {
+
+      if (!url) {
         return res.json({ verified: false });
       }
+
+      const providerResponse = await axios.post<ProviderResponse>(url, input);
+
+      const { token } = providerResponse.data;
       setAuthTokenCookie(res, token);
       res.json({ verified: true });
       break;
