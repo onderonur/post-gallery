@@ -19,12 +19,12 @@ import Loading from "@/components/Loading";
 import { updateConnectionAfterFetchMore, addEdgeToConnection } from "@/utils";
 import { useRouter } from "next/router";
 import { ID } from "@/types";
-import { NextSeo } from "next-seo";
+import PostSeo, { PostSeoFragments } from "./components/PostSeo";
 
 export const PostViewFragments = {
   post: gql`
     fragment PostView_post on Post {
-      title
+      ...PostSeo_post
       ...Post_post
       comments(first: 10, after: $commentsAfter) @connection(key: "comments") {
         ...Post_comments
@@ -37,6 +37,7 @@ export const PostViewFragments = {
         }
       }
     }
+    ${PostSeoFragments.post}
     ${PostFragments.post}
     ${PostFragments.comments}
     ${CommentListFragments.commentEdge}
@@ -157,7 +158,7 @@ const PostView = () => {
 
   return (
     <>
-      <NextSeo title={post.title} />
+      <PostSeo post={post} />
       <CenterHorizontally maxWidth={standardImage?.width}>
         <Post post={post} comments={comments} showOptions />
         <Divider />

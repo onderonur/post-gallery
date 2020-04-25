@@ -213,6 +213,28 @@ export type RemoveReactionPayload = {
   viewerReaction?: Maybe<ViewerReactionType>;
 };
 
+export type Session = {
+   __typename?: 'Session';
+  id: Scalars['ID'];
+  browser?: Maybe<Scalars['String']>;
+  platform?: Maybe<Scalars['String']>;
+  os?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+};
+
+export type SessionConnection = Connection & {
+   __typename?: 'SessionConnection';
+  totalCount: Scalars['Int'];
+  pageInfo: PageInfo;
+  edges: Array<SessionEdge>;
+};
+
+export type SessionEdge = {
+   __typename?: 'SessionEdge';
+  node: Session;
+  cursor: Scalars['Cursor'];
+};
+
 export type UpdateUserInput = {
   id: Scalars['ID'];
   displayName: Scalars['String'];
@@ -227,10 +249,17 @@ export type User = {
   email: Scalars['String'];
   thumbnailUrl?: Maybe<Scalars['String']>;
   posts?: Maybe<PostConnection>;
+  sessions?: Maybe<SessionConnection>;
 };
 
 
 export type UserPostsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  after?: Maybe<Scalars['Cursor']>;
+};
+
+
+export type UserSessionsArgs = {
   first?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['Cursor']>;
 };
@@ -407,6 +436,11 @@ export type CommentListItemReactionActions_CommentFragment = (
   & ReactionActions_Reactable_Comment_Fragment
 );
 
+export type PostSeo_PostFragment = (
+  { __typename?: 'Post' }
+  & Pick<Post, 'id' | 'title'>
+);
+
 export type PostView_PostFragment = (
   { __typename?: 'Post' }
   & Pick<Post, 'title'>
@@ -474,6 +508,31 @@ export type UserHeader_UserFragment = (
 export type UserSeo_UserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
+);
+
+export type GetViewerWithSessionsQueryVariables = {};
+
+
+export type GetViewerWithSessionsQuery = (
+  { __typename?: 'Query' }
+  & { viewer?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+    & { sessions?: Maybe<(
+      { __typename?: 'SessionConnection' }
+      & Pick<SessionConnection, 'totalCount'>
+      & { pageInfo: (
+        { __typename?: 'PageInfo' }
+        & Pick<PageInfo, 'hasNextPage'>
+      ), edges: Array<(
+        { __typename?: 'SessionEdge' }
+        & { node: (
+          { __typename?: 'Session' }
+          & Pick<Session, 'id' | 'browser' | 'os' | 'platform' | 'createdAt'>
+        ) }
+      )> }
+    )> }
+  )> }
 );
 
 export type UserSettings_UserFragment = (
@@ -573,6 +632,12 @@ export const PostList_PostConnectionFragmentDoc = gql`
 }
     ${Post_PostFragmentDoc}
 ${Post_CommentsFragmentDoc}`;
+export const PostSeo_PostFragmentDoc = gql`
+    fragment PostSeo_post on Post {
+  id
+  title
+}
+    `;
 export const CommentListItemReactionActions_CommentFragmentDoc = gql`
     fragment CommentListItemReactionActions_comment on Comment {
   ...ReactionActions_reactable
@@ -631,7 +696,7 @@ export const UserHeader_UserFragmentDoc = gql`
 }
     `;
 export const UserSeo_UserFragmentDoc = gql`
-    fragment UserSEO_user on User {
+    fragment UserSeo_user on User {
   id
   displayName
   thumbnailUrl
@@ -939,6 +1004,53 @@ export function useGetPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
 export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
 export type GetPostsQueryResult = ApolloReactCommon.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
+export const GetViewerWithSessionsDocument = gql`
+    query GetViewerWithSessions {
+  viewer {
+    id
+    sessions {
+      totalCount
+      pageInfo {
+        hasNextPage
+      }
+      edges {
+        node {
+          id
+          browser
+          os
+          platform
+          createdAt
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetViewerWithSessionsQuery__
+ *
+ * To run a query within a React component, call `useGetViewerWithSessionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetViewerWithSessionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetViewerWithSessionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetViewerWithSessionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>(GetViewerWithSessionsDocument, baseOptions);
+      }
+export function useGetViewerWithSessionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>(GetViewerWithSessionsDocument, baseOptions);
+        }
+export type GetViewerWithSessionsQueryHookResult = ReturnType<typeof useGetViewerWithSessionsQuery>;
+export type GetViewerWithSessionsLazyQueryHookResult = ReturnType<typeof useGetViewerWithSessionsLazyQuery>;
+export type GetViewerWithSessionsQueryResult = ApolloReactCommon.QueryResult<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input) {
@@ -974,7 +1086,7 @@ export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<Up
 export const GetUserDocument = gql`
     query GetUser($id: ID!, $after: Cursor) {
   user(id: $id) {
-    ...UserSEO_user
+    ...UserSeo_user
     ...UserHeader_user
     ...UserSettings_user
     posts(first: 10, after: $after) {
@@ -1095,7 +1207,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>,
   Cursor: ResolverTypeWrapper<Scalars['Cursor']>,
   PostConnection: ResolverTypeWrapper<PostConnection>,
-  Connection: ResolversTypes['PostConnection'] | ResolversTypes['CommentConnection'],
+  Connection: ResolversTypes['PostConnection'] | ResolversTypes['CommentConnection'] | ResolversTypes['SessionConnection'],
   PageInfo: ResolverTypeWrapper<PageInfo>,
   PostEdge: ResolverTypeWrapper<PostEdge>,
   Post: ResolverTypeWrapper<Post>,
@@ -1108,6 +1220,9 @@ export type ResolversTypes = {
   CommentConnection: ResolverTypeWrapper<CommentConnection>,
   CommentEdge: ResolverTypeWrapper<CommentEdge>,
   Comment: ResolverTypeWrapper<Comment>,
+  SessionConnection: ResolverTypeWrapper<SessionConnection>,
+  SessionEdge: ResolverTypeWrapper<SessionEdge>,
+  Session: ResolverTypeWrapper<Session>,
   Mutation: ResolverTypeWrapper<{}>,
   CreatePostInput: CreatePostInput,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
@@ -1128,7 +1243,7 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'],
   Cursor: Scalars['Cursor'],
   PostConnection: PostConnection,
-  Connection: ResolversParentTypes['PostConnection'] | ResolversParentTypes['CommentConnection'],
+  Connection: ResolversParentTypes['PostConnection'] | ResolversParentTypes['CommentConnection'] | ResolversParentTypes['SessionConnection'],
   PageInfo: PageInfo,
   PostEdge: PostEdge,
   Post: Post,
@@ -1141,6 +1256,9 @@ export type ResolversParentTypes = {
   CommentConnection: CommentConnection,
   CommentEdge: CommentEdge,
   Comment: Comment,
+  SessionConnection: SessionConnection,
+  SessionEdge: SessionEdge,
+  Session: Session,
   Mutation: {},
   CreatePostInput: CreatePostInput,
   Upload: Scalars['Upload'],
@@ -1181,7 +1299,7 @@ export type CommentEdgeResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type ConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Connection'] = ResolversParentTypes['Connection']> = {
-  __resolveType: TypeResolveFn<'PostConnection' | 'CommentConnection', ParentType, ContextType>,
+  __resolveType: TypeResolveFn<'PostConnection' | 'CommentConnection' | 'SessionConnection', ParentType, ContextType>,
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
 };
@@ -1278,6 +1396,28 @@ export type RemoveReactionPayloadResolvers<ContextType = any, ParentType extends
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type SessionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Session'] = ResolversParentTypes['Session']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  browser?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  platform?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  os?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type SessionConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['SessionConnection'] = ResolversParentTypes['SessionConnection']> = {
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
+  edges?: Resolver<Array<ResolversTypes['SessionEdge']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type SessionEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['SessionEdge'] = ResolversParentTypes['SessionEdge']> = {
+  node?: Resolver<ResolversTypes['Session'], ParentType, ContextType>,
+  cursor?: Resolver<ResolversTypes['Cursor'], ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload'
 }
@@ -1288,6 +1428,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   thumbnailUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   posts?: Resolver<Maybe<ResolversTypes['PostConnection']>, ParentType, ContextType, RequireFields<UserPostsArgs, 'first'>>,
+  sessions?: Resolver<Maybe<ResolversTypes['SessionConnection']>, ParentType, ContextType, RequireFields<UserSessionsArgs, 'first'>>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -1310,6 +1451,9 @@ export type Resolvers<ContextType = any> = {
   Reactable?: ReactableResolvers,
   Reactions?: ReactionsResolvers<ContextType>,
   RemoveReactionPayload?: RemoveReactionPayloadResolvers<ContextType>,
+  Session?: SessionResolvers<ContextType>,
+  SessionConnection?: SessionConnectionResolvers<ContextType>,
+  SessionEdge?: SessionEdgeResolvers<ContextType>,
   Upload?: GraphQLScalarType,
   User?: UserResolvers<ContextType>,
 };

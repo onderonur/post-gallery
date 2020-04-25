@@ -130,3 +130,5 @@ export const destroyAuthTokenCookie = (res: NextApiResponse) => {
     maxAge: -1,
   });
 };
+
+export const DATE_TIME_FORMAT = "DD-MM-YYYY HH:mm";

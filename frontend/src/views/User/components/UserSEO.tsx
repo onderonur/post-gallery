@@ -3,9 +3,9 @@ import gql from "graphql-tag";
 import { NextSeo } from "next-seo";
 import { UserSeo_UserFragment } from "@/generated/graphql";
 
-export const UserSEOFragments = {
+export const UserSeoFragments = {
   user: gql`
-    fragment UserSEO_user on User {
+    fragment UserSeo_user on User {
       id
       displayName
       thumbnailUrl
@@ -13,11 +13,11 @@ export const UserSEOFragments = {
   `,
 };
 
-interface UserSEOProps {
+interface UserSeoProps {
   user: UserSeo_UserFragment;
 }
 
-const UserSEO = React.memo<UserSEOProps>(({ user }) => {
+const UserSeo = React.memo<UserSeoProps>(({ user }) => {
   return (
     <NextSeo
       title={user.displayName}
@@ -29,4 +29,4 @@ const UserSEO = React.memo<UserSEOProps>(({ user }) => {
   );
 });
 
-export default UserSEO;
+export default UserSeo;

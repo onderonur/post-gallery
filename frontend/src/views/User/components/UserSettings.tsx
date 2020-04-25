@@ -71,6 +71,7 @@ const UserSettings = React.memo<UserSettingsProps>(({ user }) => {
       <Formik<UserSettingsFormValues>
         initialValues={initialValues}
         validationSchema={VALIDATION_SCHEMA}
+        validateOnMount
         onSubmit={handleSubmit}
       >
         {() => {

@@ -32,7 +32,12 @@ const login = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
         return res.json({ verified: false });
       }
 
-      const providerResponse = await axios.post<ProviderResponse>(url, input);
+      const providerResponse = await axios.post<ProviderResponse>(url, input, {
+        // We are also forwarding the headers.
+        // So that API can find things like "user-agent" etc.
+        // And log users info with session.
+        headers: req.headers,
+      });
 
       const { token } = providerResponse.data;
       setAuthTokenCookie(res, token);

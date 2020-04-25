@@ -22,7 +22,10 @@ export const useViewer = () => {
 };
 
 const ViewerProvider: React.FC = ({ children }) => {
-  const { data, loading } = useGetViewerQuery({ query: GET_VIEWER });
+  const { data, loading } = useGetViewerQuery({
+    query: GET_VIEWER,
+    fetchPolicy: "network-only",
+  });
 
   const viewer = data?.viewer;
 

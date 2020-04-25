@@ -11,13 +11,15 @@ import useRequireOwner from "@/hooks/useRequireOwner";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 import UserHeader, { UserHeaderFragments } from "./components/UserHeader";
-import UserSEO, { UserSEOFragments } from "./components/UserSEO";
+import UserSeo, { UserSeoFragments } from "./components/UserSeo";
 import TabPanel from "@/components/TabPanel";
 import UserSettings, { UserSettingsFragments } from "./components/UserSettings";
+import UserSessions from "./components/UserSessions";
 
 const USER_TAB_VALUES = {
   posts: "posts",
   settings: "settings",
+  sessions: "sessions",
 };
 
 const DEFAULT_SELECTED_TAB_VALUE = USER_TAB_VALUES.posts;
@@ -25,7 +27,7 @@ const DEFAULT_SELECTED_TAB_VALUE = USER_TAB_VALUES.posts;
 const GET_USER = gql`
   query GetUser($id: ID!, $after: Cursor) {
     user(id: $id) {
-      ...UserSEO_user
+      ...UserSeo_user
       ...UserHeader_user
       ...UserSettings_user
       posts(first: 10, after: $after) {
@@ -34,7 +36,7 @@ const GET_USER = gql`
       }
     }
   }
-  ${UserSEOFragments.user}
+  ${UserSeoFragments.user}
   ${UserHeaderFragments.user}
   ${UserSettingsFragments.user}
   ${PostListFragments.postConnection}
@@ -86,7 +88,7 @@ const UserView = () => {
 
   return (
     <>
-      <UserSEO user={user} />
+      <UserSeo user={user} />
       <UserHeader user={user} />
       <Paper>
         <Tabs
@@ -97,7 +99,10 @@ const UserView = () => {
             const query = { tabs: value };
             const stringified = queryString.stringify(query);
             // https://github.com/zeit/next.js/issues/9574#issuecomment-560082865
-            router.push(`${router.pathname}?${stringified}`, router.asPath);
+            router.push(
+              `${router.pathname}?${stringified}`,
+              `${router.asPath.split("?")[0]}?${stringified}`,
+            );
           }}
           aria-label="user profile tabs"
         >
@@ -107,6 +112,9 @@ const UserView = () => {
           />
           {requireOwner(
             <Tab label="Settings" value={USER_TAB_VALUES.settings} />,
+          )}
+          {requireOwner(
+            <Tab label="Sessions" value={USER_TAB_VALUES.sessions} />,
           )}
         </Tabs>
       </Paper>
@@ -122,6 +130,11 @@ const UserView = () => {
       {requireOwner(
         <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.settings}>
           <UserSettings user={user} />
+        </TabPanel>,
+      )}
+      {requireOwner(
+        <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.sessions}>
+          <UserSessions />
         </TabPanel>,
       )}
     </>

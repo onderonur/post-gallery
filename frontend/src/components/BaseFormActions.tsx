@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 const BaseFormActions = React.memo<BaseFormActionsProps>(
   ({ submitText = "Submit", ...rest }) => {
     const classes = useStyles();
-    const { isSubmitting, isValid } = useFormikContext();
+    const { isSubmitting, isValid, dirty } = useFormikContext();
     return (
       <FlexRow justifyContent="flex-end" marginY={1} {...rest}>
         <BaseButton
@@ -33,7 +33,7 @@ const BaseFormActions = React.memo<BaseFormActionsProps>(
           className={classes.actionButton}
           type="submit"
           color="primary"
-          disabled={!isValid}
+          disabled={!isValid || !dirty}
           loading={isSubmitting}
         >
           {submitText}
