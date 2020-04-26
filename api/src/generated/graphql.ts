@@ -211,6 +211,7 @@ export type Session = {
   platform?: Maybe<Scalars['String']>;
   os?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
+  isCurrent: Scalars['Boolean'];
 };
 
 export type SessionConnection = Connection & {
@@ -535,6 +536,7 @@ export type SessionResolvers<ContextType = GQLContext, ParentType extends Resolv
   platform?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   os?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  isCurrent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 

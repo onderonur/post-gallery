@@ -17,19 +17,25 @@ import { unionAllQueries, runRawSQL } from './utils';
 import { mapConnectionsByHashes } from './utils/connection';
 import Maybe from 'graphql/tsutils/Maybe';
 
-interface SesssionConnectionQueryRow {
+export type AuthTokenConnectionOptions = ConnectionOptions & {
+  userId: ID;
+  jti?: ID;
+};
+
+interface AuthTokenConnectionQueryRow {
   id: ID;
   browser: Maybe<string>;
   platform: Maybe<string>;
   os: Maybe<string>;
   createdAt: Date;
+  isCurrent: boolean;
   key: string;
   totalCount: number;
 }
 
-export type SessionConnectionByKey = {
+export type AuthTokenConnectionByKey = {
   key: string;
-  connection: Connection<SesssionConnectionQueryRow>;
+  connection: Connection<AuthTokenConnectionQueryRow>;
 };
 
 @Entity()
@@ -86,16 +92,16 @@ export class AuthToken extends BaseAbstractEntity {
     return partialAuthToken.createdAt.toISOString();
   };
 
-  static async findConnections(args: ConnectionOptions[], viewer: User) {
+  static async findConnections(args: AuthTokenConnectionOptions[]) {
     const hashes = [];
     const queries = [];
     const parameters = {};
+
     for (let i = 0; i < args.length; i++) {
-      const alias = 'session';
+      const alias = 'authToken';
 
       const arg = args[i];
-      const { first, after } = arg;
-      const userId = viewer?.id;
+      const { first, after, userId } = arg;
 
       // "WHERE" conditions those are other than the pagination.
       // This is shared by both pagination query and totalCount query.
@@ -115,6 +121,12 @@ export class AuthToken extends BaseAbstractEntity {
         .addSelect(`${alias}.os`, 'os')
         .addSelect(`${alias}.createdAt`, 'createdAt')
         .addSelect(`'${cacheKey}'`, 'key')
+        .addSelect(
+          arg.jti
+            ? `(CASE WHEN ${alias}.jti = '${arg.jti}' THEN 1  ELSE 0 END)`
+            : '0',
+          'isCurrent',
+        )
         .addSelect((subQuery) =>
           subQuery
             .select(`COUNT(${alias}.id)`, 'totalCount')
@@ -145,10 +157,11 @@ export class AuthToken extends BaseAbstractEntity {
     }
 
     const unionAll = unionAllQueries(queries);
-    const rows = await runRawSQL<SesssionConnectionQueryRow[]>(
+    const rows = await runRawSQL<AuthTokenConnectionQueryRow[]>(
       unionAll,
       parameters,
     );
+
     const connectionsByKey = mapConnectionsByHashes({
       hashes,
       args,

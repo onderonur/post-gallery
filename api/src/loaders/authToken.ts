@@ -1,12 +1,16 @@
 import { createLoader, getDataLoaderCacheKey } from './utils';
-import { RequestUser, ConnectionOptions } from '../types';
+import { RequestUser } from '../types';
 import Maybe from 'graphql/tsutils/Maybe';
-import { AuthToken, SessionConnectionByKey } from '../db/entity/AuthToken';
+import {
+  AuthToken,
+  AuthTokenConnectionByKey,
+  AuthTokenConnectionOptions,
+} from '../db/entity/AuthToken';
 import { EMPTY_CONNECTION } from '../db/entity/utils/connection';
 
 const createSessionConnectionByUserIdLoader = createLoader<
-  ConnectionOptions,
-  SessionConnectionByKey
+  AuthTokenConnectionOptions,
+  AuthTokenConnectionByKey
 >(
   async (args, viewer) => {
     // If user is not logged in,
@@ -20,16 +24,15 @@ const createSessionConnectionByUserIdLoader = createLoader<
     }
 
     const connectionsByKey = await AuthToken.findConnections(
-      args as ConnectionOptions[],
-      viewer,
+      args as AuthTokenConnectionOptions[],
     );
     return connectionsByKey;
   },
   (result) => result.key,
 );
 
-const sessionLoaders = (viewer: Maybe<RequestUser>) => ({
-  sessionConnectionByUserId: createSessionConnectionByUserIdLoader(viewer),
+const authTokenLoaders = (viewer: Maybe<RequestUser>) => ({
+  authTokenConnectionByUserId: createSessionConnectionByUserIdLoader(viewer),
 });
 
-export default sessionLoaders;
+export default authTokenLoaders;

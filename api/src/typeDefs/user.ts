@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-express';
 const userSchema = gql`
   extend type Query {
     user(id: ID!): User
+    viewer: User
   }
 
   extend type Mutation {
@@ -30,6 +31,7 @@ const userSchema = gql`
     platform: String
     os: String
     createdAt: Date!
+    isCurrent: Boolean!
   }
 
   type SessionEdge {

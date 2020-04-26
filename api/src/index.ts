@@ -28,9 +28,10 @@ const server = new ApolloServer({
     maxFiles: MAX_FILES_COUNT,
   },
   context: ({ req }): Omit<GQLContext, 'dataSources'> => {
-    const viewer = req.user;
+    const { user: viewer, authToken } = req;
     return {
       viewer,
+      authToken,
       loaders: createLoaders(viewer),
     };
   },

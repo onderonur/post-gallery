@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-express';
-import viewerSchema from './viewer';
 import scalarsSchema from './scalars';
 import postSchema from './post';
 import connectionSchema from './connection';
@@ -21,7 +20,6 @@ export default [
   linkSchema,
   scalarsSchema,
   connectionSchema,
-  viewerSchema,
   postSchema,
   commentSchema,
   reactionSchema,

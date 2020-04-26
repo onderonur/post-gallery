@@ -55,6 +55,7 @@ export interface Connection<T> {
 // It insert this type to each resolver automatically.
 export interface GQLContext {
   viewer: Maybe<RequestUser>;
+  authToken: Maybe<string>;
   dataSources: DataSources;
   loaders: Loaders;
 }

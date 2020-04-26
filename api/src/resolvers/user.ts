@@ -12,8 +12,11 @@ const viewerResolvers: Resolvers = {
   User: {
     posts: ({ id }, args, { dataSources }) =>
       dataSources.postAPI.findPostConnection({ ...args, authorId: id }),
-    sessions: async (parent, args, { dataSources }) =>
-      dataSources.sessionAPI.findViewerSessions(args),
+    sessions: async ({ id }, args, { dataSources }) =>
+      dataSources.authTokenAPI.findAuthTokenConnectionByUserId({
+        ...args,
+        userId: id,
+      }),
   },
 };
 

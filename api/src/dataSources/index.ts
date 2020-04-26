@@ -3,7 +3,7 @@ import MediaAPI from './MediaAPI';
 import CommentAPI from './CommentAPI';
 import { UserAPI } from './UserAPI';
 import ReactionAPI from './ReactionAPI';
-import { SessionAPI } from './SessionAPI';
+import { AuthTokenAPI } from './AuthTokenAPI';
 
 const dataSources = () => ({
   postAPI: new PostAPI(),
@@ -11,7 +11,7 @@ const dataSources = () => ({
   commentAPI: new CommentAPI(),
   userAPI: new UserAPI(),
   reactionAPI: new ReactionAPI(),
-  sessionAPI: new SessionAPI(),
+  authTokenAPI: new AuthTokenAPI(),
 });
 
 export type DataSources = ReturnType<typeof dataSources>;
