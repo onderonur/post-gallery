@@ -21,6 +21,8 @@ const login = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
       let url: Maybe<string>;
       switch (provider) {
         case authProviders.google:
+          // https://nextjs.org/docs/api-reference/next.config.js/environment-variables
+          // Trying to destructure process.env variables won't work due to the nature of webpack DefinePlugin.
           url = `${process.env.API_URL}/auth/google/verify`;
           break;
         case authProviders.facebook:
