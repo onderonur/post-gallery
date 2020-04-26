@@ -511,12 +511,14 @@ export type UserSeo_UserFragment = (
   & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
 );
 
-export type GetViewerWithSessionsQueryVariables = {};
+export type GetUserWithSessionsQueryVariables = {
+  id: Scalars['ID'];
+};
 
 
-export type GetViewerWithSessionsQuery = (
+export type GetUserWithSessionsQuery = (
   { __typename?: 'Query' }
-  & { viewer?: Maybe<(
+  & { user?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id'>
     & { sessions?: Maybe<(
@@ -1006,9 +1008,9 @@ export function useGetPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
 export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
 export type GetPostsQueryResult = ApolloReactCommon.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
-export const GetViewerWithSessionsDocument = gql`
-    query GetViewerWithSessions {
-  viewer {
+export const GetUserWithSessionsDocument = gql`
+    query GetUserWithSessions($id: ID!) {
+  user(id: $id) {
     id
     sessions {
       totalCount
@@ -1031,29 +1033,30 @@ export const GetViewerWithSessionsDocument = gql`
     `;
 
 /**
- * __useGetViewerWithSessionsQuery__
+ * __useGetUserWithSessionsQuery__
  *
- * To run a query within a React component, call `useGetViewerWithSessionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetViewerWithSessionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserWithSessionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserWithSessionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetViewerWithSessionsQuery({
+ * const { data, loading, error } = useGetUserWithSessionsQuery({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetViewerWithSessionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>(GetViewerWithSessionsDocument, baseOptions);
+export function useGetUserWithSessionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>(GetUserWithSessionsDocument, baseOptions);
       }
-export function useGetViewerWithSessionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>(GetViewerWithSessionsDocument, baseOptions);
+export function useGetUserWithSessionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>(GetUserWithSessionsDocument, baseOptions);
         }
-export type GetViewerWithSessionsQueryHookResult = ReturnType<typeof useGetViewerWithSessionsQuery>;
-export type GetViewerWithSessionsLazyQueryHookResult = ReturnType<typeof useGetViewerWithSessionsLazyQuery>;
-export type GetViewerWithSessionsQueryResult = ApolloReactCommon.QueryResult<GetViewerWithSessionsQuery, GetViewerWithSessionsQueryVariables>;
+export type GetUserWithSessionsQueryHookResult = ReturnType<typeof useGetUserWithSessionsQuery>;
+export type GetUserWithSessionsLazyQueryHookResult = ReturnType<typeof useGetUserWithSessionsLazyQuery>;
+export type GetUserWithSessionsQueryResult = ApolloReactCommon.QueryResult<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input) {
