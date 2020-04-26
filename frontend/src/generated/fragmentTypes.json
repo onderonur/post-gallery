@@ -3,21 +3,6 @@
     "types": [
       {
         "kind": "INTERFACE",
-        "name": "Connection",
-        "possibleTypes": [
-          {
-            "name": "PostConnection"
-          },
-          {
-            "name": "CommentConnection"
-          },
-          {
-            "name": "SessionConnection"
-          }
-        ]
-      },
-      {
-        "kind": "INTERFACE",
         "name": "Reactable",
         "possibleTypes": [
           {
@@ -25,6 +10,21 @@
           },
           {
             "name": "Comment"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Connection",
+        "possibleTypes": [
+          {
+            "name": "PostConnection"
+          },
+          {
+            "name": "SessionConnection"
+          },
+          {
+            "name": "CommentConnection"
           }
         ]
       }

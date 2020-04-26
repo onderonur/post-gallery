@@ -11,10 +11,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Cursor scalar type for pagination */
-  Cursor: any;
   /** Date custom scalar type */
   Date: any;
+  /** Cursor scalar type for pagination */
+  Cursor: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -173,10 +173,10 @@ export type PostEdge = {
 export type Query = {
    __typename?: 'Query';
   _: Scalars['Boolean'];
-  viewer?: Maybe<User>;
   post?: Maybe<Post>;
   posts: PostConnection;
   user?: Maybe<User>;
+  viewer?: Maybe<User>;
 };
 
 
@@ -220,6 +220,7 @@ export type Session = {
   platform?: Maybe<Scalars['String']>;
   os?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
+  isCurrent: Scalars['Boolean'];
 };
 
 export type SessionConnection = Connection & {
@@ -443,7 +444,6 @@ export type PostSeo_PostFragment = (
 
 export type PostView_PostFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, 'title'>
   & { comments: (
     { __typename?: 'CommentConnection' }
     & { edges: Array<(
@@ -456,6 +456,7 @@ export type PostView_PostFragment = (
     ) }
     & Post_CommentsFragment
   ) }
+  & PostSeo_PostFragment
   & Post_PostFragment
 );
 
@@ -528,7 +529,7 @@ export type GetViewerWithSessionsQuery = (
         { __typename?: 'SessionEdge' }
         & { node: (
           { __typename?: 'Session' }
-          & Pick<Session, 'id' | 'browser' | 'os' | 'platform' | 'createdAt'>
+          & Pick<Session, 'id' | 'browser' | 'os' | 'platform' | 'createdAt' | 'isCurrent'>
         ) }
       )> }
     )> }
@@ -671,7 +672,7 @@ export const CommentList_PageInfoFragmentDoc = gql`
     `;
 export const PostView_PostFragmentDoc = gql`
     fragment PostView_post on Post {
-  title
+  ...PostSeo_post
   ...Post_post
   comments(first: 10, after: $commentsAfter) @connection(key: "comments") {
     ...Post_comments
@@ -684,7 +685,8 @@ export const PostView_PostFragmentDoc = gql`
     }
   }
 }
-    ${Post_PostFragmentDoc}
+    ${PostSeo_PostFragmentDoc}
+${Post_PostFragmentDoc}
 ${Post_CommentsFragmentDoc}
 ${CommentList_CommentEdgeFragmentDoc}
 ${CommentList_PageInfoFragmentDoc}`;
@@ -1020,6 +1022,7 @@ export const GetViewerWithSessionsDocument = gql`
           os
           platform
           createdAt
+          isCurrent
         }
       }
     }
@@ -1201,28 +1204,28 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  User: ResolverTypeWrapper<User>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
-  String: ResolverTypeWrapper<Scalars['String']>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
-  Cursor: ResolverTypeWrapper<Scalars['Cursor']>,
-  PostConnection: ResolverTypeWrapper<PostConnection>,
-  Connection: ResolversTypes['PostConnection'] | ResolversTypes['CommentConnection'] | ResolversTypes['SessionConnection'],
-  PageInfo: ResolverTypeWrapper<PageInfo>,
-  PostEdge: ResolverTypeWrapper<PostEdge>,
   Post: ResolverTypeWrapper<Post>,
   Reactable: ResolversTypes['Post'] | ResolversTypes['Comment'],
   ViewerReactionType: ViewerReactionType,
   Reactions: ResolverTypeWrapper<Reactions>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Media: ResolverTypeWrapper<Media>,
   Image: ResolverTypeWrapper<Image>,
-  CommentConnection: ResolverTypeWrapper<CommentConnection>,
-  CommentEdge: ResolverTypeWrapper<CommentEdge>,
-  Comment: ResolverTypeWrapper<Comment>,
+  User: ResolverTypeWrapper<User>,
+  Cursor: ResolverTypeWrapper<Scalars['Cursor']>,
+  PostConnection: ResolverTypeWrapper<PostConnection>,
+  Connection: ResolversTypes['PostConnection'] | ResolversTypes['SessionConnection'] | ResolversTypes['CommentConnection'],
+  PageInfo: ResolverTypeWrapper<PageInfo>,
+  PostEdge: ResolverTypeWrapper<PostEdge>,
   SessionConnection: ResolverTypeWrapper<SessionConnection>,
   SessionEdge: ResolverTypeWrapper<SessionEdge>,
   Session: ResolverTypeWrapper<Session>,
+  CommentConnection: ResolverTypeWrapper<CommentConnection>,
+  CommentEdge: ResolverTypeWrapper<CommentEdge>,
+  Comment: ResolverTypeWrapper<Comment>,
   Mutation: ResolverTypeWrapper<{}>,
   CreatePostInput: CreatePostInput,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
@@ -1237,28 +1240,28 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Query: {},
   Boolean: Scalars['Boolean'],
-  User: User,
   ID: Scalars['ID'],
-  String: Scalars['String'],
-  Int: Scalars['Int'],
-  Cursor: Scalars['Cursor'],
-  PostConnection: PostConnection,
-  Connection: ResolversParentTypes['PostConnection'] | ResolversParentTypes['CommentConnection'] | ResolversParentTypes['SessionConnection'],
-  PageInfo: PageInfo,
-  PostEdge: PostEdge,
   Post: Post,
   Reactable: ResolversParentTypes['Post'] | ResolversParentTypes['Comment'],
   ViewerReactionType: ViewerReactionType,
   Reactions: Reactions,
+  Int: Scalars['Int'],
+  String: Scalars['String'],
   Date: Scalars['Date'],
   Media: Media,
   Image: Image,
-  CommentConnection: CommentConnection,
-  CommentEdge: CommentEdge,
-  Comment: Comment,
+  User: User,
+  Cursor: Scalars['Cursor'],
+  PostConnection: PostConnection,
+  Connection: ResolversParentTypes['PostConnection'] | ResolversParentTypes['SessionConnection'] | ResolversParentTypes['CommentConnection'],
+  PageInfo: PageInfo,
+  PostEdge: PostEdge,
   SessionConnection: SessionConnection,
   SessionEdge: SessionEdge,
   Session: Session,
+  CommentConnection: CommentConnection,
+  CommentEdge: CommentEdge,
+  Comment: Comment,
   Mutation: {},
   CreatePostInput: CreatePostInput,
   Upload: Scalars['Upload'],
@@ -1299,7 +1302,7 @@ export type CommentEdgeResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type ConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Connection'] = ResolversParentTypes['Connection']> = {
-  __resolveType: TypeResolveFn<'PostConnection' | 'CommentConnection' | 'SessionConnection', ParentType, ContextType>,
+  __resolveType: TypeResolveFn<'PostConnection' | 'SessionConnection' | 'CommentConnection', ParentType, ContextType>,
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>,
 };
@@ -1371,10 +1374,10 @@ export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  viewer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>,
   posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<QueryPostsArgs, 'first'>>,
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,
+  viewer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
 };
 
 export type ReactableResolvers<ContextType = any, ParentType extends ResolversParentTypes['Reactable'] = ResolversParentTypes['Reactable']> = {
@@ -1402,6 +1405,7 @@ export type SessionResolvers<ContextType = any, ParentType extends ResolversPare
   platform?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   os?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
+  isCurrent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

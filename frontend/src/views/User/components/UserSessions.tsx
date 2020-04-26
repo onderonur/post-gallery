@@ -5,6 +5,7 @@ import Loading from "@/components/Loading";
 import { List, ListItem, ListItemText } from "@material-ui/core";
 import dayjs from "dayjs";
 import { DATE_TIME_FORMAT } from "@/utils";
+import { BoldText } from "@/components/Text";
 
 const GET_VIEWER_WITH_SESSIONS = gql`
   query GetViewerWithSessions {
@@ -26,6 +27,7 @@ const GET_VIEWER_WITH_SESSIONS = gql`
             os
             platform
             createdAt
+            isCurrent
           }
         }
       }
@@ -51,9 +53,21 @@ const UserSessions = React.memo(() => {
           <ListItem key={node.id} divider>
             <ListItemText
               primary={`${node.platform} • ${node.os}`}
-              secondary={`${node.browser} • ${dayjs(node.createdAt).format(
-                DATE_TIME_FORMAT,
-              )}`}
+              secondary={
+                <>
+                  <span>{`${node.browser} • ${dayjs(node.createdAt).format(
+                    DATE_TIME_FORMAT,
+                  )}`}</span>
+                  {node.isCurrent ? (
+                    <span>
+                      {" • "}
+                      <BoldText component="span" color="primary">
+                        Current Session
+                      </BoldText>
+                    </span>
+                  ) : null}
+                </>
+              }
             />
           </ListItem>
         );
