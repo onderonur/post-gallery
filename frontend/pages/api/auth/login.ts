@@ -35,7 +35,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
       const providerResponse = await axios.post<ProviderResponse>(url, input, {
         // We are also forwarding the headers.
         // So that API can find things like "user-agent" etc.
-        // And log users info with session.
+        // And log users info when they are logging in.
         headers: req.headers,
       });
 
