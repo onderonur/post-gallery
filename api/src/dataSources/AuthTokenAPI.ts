@@ -11,6 +11,7 @@ export class AuthTokenAPI extends BaseDataSource {
     // When we have roles like admins etc,
     // this condition will be expanded.
     if (!viewer || !authToken || viewer.id !== args.userId) {
+      // TODO: Turn this into an AuthorizationError
       throw new AuthenticationError(
         "You don't have permission for this operation.",
       );
