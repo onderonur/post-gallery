@@ -8,13 +8,14 @@ import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 import dataSources from './dataSources';
 import { createLoaders } from './loaders';
-import { convertMBToBytes } from './utils';
+import { convertMBToBytes, IS_PROD } from './utils';
 import routes from './routes';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import { errorHandler, authenticate } from './middlewares';
 import { GQLContext } from './types';
 import useragent from 'express-useragent';
+import rateLimit from 'express-rate-limit';
 
 const { MAX_FILE_SIZE_IN_MB, MAX_FILES_COUNT } = process.env;
 
@@ -46,6 +47,16 @@ async function runServer() {
 
   // Middlewares
   app.use(helmet());
+
+  if (IS_PROD) {
+    const limiter = rateLimit({
+      windowMs: 1 * 60 * 1000, // 1 minute
+      max: 100, // limit each IP to 100 requests per windowMs
+    });
+
+    //  apply to all requests
+    app.use(limiter);
+  }
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
