@@ -5,18 +5,18 @@ interface VerifiedLoginInfoProps {
   isVerified: boolean;
 }
 
-const VerifiedLoginInfo: React.FC<VerifiedLoginInfoProps> = ({
-  isVerified,
-}) => {
-  if (!isVerified) {
-    return null;
-  }
+const VerifiedLoginInfo = React.memo<VerifiedLoginInfoProps>(
+  ({ isVerified }) => {
+    if (!isVerified) {
+      return null;
+    }
 
-  return (
-    <Typography color="primary">
-      You are now logged in and will be automatically redirected.
-    </Typography>
-  );
-};
+    return (
+      <Typography color="primary">
+        You are now logged in and will be automatically redirected.
+      </Typography>
+    );
+  },
+);
 
 export default VerifiedLoginInfo;

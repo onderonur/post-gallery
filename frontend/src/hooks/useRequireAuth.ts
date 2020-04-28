@@ -1,14 +1,20 @@
 import { useViewer } from "@/components/ViewerProvider";
+import { useCallback } from "react";
 
 const useRequireAuth = () => {
   const viewer = useViewer();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const requireAuth = (authenticated: any, fallback: any = null) => {
-    if (!viewer) {
-      return fallback;
-    }
-    return authenticated;
-  };
+
+  const requireAuth = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (authenticated: any, fallback: any = null) => {
+      if (!viewer) {
+        return fallback;
+      }
+      return authenticated;
+    },
+    [viewer],
+  );
+
   return requireAuth;
 };
 

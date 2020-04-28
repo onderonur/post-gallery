@@ -25,7 +25,7 @@ const GET_USER_WITH_POSTS = gql`
   ${PostListFragments.postConnection}
 `;
 
-const UserView = () => {
+const UserView = React.memo(() => {
   const router = useRouter();
   const { userId } = router.query;
   const { data, loading, fetchMore } = useGetUserWithPostsQuery({
@@ -73,6 +73,6 @@ const UserView = () => {
       )}
     </UserLayout>
   );
-};
+});
 
 export default UserView;

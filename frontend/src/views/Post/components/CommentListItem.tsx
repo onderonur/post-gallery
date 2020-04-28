@@ -86,106 +86,105 @@ export interface CommentListItemProps {
   ) => RemovePostCommentMutationOptions["update"];
 }
 
-const CommentListItem: React.FC<CommentListItemProps> = ({
-  comment,
-  updateAfterDelete,
-}) => {
-  const classes = useStyles();
-  const { commenter } = comment;
-  const confirm = useConfirmDialog();
-  const [removePostComment, { loading }] = useRemovePostCommentMutation({
-    mutation: REMOVE_POST_COMMENT,
-    variables: { id: comment.id },
-    update: updateAfterDelete(comment.id),
-  });
+const CommentListItem = React.memo<CommentListItemProps>(
+  ({ comment, updateAfterDelete }) => {
+    const classes = useStyles();
+    const { commenter } = comment;
+    const confirm = useConfirmDialog();
+    const [removePostComment, { loading }] = useRemovePostCommentMutation({
+      mutation: REMOVE_POST_COMMENT,
+      variables: { id: comment.id },
+      update: updateAfterDelete(comment.id),
+    });
 
-  const requireOwner = useRequireOwner(commenter?.id);
+    const requireOwner = useRequireOwner(commenter?.id);
 
-  if (loading) {
-    return <Loading />;
-  }
+    if (loading) {
+      return <Loading />;
+    }
 
-  return (
-    <ListItem
-      classes={{
-        container: classes.container,
-      }}
-      key={comment.id}
-      // To align the avatar to top of listItem
-      alignItems="flex-start"
-    >
-      <ListItemAvatar>
-        <Avatar
-          src={commenter?.thumbnailUrl || undefined}
-          alt={commenter?.displayName}
-          href={URLS.user}
-          hrefAs={`/users/${commenter?.id}`}
-          component={NextLink}
-        />
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <FlexRow>
-            <BaseLink
-              className={classes.commenterName}
-              href={URLS.user}
-              hrefAs={`/users/${commenter?.id}`}
-              color="textPrimary"
-              variant="subtitle2"
-            >
-              {commenter?.displayName}
-            </BaseLink>
-            <Typography
-              component="span"
-              variant="caption"
-              color="textSecondary"
-            >
-              {dayjs(comment.createdAt).fromNow()}
-            </Typography>
-          </FlexRow>
-        }
-        secondary={
-          <>
-            <div className={classes.commentText}>{comment.text}</div>
-            <FlexRow marginTop={0.5}>
-              <CommentListItemReactionActions comment={comment} />
-              <BaseButton
-                startIcon={<CommentOutlinedIcon />}
-                variant="text"
-                size="small"
-              />
-            </FlexRow>
-          </>
-        }
-        disableTypography
-      />
-      <ListItemSecondaryAction className={classes.secondaryAction}>
-        {requireOwner(
-          <BaseMenu>
-            <BaseMenuTrigger>
-              <BaseIconButton size="small">
-                <MoreVertIcon />
-              </BaseIconButton>
-            </BaseMenuTrigger>
-            <BaseMenuList>
-              <MenuItem
-                onClick={() => {
-                  confirm({
-                    title: "Delete comment?",
-                    description: "Are you sure to delete your comment?",
-                    confirmText: "Delete",
-                    onConfirm: removePostComment,
-                  });
-                }}
+    return (
+      <ListItem
+        classes={{
+          container: classes.container,
+        }}
+        key={comment.id}
+        // To align the avatar to top of listItem
+        alignItems="flex-start"
+      >
+        <ListItemAvatar>
+          <Avatar
+            src={commenter?.thumbnailUrl || undefined}
+            alt={commenter?.displayName}
+            href={URLS.user}
+            hrefAs={`/users/${commenter?.id}`}
+            component={NextLink}
+          />
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            <FlexRow>
+              <BaseLink
+                className={classes.commenterName}
+                href={URLS.user}
+                hrefAs={`/users/${commenter?.id}`}
+                color="textPrimary"
+                variant="subtitle2"
               >
-                Delete
-              </MenuItem>
-            </BaseMenuList>
-          </BaseMenu>,
-        )}
-      </ListItemSecondaryAction>
-    </ListItem>
-  );
-};
+                {commenter?.displayName}
+              </BaseLink>
+              <Typography
+                component="span"
+                variant="caption"
+                color="textSecondary"
+              >
+                {dayjs(comment.createdAt).fromNow()}
+              </Typography>
+            </FlexRow>
+          }
+          secondary={
+            <>
+              <div className={classes.commentText}>{comment.text}</div>
+              <FlexRow marginTop={0.5}>
+                <CommentListItemReactionActions comment={comment} />
+                <BaseButton
+                  startIcon={<CommentOutlinedIcon />}
+                  variant="text"
+                  size="small"
+                />
+              </FlexRow>
+            </>
+          }
+          disableTypography
+        />
+        <ListItemSecondaryAction className={classes.secondaryAction}>
+          {requireOwner(
+            <BaseMenu>
+              <BaseMenuTrigger>
+                <BaseIconButton size="small">
+                  <MoreVertIcon />
+                </BaseIconButton>
+              </BaseMenuTrigger>
+              <BaseMenuList>
+                <MenuItem
+                  onClick={() => {
+                    confirm({
+                      title: "Delete comment?",
+                      description: "Are you sure to delete your comment?",
+                      confirmText: "Delete",
+                      onConfirm: removePostComment,
+                    });
+                  }}
+                >
+                  Delete
+                </MenuItem>
+              </BaseMenuList>
+            </BaseMenu>,
+          )}
+        </ListItemSecondaryAction>
+      </ListItem>
+    );
+  },
+);
 
 export default CommentListItem;

@@ -1,7 +1,7 @@
 import React from "react";
 import { SvgIcon } from "@material-ui/core";
 
-const GoogleIcon = () => {
+const GoogleIcon = React.memo(() => {
   return (
     <SvgIcon>
       <svg viewBox="0 0 366 372" xmlns="http://www.w3.org/2000/svg">
@@ -27,6 +27,6 @@ const GoogleIcon = () => {
       </svg>
     </SvgIcon>
   );
-};
+});
 
 export default GoogleIcon;

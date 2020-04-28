@@ -11,7 +11,7 @@ import { redirectToHome } from "@/utils";
 import FacebookIcon from "./FacebookIcon";
 import authProviders from "@/constants/authProviders";
 
-const FacebookLoginButton = () => {
+const FacebookLoginButton = React.memo(() => {
   const [isLoginVerified, setIsLoginVerified] = useState<boolean>(false);
   return (
     <FacebookLogin
@@ -48,6 +48,6 @@ const FacebookLoginButton = () => {
       cookie={false}
     />
   );
-};
+});
 
 export default FacebookLoginButton;

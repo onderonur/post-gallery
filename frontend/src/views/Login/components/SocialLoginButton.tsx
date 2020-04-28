@@ -63,38 +63,40 @@ type SocialLoginButtonProps = StyleProps & {
 };
 
 // Thanks to: https://codepen.io/slukas23/pen/qwMevr
-const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
-  icon,
-  backgroundColor,
-  fontColor,
-  activeBackgroundColor,
-  providerName,
-  isLoginVerified,
-  disabled,
-  onClick,
-}) => {
-  const classes = useStyles({
-    activeBackgroundColor,
+const SocialLoginButton = React.memo<SocialLoginButtonProps>(
+  ({
+    icon,
     backgroundColor,
     fontColor,
-  });
-  const requireAuth = useRequireAuth();
-  return requireAuth(
-    null,
-    <div>
-      <BaseButton
-        className={classes.button}
-        disabled={disabled}
-        onClick={onClick}
-      >
-        <span className={classes.icon}>{icon}</span>
-        <span className={classes.text}>Log in with {providerName}</span>
-      </BaseButton>
-      <Box marginTop={0.5}>
-        <VerifiedLoginInfo isVerified={isLoginVerified} />
-      </Box>
-    </div>,
-  );
-};
+    activeBackgroundColor,
+    providerName,
+    isLoginVerified,
+    disabled,
+    onClick,
+  }) => {
+    const classes = useStyles({
+      activeBackgroundColor,
+      backgroundColor,
+      fontColor,
+    });
+    const requireAuth = useRequireAuth();
+    return requireAuth(
+      null,
+      <div>
+        <BaseButton
+          className={classes.button}
+          disabled={disabled}
+          onClick={onClick}
+        >
+          <span className={classes.icon}>{icon}</span>
+          <span className={classes.text}>Log in with {providerName}</span>
+        </BaseButton>
+        <Box marginTop={0.5}>
+          <VerifiedLoginInfo isVerified={isLoginVerified} />
+        </Box>
+      </div>,
+    );
+  },
+);
 
 export default SocialLoginButton;

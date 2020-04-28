@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginView = () => {
+const LoginView = React.memo(() => {
   const classes = useStyles();
   const router = useRouter();
   const theme = useTheme();
@@ -60,6 +60,6 @@ const LoginView = () => {
       </Container>
     </div>,
   );
-};
+});
 
 export default LoginView;

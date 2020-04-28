@@ -37,35 +37,31 @@ interface CommentListProps {
   updateAfterDelete: CommentListItemProps["updateAfterDelete"];
 }
 
-const CommentList: React.FC<CommentListProps> = ({
-  edges,
-  pageInfo,
-  loading,
-  onFetchMore,
-  updateAfterDelete,
-}) => {
-  const { hasNextPage } = pageInfo;
-  const infiniteRef = useInfiniteScroll({
-    hasNextPage,
-    loading,
-    onLoadMore: onFetchMore,
-  });
-  return (
-    <RootRef rootRef={infiniteRef}>
-      <List>
-        {edges.map((edge) => {
-          return (
-            <CommentListItem
-              key={edge.cursor}
-              comment={edge.node}
-              updateAfterDelete={updateAfterDelete}
-            />
-          );
-        })}
-        {hasNextPage && <Loading />}
-      </List>
-    </RootRef>
-  );
-};
+const CommentList = React.memo<CommentListProps>(
+  ({ edges, pageInfo, loading, onFetchMore, updateAfterDelete }) => {
+    const { hasNextPage } = pageInfo;
+    const infiniteRef = useInfiniteScroll({
+      hasNextPage,
+      loading,
+      onLoadMore: onFetchMore,
+    });
+    return (
+      <RootRef rootRef={infiniteRef}>
+        <List>
+          {edges.map((edge) => {
+            return (
+              <CommentListItem
+                key={edge.cursor}
+                comment={edge.node}
+                updateAfterDelete={updateAfterDelete}
+              />
+            );
+          })}
+          {hasNextPage && <Loading />}
+        </List>
+      </RootRef>
+    );
+  },
+);
 
 export default CommentList;

@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PostsView = () => {
+const PostsView = React.memo(() => {
   const classes = useStyles();
   const { data, loading, fetchMore } = useGetPostsQuery({
     query: GET_POSTS,
@@ -61,6 +61,6 @@ const PostsView = () => {
       </Container>
     </>
   );
-};
+});
 
 export default PostsView;

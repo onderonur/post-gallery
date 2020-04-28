@@ -63,7 +63,7 @@ const ADD_POST_COMMENT = gql`
   ${CommentListFragments.commentEdge}
 `;
 
-const PostView = () => {
+const PostView = React.memo(() => {
   const router = useRouter();
   const { postId } = router.query;
   const viewer = useViewer();
@@ -227,6 +227,6 @@ const PostView = () => {
       </CenterHorizontally>
     </>
   );
-};
+});
 
 export default PostView;

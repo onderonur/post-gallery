@@ -7,7 +7,7 @@ import axios from "axios";
 import { redirectToHome } from "@/utils";
 import authProviders from "@/constants/authProviders";
 
-const GoogleLoginButton = () => {
+const GoogleLoginButton = React.memo(() => {
   const [isLoginVerified, setIsLoginVerified] = useState<boolean>(false);
   return (
     <GoogleLogin
@@ -45,6 +45,6 @@ const GoogleLoginButton = () => {
       cookiePolicy="none"
     />
   );
-};
+});
 
 export default GoogleLoginButton;
