@@ -54,19 +54,10 @@ const UserLayout: React.FC<UserLayoutProps> = ({
           value={router.pathname}
           indicatorColor="primary"
           textColor="primary"
-          //   onChange={(e, value) => {
-          //     const query = { tabs: value };
-          //     const stringified = queryString.stringify(query);
-          //     // https://github.com/zeit/next.js/issues/9574#issuecomment-560082865
-          //     router.push(
-          //       `${router.pathname}?${stringified}`,
-          //       `${router.asPath.split("?")[0]}?${stringified}`,
-          //     );
-          //   }}
           aria-label="user profile tabs"
         >
           <Tab
-            label={`Posts${userPosts ? ` (${userPosts.totalCount})` : ""}`}
+            label={`Posts (${userPosts?.totalCount || 0})`}
             value="/users/[userId]"
             href="/users/[userId]"
             hrefAs={`/users/${user.id}`}
@@ -93,25 +84,6 @@ const UserLayout: React.FC<UserLayoutProps> = ({
         </Tabs>
       </Paper>
       <Box padding={2}>{children}</Box>
-      {/* <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.posts}>
-        <Container maxWidth="sm">
-          <PostList
-            loading={loading}
-            postConnection={user.posts}
-            onFetchMore={handleFetchMorePosts}
-          />
-        </Container>
-      </TabPanel>
-      {requireOwner(
-        <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.settings}>
-          <UserSettings user={user} />
-        </TabPanel>,
-      )}
-      {requireOwner(
-        <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.sessions}>
-          <UserSessions />
-        </TabPanel>,
-      )} */}
     </>
   );
 };
