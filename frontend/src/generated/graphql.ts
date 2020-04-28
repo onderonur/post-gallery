@@ -501,14 +501,23 @@ export type GetPostsQuery = (
   ) }
 );
 
-export type UserHeader_UserFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'thumbnailUrl' | 'displayName'>
-);
+export type GetUserWithPostsQueryVariables = {
+  id: Scalars['ID'];
+  after?: Maybe<Scalars['Cursor']>;
+};
 
-export type UserSeo_UserFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
+
+export type GetUserWithPostsQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & { posts?: Maybe<(
+      { __typename?: 'PostConnection' }
+      & UserLayout_UserPostsFragment
+      & PostList_PostConnectionFragment
+    )> }
+    & UserLayout_UserFragment
+  )> }
 );
 
 export type GetUserWithSessionsQueryVariables = {
@@ -520,8 +529,10 @@ export type GetUserWithSessionsQuery = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id'>
-    & { sessions?: Maybe<(
+    & { posts?: Maybe<(
+      { __typename?: 'PostConnection' }
+      & UserLayout_UserPostsFragment
+    )>, sessions?: Maybe<(
       { __typename?: 'SessionConnection' }
       & Pick<SessionConnection, 'totalCount'>
       & { pageInfo: (
@@ -535,6 +546,7 @@ export type GetUserWithSessionsQuery = (
         ) }
       )> }
     )> }
+    & UserLayout_UserFragment
   )> }
 );
 
@@ -558,11 +570,50 @@ export type UpdateUserMutation = (
 
 export type GetUserQueryVariables = {
   id: Scalars['ID'];
-  after?: Maybe<Scalars['Cursor']>;
 };
 
 
 export type GetUserQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & { posts?: Maybe<(
+      { __typename?: 'PostConnection' }
+      & UserLayout_UserPostsFragment
+    )> }
+    & UserLayout_UserFragment
+    & UserSettings_UserFragment
+  )> }
+);
+
+export type UserHeader_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'thumbnailUrl' | 'displayName'>
+);
+
+export type UserLayout_UserFragment = (
+  { __typename?: 'User' }
+  & UserSeo_UserFragment
+  & UserHeader_UserFragment
+);
+
+export type UserLayout_UserPostsFragment = (
+  { __typename?: 'PostConnection' }
+  & Pick<PostConnection, 'totalCount'>
+);
+
+export type UserSeo_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
+);
+
+export type GetUser22QueryVariables = {
+  id: Scalars['ID'];
+  after?: Maybe<Scalars['Cursor']>;
+};
+
+
+export type GetUser22Query = (
   { __typename?: 'Query' }
   & { user?: Maybe<(
     { __typename?: 'User' }
@@ -573,7 +624,6 @@ export type GetUserQuery = (
     )> }
     & UserSeo_UserFragment
     & UserHeader_UserFragment
-    & UserSettings_UserFragment
   )> }
 );
 
@@ -692,11 +742,11 @@ ${Post_PostFragmentDoc}
 ${Post_CommentsFragmentDoc}
 ${CommentList_CommentEdgeFragmentDoc}
 ${CommentList_PageInfoFragmentDoc}`;
-export const UserHeader_UserFragmentDoc = gql`
-    fragment UserHeader_user on User {
+export const UserSettings_UserFragmentDoc = gql`
+    fragment UserSettings_user on User {
   id
-  thumbnailUrl
   displayName
+  email
 }
     `;
 export const UserSeo_UserFragmentDoc = gql`
@@ -706,11 +756,23 @@ export const UserSeo_UserFragmentDoc = gql`
   thumbnailUrl
 }
     `;
-export const UserSettings_UserFragmentDoc = gql`
-    fragment UserSettings_user on User {
+export const UserHeader_UserFragmentDoc = gql`
+    fragment UserHeader_user on User {
   id
+  thumbnailUrl
   displayName
-  email
+}
+    `;
+export const UserLayout_UserFragmentDoc = gql`
+    fragment UserLayout_user on User {
+  ...UserSeo_user
+  ...UserHeader_user
+}
+    ${UserSeo_UserFragmentDoc}
+${UserHeader_UserFragmentDoc}`;
+export const UserLayout_UserPostsFragmentDoc = gql`
+    fragment UserLayout_userPosts on PostConnection {
+  totalCount
 }
     `;
 export const CreatePostDocument = gql`
@@ -1008,10 +1070,53 @@ export function useGetPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
 export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
 export type GetPostsQueryResult = ApolloReactCommon.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
+export const GetUserWithPostsDocument = gql`
+    query GetUserWithPosts($id: ID!, $after: Cursor) {
+  user(id: $id) {
+    ...UserLayout_user
+    posts(first: 10, after: $after) @connection(key: "userPosts") {
+      ...UserLayout_userPosts
+      ...PostList_postConnection
+    }
+  }
+}
+    ${UserLayout_UserFragmentDoc}
+${UserLayout_UserPostsFragmentDoc}
+${PostList_PostConnectionFragmentDoc}`;
+
+/**
+ * __useGetUserWithPostsQuery__
+ *
+ * To run a query within a React component, call `useGetUserWithPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserWithPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserWithPostsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useGetUserWithPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(GetUserWithPostsDocument, baseOptions);
+      }
+export function useGetUserWithPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(GetUserWithPostsDocument, baseOptions);
+        }
+export type GetUserWithPostsQueryHookResult = ReturnType<typeof useGetUserWithPostsQuery>;
+export type GetUserWithPostsLazyQueryHookResult = ReturnType<typeof useGetUserWithPostsLazyQuery>;
+export type GetUserWithPostsQueryResult = ApolloReactCommon.QueryResult<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>;
 export const GetUserWithSessionsDocument = gql`
     query GetUserWithSessions($id: ID!) {
   user(id: $id) {
-    id
+    ...UserLayout_user
+    posts(first: 0) @connection(key: "userPosts") {
+      ...UserLayout_userPosts
+    }
     sessions {
       totalCount
       pageInfo {
@@ -1030,7 +1135,8 @@ export const GetUserWithSessionsDocument = gql`
     }
   }
 }
-    `;
+    ${UserLayout_UserFragmentDoc}
+${UserLayout_UserPostsFragmentDoc}`;
 
 /**
  * __useGetUserWithSessionsQuery__
@@ -1090,21 +1196,18 @@ export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutati
 export type UpdateUserMutationResult = ApolloReactCommon.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const GetUserDocument = gql`
-    query GetUser($id: ID!, $after: Cursor) {
+    query GetUser($id: ID!) {
   user(id: $id) {
-    ...UserSeo_user
-    ...UserHeader_user
+    ...UserLayout_user
     ...UserSettings_user
-    posts(first: 10, after: $after) {
-      totalCount
-      ...PostList_postConnection
+    posts(first: 0) @connection(key: "userPosts") {
+      ...UserLayout_userPosts
     }
   }
 }
-    ${UserSeo_UserFragmentDoc}
-${UserHeader_UserFragmentDoc}
+    ${UserLayout_UserFragmentDoc}
 ${UserSettings_UserFragmentDoc}
-${PostList_PostConnectionFragmentDoc}`;
+${UserLayout_UserPostsFragmentDoc}`;
 
 /**
  * __useGetUserQuery__
@@ -1119,7 +1222,6 @@ ${PostList_PostConnectionFragmentDoc}`;
  * const { data, loading, error } = useGetUserQuery({
  *   variables: {
  *      id: // value for 'id'
- *      after: // value for 'after'
  *   },
  * });
  */
@@ -1132,6 +1234,47 @@ export function useGetUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
 export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
 export type GetUserQueryResult = ApolloReactCommon.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export const GetUser22Document = gql`
+    query GetUser22($id: ID!, $after: Cursor) {
+  user(id: $id) {
+    ...UserSeo_user
+    ...UserHeader_user
+    posts(first: 10, after: $after) {
+      totalCount
+      ...PostList_postConnection
+    }
+  }
+}
+    ${UserSeo_UserFragmentDoc}
+${UserHeader_UserFragmentDoc}
+${PostList_PostConnectionFragmentDoc}`;
+
+/**
+ * __useGetUser22Query__
+ *
+ * To run a query within a React component, call `useGetUser22Query` and pass it any options that fit your needs.
+ * When your component renders, `useGetUser22Query` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUser22Query({
+ *   variables: {
+ *      id: // value for 'id'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useGetUser22Query(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUser22Query, GetUser22QueryVariables>) {
+        return ApolloReactHooks.useQuery<GetUser22Query, GetUser22QueryVariables>(GetUser22Document, baseOptions);
+      }
+export function useGetUser22LazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUser22Query, GetUser22QueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetUser22Query, GetUser22QueryVariables>(GetUser22Document, baseOptions);
+        }
+export type GetUser22QueryHookResult = ReturnType<typeof useGetUser22Query>;
+export type GetUser22LazyQueryHookResult = ReturnType<typeof useGetUser22LazyQuery>;
+export type GetUser22QueryResult = ApolloReactCommon.QueryResult<GetUser22Query, GetUser22QueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;

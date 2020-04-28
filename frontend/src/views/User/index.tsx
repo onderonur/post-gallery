@@ -1,54 +1,38 @@
 import React, { useCallback } from "react";
-import { Container, Tabs, Tab, Paper } from "@material-ui/core";
-import gql from "graphql-tag";
-import { useGetUserQuery } from "@/generated/graphql";
-import { ID, Cursor } from "@/types";
-import Loading from "@/components/Loading";
+import UserLayout, { UserLayoutFragments } from "./components/UserLayout";
+import { Container } from "@material-ui/core";
 import PostList, { PostListFragments } from "@/components/PostList";
+import Loading from "@/components/Loading";
+import { useRouter } from "next/router";
+import { ID, Cursor } from "@/types";
+import { useGetUserWithPostsQuery } from "@/generated/graphql";
 import produce from "immer";
 import { updateConnectionAfterFetchMore } from "@/utils";
-import useRequireOwner from "@/hooks/useRequireOwner";
-import { useRouter } from "next/router";
-import queryString from "query-string";
-import UserHeader, { UserHeaderFragments } from "./components/UserHeader";
-import UserSeo, { UserSeoFragments } from "./components/UserSeo";
-import TabPanel from "@/components/TabPanel";
-import UserSettings, { UserSettingsFragments } from "./components/UserSettings";
-import UserSessions from "./components/UserSessions";
+import gql from "graphql-tag";
 
-const USER_TAB_VALUES = {
-  posts: "posts",
-  settings: "settings",
-  sessions: "sessions",
-};
-
-const DEFAULT_SELECTED_TAB_VALUE = USER_TAB_VALUES.posts;
-
-const GET_USER = gql`
-  query GetUser($id: ID!, $after: Cursor) {
+const GET_USER_WITH_POSTS = gql`
+  query GetUserWithPosts($id: ID!, $after: Cursor) {
     user(id: $id) {
-      ...UserSeo_user
-      ...UserHeader_user
-      ...UserSettings_user
-      posts(first: 10, after: $after) {
-        totalCount
+      ...UserLayout_user
+      posts(first: 10, after: $after) @connection(key: "userPosts") {
+        ...UserLayout_userPosts
         ...PostList_postConnection
       }
     }
   }
-  ${UserSeoFragments.user}
-  ${UserHeaderFragments.user}
-  ${UserSettingsFragments.user}
+  ${UserLayoutFragments.user}
+  ${UserLayoutFragments.userPosts}
   ${PostListFragments.postConnection}
 `;
 
 const UserView = () => {
   const router = useRouter();
   const { userId } = router.query;
-  const { data, loading, fetchMore } = useGetUserQuery({
-    query: GET_USER,
+  const { data, loading, fetchMore } = useGetUserWithPostsQuery({
+    query: GET_USER_WITH_POSTS,
     variables: { id: userId as ID },
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
+    returnPartialData: true,
   });
 
   const handleFetchMorePosts = useCallback(
@@ -73,71 +57,21 @@ const UserView = () => {
   );
 
   const user = data?.user;
-  const requireOwner = useRequireOwner(user?.id);
-
-  if (!user) {
-    if (loading) {
-      return <Loading />;
-    }
-    // TODO: Redirect to 404
-    return null;
-  }
-
-  const { tabs = DEFAULT_SELECTED_TAB_VALUE } = router.query;
-  const selectedTab = typeof tabs === "string" ? tabs : null;
 
   return (
-    <>
-      <UserSeo user={user} />
-      <UserHeader user={user} />
-      <Paper>
-        <Tabs
-          value={tabs as string}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={(e, value) => {
-            const query = { tabs: value };
-            const stringified = queryString.stringify(query);
-            // https://github.com/zeit/next.js/issues/9574#issuecomment-560082865
-            router.push(
-              `${router.pathname}?${stringified}`,
-              `${router.asPath.split("?")[0]}?${stringified}`,
-            );
-          }}
-          aria-label="user profile tabs"
-        >
-          <Tab
-            label={`Posts (${user.posts?.totalCount})`}
-            value={USER_TAB_VALUES.posts}
-          />
-          {requireOwner(
-            <Tab label="Settings" value={USER_TAB_VALUES.settings} />,
-          )}
-          {requireOwner(
-            <Tab label="Sessions" value={USER_TAB_VALUES.sessions} />,
-          )}
-        </Tabs>
-      </Paper>
-      <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.posts}>
+    <UserLayout user={user} userPosts={user?.posts}>
+      {loading ? (
+        <Loading />
+      ) : (
         <Container maxWidth="sm">
           <PostList
             loading={loading}
-            postConnection={user.posts}
+            postConnection={user?.posts}
             onFetchMore={handleFetchMorePosts}
           />
         </Container>
-      </TabPanel>
-      {requireOwner(
-        <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.settings}>
-          <UserSettings user={user} />
-        </TabPanel>,
       )}
-      {requireOwner(
-        <TabPanel currentValue={selectedTab} value={USER_TAB_VALUES.sessions}>
-          <UserSessions />
-        </TabPanel>,
-      )}
-    </>
+    </UserLayout>
   );
 };
 
