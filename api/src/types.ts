@@ -20,7 +20,6 @@ declare global {
       MAX_FILE_SIZE_IN_MB: number;
       MAX_FILES_COUNT: number;
       STORAGE_DIR: string;
-      CLIENT_BUILD_PATH: string;
       GOOGLE_OAUTH_CLIENT_ID: string;
       GOOGLE_OAUTH_CLIENT_SECRET: string;
       AUTH_TOKEN_SECRET: string;
