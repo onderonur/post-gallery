@@ -132,3 +132,19 @@ export const destroyAuthTokenCookie = (res: NextApiResponse) => {
 };
 
 export const DATE_TIME_FORMAT = "DD-MM-YYYY HH:mm";
+
+class CustomError extends Error {
+  public statusCode: number;
+
+  constructor(statusCode: number, message: string) {
+    super(message); // 'Error' breaks prototype chain here
+    this.statusCode = statusCode;
+    Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
+  }
+}
+
+// https://github.com/zeit/micro#error-handling
+export const createError = (statusCode: number, message: string) => {
+  const err = new CustomError(statusCode, message);
+  return err;
+};
