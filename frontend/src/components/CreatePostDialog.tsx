@@ -30,12 +30,12 @@ type CreatePostFormValues = {
   media: CreatePostInput["media"] | null;
 };
 
+const INITIAL_VALUES: CreatePostFormValues = { title: "", media: null };
+
 const VALIDATION_SCHEMA = Yup.object().shape<CreatePostFormValues>({
   title: Yup.string().label("Title").transform(trimString).required(),
   media: Yup.mixed().label("Media").required(),
 });
-
-const INITIAL_VALUES = { title: "", media: null };
 
 const CreatePostDialog = () => {
   const router = useRouter();

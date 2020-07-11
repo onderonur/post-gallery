@@ -26,7 +26,7 @@ const CommentFormFallback = () => {
   );
 };
 
-const INITIAL_VALUES = { text: "" };
+const INITIAL_VALUES: CommentFormValues = { text: "" };
 
 const VALIDATION_SCHEMA = Yup.object().shape<CommentFormValues>({
   text: Yup.string().transform(trimString).required(),

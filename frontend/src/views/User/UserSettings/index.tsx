@@ -79,7 +79,7 @@ const UserSettingsView = React.memo<UserSettingsProps>(() => {
 
   const user = data?.user;
 
-  const initialValues = useMemo(
+  const initialValues = useMemo<UserSettingsFormValues>(
     () => ({ displayName: user?.displayName || "", email: user?.email || "" }),
     [user],
   );
