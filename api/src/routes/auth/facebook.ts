@@ -6,14 +6,14 @@ import { asyncHandler } from '../../middlewares';
 
 const facebookRouter = Router();
 
-const VERIFY_TOKEN_URL =
+const verifyTokenUrl =
   'https://graph.facebook.com/me?fields=id,email,name,gender,picture&access_token=';
 
 facebookRouter.post(
   '/verify',
   asyncHandler(async (req, res) => {
     const { providerToken } = req.body;
-    const response = await axios.get(`${VERIFY_TOKEN_URL}${providerToken}`);
+    const response = await axios.get(`${verifyTokenUrl}${providerToken}`);
     const { data } = response;
 
     const facebookProfileId = data.id;

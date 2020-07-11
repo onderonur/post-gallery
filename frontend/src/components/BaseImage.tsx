@@ -5,7 +5,7 @@ import AspectRatio from "./AspectRatio";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import { makeStyles, Theme } from "@material-ui/core";
 
-const DEFAULT_ALT = "Not Loaded";
+const defaultAlt = "Not Loaded";
 
 interface ImgStyleProps {
   objectFit: CSSProperties["objectFit"];
@@ -29,7 +29,7 @@ interface BaseImageProps {
 
 const BaseImage: React.FC<BaseImageProps> = ({
   src /*= placeholderPng*/,
-  alt = DEFAULT_ALT,
+  alt = defaultAlt,
   aspectRatio,
   lazyLoad = true,
   objectFit = "cover",

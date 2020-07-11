@@ -1,5 +1,5 @@
 import BaseDataSource from './BaseDataSource';
-import { EMPTY_CONNECTION } from '../db/entity/utils/connection';
+import { emptyConnection } from '../db/entity/utils/connection';
 import { AuthTokenConnectionOptions } from '../db/entity/AuthToken';
 import { AuthenticationError } from 'apollo-server-express';
 import jwt from 'jsonwebtoken';
@@ -21,6 +21,6 @@ export class AuthTokenAPI extends BaseDataSource {
     const result = await loaders.authTokenLoaders.authTokenConnectionByUserId.load(
       { ...args, jti },
     );
-    return result?.connection || EMPTY_CONNECTION;
+    return result?.connection || emptyConnection;
   }
 }

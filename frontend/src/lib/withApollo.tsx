@@ -11,14 +11,14 @@ import { onError } from "apollo-link-error";
 import introspectionQueryResultData from "@/generated/fragmentTypes.json";
 import ApolloClient from "apollo-client";
 import { isServer } from "@/utils";
-import { getCSRFToken, CSRF_TOKEN_HEADER_KEY } from "./withCSRF";
+import { getCSRFToken, csrfTokenHeaderKey } from "./withCSRF";
 
 export default withApollo(
   ({ initialState = {}, ctx }) => {
     const request = (operation: Operation) => {
       operation.setContext({
         headers: {
-          [CSRF_TOKEN_HEADER_KEY]: getCSRFToken(ctx),
+          [csrfTokenHeaderKey]: getCSRFToken(ctx),
           // Passing cookies while SSR
           cookie: isServer() ? ctx?.req?.headers.cookie : undefined,
         },

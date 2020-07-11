@@ -3,7 +3,7 @@ import axios from "axios";
 import {
   destroyAuthTokenCookie,
   extractAuthToken,
-  AUTH_HEADER_KEY,
+  authHeaderKey,
   getAuthHeaderValue,
 } from "@/utils";
 import handleErrors from "@/middlewares/handleErrors";
@@ -18,7 +18,7 @@ const logout = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
       const headers: Record<string, string> = {};
       const authToken = extractAuthToken(req.cookies);
       if (authToken) {
-        headers[AUTH_HEADER_KEY] = getAuthHeaderValue(authToken);
+        headers[authHeaderKey] = getAuthHeaderValue(authToken);
       }
       await axios.post(`${process.env.API_URL}/auth/logout`, {}, { headers });
       destroyAuthTokenCookie(res);

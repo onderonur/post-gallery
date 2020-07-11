@@ -61,10 +61,10 @@ export const addEdgeToConnection = <T extends any>(
 export const isServer = () => typeof window === "undefined";
 
 export const extractAuthToken = (cookies: NextApiRequestCookies) => {
-  return cookies[AUTH_TOKEN_COOKIE_NAME];
+  return cookies[authTokenCookieName];
 };
 
-export const AUTH_HEADER_KEY = "Authorization";
+export const authHeaderKey = "Authorization";
 
 export const getAuthHeaderValue = (authToken: string) => {
   return `Bearer ${authToken}`;
@@ -105,7 +105,7 @@ const setCookie = (
   res.setHeader("Set-Cookie", finalCookies);
 };
 
-export const SAFE_COOKIE_OPTIONS: CookieSerializeOptions = {
+export const safeCookieOptions: CookieSerializeOptions = {
   // We need to set "path". Otherwise, the cookie will be
   // set for "/api" path.
   path: "/",
@@ -116,14 +116,14 @@ export const SAFE_COOKIE_OPTIONS: CookieSerializeOptions = {
   secure: process.env.NODE_ENV === "production",
 };
 
-const AUTH_TOKEN_COOKIE_NAME = "authToken";
+const authTokenCookieName = "authToken";
 
 export const setAuthTokenCookie = (res: NextApiResponse, authToken: string) => {
-  setCookie(res, AUTH_TOKEN_COOKIE_NAME, authToken, SAFE_COOKIE_OPTIONS);
+  setCookie(res, authTokenCookieName, authToken, safeCookieOptions);
 };
 
 export const destroyAuthTokenCookie = (res: NextApiResponse) => {
-  setCookie(res, AUTH_TOKEN_COOKIE_NAME, "", {
+  setCookie(res, authTokenCookieName, "", {
     // We need to set "path". Otherwise, the cookie will be
     // set for "/api" path.
     path: "/",
@@ -131,7 +131,7 @@ export const destroyAuthTokenCookie = (res: NextApiResponse) => {
   });
 };
 
-export const DATE_TIME_FORMAT = "DD-MM-YYYY HH:mm";
+export const dateTimeFormat = "DD-MM-YYYY HH:mm";
 
 class CustomError extends Error {
   public statusCode: number;

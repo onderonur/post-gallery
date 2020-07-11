@@ -7,8 +7,10 @@ import { gradientBackground } from "@/styles";
 import useIsMobile from "@/hooks/useIsMobile";
 import { UserHeader_UserFragment } from "@/generated/graphql";
 
-const LARGE_AVATAR_SIZE = 12;
-const SMALL_AVATAR_SIZE = 6;
+const avatarSizes = {
+  large: 12,
+  small: 6,
+};
 
 interface UserAvatarStyleProps {
   size: number;
@@ -47,7 +49,7 @@ interface UserHeaderProps {
 const UserHeader = React.memo<UserHeaderProps>(({ user }) => {
   const isMobile = useIsMobile();
   const classes = useStyles({
-    size: isMobile ? SMALL_AVATAR_SIZE : LARGE_AVATAR_SIZE,
+    size: isMobile ? avatarSizes.small : avatarSizes.large,
   });
 
   return (

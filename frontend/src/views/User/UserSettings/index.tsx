@@ -21,7 +21,7 @@ interface UserSettingsFormValues {
   email: string;
 }
 
-const VALIDATION_SCHEMA = Yup.object().shape<UserSettingsFormValues>({
+const validationSchema = Yup.object().shape<UserSettingsFormValues>({
   displayName: Yup.string()
     .label("Display Name")
     .transform(trimString)
@@ -105,7 +105,7 @@ const UserSettingsView = React.memo<UserSettingsProps>(() => {
         <Container maxWidth="sm">
           <Formik<UserSettingsFormValues>
             initialValues={initialValues}
-            validationSchema={VALIDATION_SCHEMA}
+            validationSchema={validationSchema}
             validateOnMount
             onSubmit={handleSubmit}
           >

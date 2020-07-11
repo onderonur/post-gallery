@@ -4,7 +4,7 @@ import { useGetUserWithSessionsQuery } from "@/generated/graphql";
 import Loading from "@/components/Loading";
 import { List, ListItem, ListItemText } from "@material-ui/core";
 import dayjs from "dayjs";
-import { DATE_TIME_FORMAT } from "@/utils";
+import { dateTimeFormat } from "@/utils";
 import { BoldText } from "@/components/Text";
 import { useRouter } from "next/router";
 import { ID } from "@/types";
@@ -68,7 +68,7 @@ const UserSessionsView = React.memo(() => {
                   secondary={
                     <>
                       <span>{`${node.browser} • ${dayjs(node.createdAt).format(
-                        DATE_TIME_FORMAT,
+                        dateTimeFormat,
                       )}`}</span>
                       {node.isCurrent ? (
                         <span>

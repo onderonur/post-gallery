@@ -3,7 +3,7 @@ import nookies from "nookies";
 import { AppProps, AppContext } from "next/app";
 import { NextPageContext } from "next";
 import { Maybe } from "@/generated/graphql";
-import { isServer, SAFE_COOKIE_OPTIONS } from "@/utils";
+import { isServer, safeCookieOptions } from "@/utils";
 import Tokens from "csrf";
 
 declare global {
@@ -22,8 +22,8 @@ declare module "http" {
   }
 }
 
-const CSRF_SECRET_KEY = "_csrf";
-export const CSRF_TOKEN_HEADER_KEY = "x-xsrf-token";
+const csrfSecretKey = "_csrf";
+export const csrfTokenHeaderKey = "x-xsrf-token";
 
 export const getCSRFToken = (ctx?: NextPageContext) => {
   return isServer()
@@ -45,7 +45,7 @@ const withCSRF = (AppComponent: any) => {
       // Get all cookies from the request
       const currentCookies = nookies.get(appContext.ctx);
       // Check if there is a csrfSecret
-      let csrfSecret = currentCookies[CSRF_SECRET_KEY];
+      let csrfSecret = currentCookies[csrfSecretKey];
       const tokens = new Tokens();
       if (!csrfSecret) {
         // If there is no csrfSecret, first create it.
@@ -53,9 +53,9 @@ const withCSRF = (AppComponent: any) => {
         // Then, set it in a httpOnly cookie for later use.
         nookies.set(
           appContext.ctx,
-          CSRF_SECRET_KEY,
+          csrfSecretKey,
           csrfSecret,
-          SAFE_COOKIE_OPTIONS,
+          safeCookieOptions,
         );
         // Lastly, add it to the current request cookies.
         // This is important if a user opens the app for the first time,
@@ -64,7 +64,7 @@ const withCSRF = (AppComponent: any) => {
         // "GET" requests for GraphQL Queries. It only supports "POST".
         // So, when we server-rendering the app and if there is any
         // Query, it fails because of the missing csrfToken.
-        appContext.ctx.req.headers.cookie += `; ${CSRF_SECRET_KEY}=${csrfSecret}`;
+        appContext.ctx.req.headers.cookie += `; ${csrfSecretKey}=${csrfSecret}`;
       }
 
       // Create a csrfToken

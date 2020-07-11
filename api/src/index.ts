@@ -8,7 +8,7 @@ import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 import dataSources from './dataSources';
 import { createLoaders } from './loaders';
-import { convertMBToBytes, IS_PROD } from './utils';
+import { convertMBToBytes, isProd } from './utils';
 import routes from './routes';
 import helmet from 'helmet';
 import bodyParser from 'body-parser';
@@ -48,7 +48,7 @@ async function runServer() {
   // Middlewares
   app.use(helmet());
 
-  if (IS_PROD) {
+  if (isProd) {
     const limiter = rateLimit({
       windowMs: 1 * 60 * 1000, // 1 minute
       max: 100, // limit each IP to 100 requests per windowMs

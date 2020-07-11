@@ -26,9 +26,9 @@ const CommentFormFallback = () => {
   );
 };
 
-const INITIAL_VALUES: CommentFormValues = { text: "" };
+const initialValues: CommentFormValues = { text: "" };
 
-const VALIDATION_SCHEMA = Yup.object().shape<CommentFormValues>({
+const validationSchema = Yup.object().shape<CommentFormValues>({
   text: Yup.string().transform(trimString).required(),
 });
 
@@ -36,8 +36,8 @@ const CommentForm = React.memo<CommentFormProps>(({ onSubmit }) => {
   const requireAuth = useRequireAuth();
   return requireAuth(
     <Formik<CommentFormValues>
-      initialValues={INITIAL_VALUES}
-      validationSchema={VALIDATION_SCHEMA}
+      initialValues={initialValues}
+      validationSchema={validationSchema}
       onSubmit={onSubmit}
       validateOnMount
     >

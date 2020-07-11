@@ -25,7 +25,7 @@ Router.events.on("routeChangeError", () => NProgress.done());
 
 dayjs.extend(relativeTime);
 
-const NEXT_SEO_DEFAULTS: DefaultSeoProps = {
+const nextSeoDefaults: DefaultSeoProps = {
   titleTemplate: "%s | Post Gallery",
   description: "Post Gallery Web Site",
   openGraph: {
@@ -53,7 +53,7 @@ class MyApp extends App {
           {/* Import CSS for nprogress */}
           <link rel="stylesheet" type="text/css" href="/nprogress.css" />
         </Head>
-        <DefaultSeo {...NEXT_SEO_DEFAULTS} />
+        <DefaultSeo {...nextSeoDefaults} />
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />

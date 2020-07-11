@@ -6,7 +6,7 @@ import {
   AuthTokenConnectionByKey,
   AuthTokenConnectionOptions,
 } from '../db/entity/AuthToken';
-import { EMPTY_CONNECTION } from '../db/entity/utils/connection';
+import { emptyConnection } from '../db/entity/utils/connection';
 
 const createSessionConnectionByUserIdLoader = createLoader<
   AuthTokenConnectionOptions,
@@ -19,7 +19,7 @@ const createSessionConnectionByUserIdLoader = createLoader<
     if (!viewer) {
       return args.map((arg) => ({
         key: getDataLoaderCacheKey(arg),
-        connection: EMPTY_CONNECTION,
+        connection: emptyConnection,
       }));
     }
 

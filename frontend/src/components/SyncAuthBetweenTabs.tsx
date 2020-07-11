@@ -1,21 +1,21 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
-const LOGOUT_TIMESTAMP_KEY = "logout";
+const logoutTimestampKey = "logout";
 
 const SyncAuthBetweenTabs: React.FC = ({ children }) => {
   const router = useRouter();
   const { logout } = router.query;
 
   useEffect(() => {
-    const prevTimeStamp = localStorage.getItem(LOGOUT_TIMESTAMP_KEY);
+    const prevTimeStamp = localStorage.getItem(logoutTimestampKey);
 
     const redirectToHome = () => {
       window.location.href = "/";
     };
 
     const storageListener = () => {
-      const timeStamp = localStorage.getItem(LOGOUT_TIMESTAMP_KEY);
+      const timeStamp = localStorage.getItem(logoutTimestampKey);
       if (prevTimeStamp !== timeStamp) {
         redirectToHome();
       }
@@ -24,7 +24,7 @@ const SyncAuthBetweenTabs: React.FC = ({ children }) => {
     window.addEventListener("storage", storageListener);
 
     if (typeof logout === "string" && logout !== prevTimeStamp) {
-      localStorage.setItem(LOGOUT_TIMESTAMP_KEY, logout);
+      localStorage.setItem(logoutTimestampKey, logout);
       redirectToHome();
     }
 

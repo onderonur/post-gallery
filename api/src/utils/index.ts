@@ -14,4 +14,4 @@ export const toBase64 = (string: string) =>
 export const fromBase64 = (base64String: string) =>
   Buffer.from(base64String, 'base64').toString();
 
-export const IS_PROD = process.env.NODE_ENV === 'production';
+export const isProd = process.env.NODE_ENV === 'production';

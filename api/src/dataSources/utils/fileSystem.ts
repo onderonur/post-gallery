@@ -7,9 +7,9 @@ import { FileUpload } from 'graphql-upload';
 
 // TODO: There may be a "cron" job to run daily/weekly to clear images of the deleted "posts".
 
-const DEFAULT_JPG_QUALITY = 70;
+const defaultJpgQuality = 70;
 const { STORAGE_DIR } = process.env;
-const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png'];
+const allowedMimeTypes = ['image/jpeg', 'image/png'];
 
 // Promisifying the "fs.access" method which works with callbacks.
 // So, we can use "async/await" or "then/catch" with it.
@@ -58,7 +58,7 @@ const saveStreamToPath = async (
 ): Promise<SaveStreamOutputInfo> => {
   const { fileOut, width, height } = options;
   const pipeline = sharp();
-  pipeline.jpeg({ quality: DEFAULT_JPG_QUALITY });
+  pipeline.jpeg({ quality: defaultJpgQuality });
   pipeline.resize(width, height);
   const info = await stream.pipe(pipeline).toFile(fileOut);
   return { ...info, Url: `/${fileOut}` };
@@ -74,7 +74,7 @@ const saveStreamToPath = async (
 // };
 
 const isAllowedMimeType = (mimetype: string) =>
-  ALLOWED_MIME_TYPES.includes(mimetype);
+  allowedMimeTypes.includes(mimetype);
 
 export interface ImageOptions {
   suffix?: string;

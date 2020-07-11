@@ -8,9 +8,9 @@ import {
 } from "@/generated/graphql";
 import useRequireOwner from "@/hooks/useRequireOwner";
 import UserHeader, { UserHeaderFragments } from "./UserHeader";
-import UserSeo, { UserSeoFragments } from "./UserSeo";
 import { useRouter } from "next/router";
 import NextLink from "@/components/NextLink";
+import UserSeo, { UserSeoFragments } from "./UserSeo";
 
 export const UserLayoutFragments = {
   user: gql`

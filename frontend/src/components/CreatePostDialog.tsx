@@ -30,9 +30,9 @@ type CreatePostFormValues = {
   media: CreatePostInput["media"] | null;
 };
 
-const INITIAL_VALUES: CreatePostFormValues = { title: "", media: null };
+const initialValues: CreatePostFormValues = { title: "", media: null };
 
-const VALIDATION_SCHEMA = Yup.object().shape<CreatePostFormValues>({
+const validationSchema = Yup.object().shape<CreatePostFormValues>({
   title: Yup.string().label("Title").transform(trimString).required(),
   media: Yup.mixed().label("Media").required(),
 });
@@ -61,8 +61,8 @@ const CreatePostDialog = () => {
       </BaseIconButton>
       <BaseDialog open={isOpen} maxWidth="sm" onClose={close}>
         <Formik<CreatePostFormValues>
-          initialValues={INITIAL_VALUES}
-          validationSchema={VALIDATION_SCHEMA}
+          initialValues={initialValues}
+          validationSchema={validationSchema}
           validateOnMount
           onSubmit={(values) => createPost({ variables: values })}
           onReset={close}
