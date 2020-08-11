@@ -10,7 +10,7 @@ import {
   CommentList_PageInfoFragment,
 } from "@/generated/graphql";
 import Loading from "@/components/Loading";
-import { useInfiniteScroll } from "react-infinite-scroll-hook";
+import useInfiniteScroll from "react-infinite-scroll-hook";
 
 export const CommentListFragments = {
   commentEdge: gql`

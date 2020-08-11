@@ -45,7 +45,7 @@
     "react-dropzone": "^10.2.2",
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.1.10",
-    "react-infinite-scroll-hook": "^2.0.1",
+    "react-infinite-scroll-hook": "^3.0.0-alpha.1",
     "react-intersection-observer-hook": "^1.0.4",
     "yup": "^0.28.4"
   },

@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import { PostList_PostConnectionFragment, Maybe } from "@/generated/graphql";
 import Post, { PostFragments } from "@/components/Post";
 import Loading from "@/components/Loading";
-import { useInfiniteScroll } from "react-infinite-scroll-hook";
+import useInfiniteScroll from "react-infinite-scroll-hook";
 import { RootRef, makeStyles } from "@material-ui/core";
 import { Cursor } from "@/types";
 
