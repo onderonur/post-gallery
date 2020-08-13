@@ -19,7 +19,7 @@ const handleErrors = (fn: NextApiHandler) => async (
       message = data.message || message;
     }
 
-    res.status(status).send(message);
+    res.status(status).json({ message });
   }
 };
 
