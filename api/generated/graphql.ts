@@ -13,6 +13,8 @@ export type Scalars = {
   Float: number;
   Date: any;
   Cursor: any;
+  NonNegativeInt: any;
+  EmailAddress: any;
 };
 
 export type Mutation = {
@@ -138,7 +140,7 @@ export type QueryPostArgs = {
 
 
 export type QueryPostsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 
@@ -157,7 +159,7 @@ export type Category = {
 
 
 export type CategoryPostsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 
@@ -170,20 +172,20 @@ export type Post = Reactable & {
   author?: Maybe<User>;
   viewerReaction?: Maybe<ReactionType>;
   reactionsCount: ReactionsCount;
-  commentsCount: Scalars['Int'];
+  commentsCount: Scalars['NonNegativeInt'];
   comments: CommentConnection;
 };
 
 
 export type PostCommentsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 
 export type GraphImage = {
   __typename?: 'GraphImage';
-  width: Scalars['Int'];
-  height: Scalars['Int'];
+  width: Scalars['NonNegativeInt'];
+  height: Scalars['NonNegativeInt'];
   url: Scalars['String'];
 };
 
@@ -238,9 +240,11 @@ export type Reactable = {
 
 export type ReactionsCount = {
   __typename?: 'ReactionsCount';
-  likesCount: Scalars['Int'];
-  dislikesCount: Scalars['Int'];
+  likesCount: Scalars['NonNegativeInt'];
+  dislikesCount: Scalars['NonNegativeInt'];
 };
+
+
 
 
 
@@ -251,31 +255,31 @@ export enum SocialAccountType {
 
 export type UserInput = {
   displayName: Scalars['String'];
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
 };
 
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
   displayName: Scalars['String'];
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
   thumbnailUrl?: Maybe<Scalars['String']>;
   googleProfileId?: Maybe<Scalars['String']>;
   facebookProfileId?: Maybe<Scalars['String']>;
-  postsCount: Scalars['Int'];
+  postsCount: Scalars['NonNegativeInt'];
   posts: PostConnection;
   sessions: SessionConnection;
 };
 
 
 export type UserPostsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 
 
 export type UserSessionsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 
@@ -391,7 +395,6 @@ export type ResolversTypes = ResolversObject<{
   Connection: ResolversTypes['CommentConnection'] | ResolversTypes['PostConnection'] | ResolversTypes['SessionConnection'];
   PageInfo: ResolverTypeWrapper<PageInfo>;
   Query: ResolverTypeWrapper<{}>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   Category: ResolverTypeWrapper<CategoryMapper>;
   Post: ResolverTypeWrapper<PostMapper>;
   GraphImage: ResolverTypeWrapper<GraphImage>;
@@ -406,6 +409,8 @@ export type ResolversTypes = ResolversObject<{
   ReactionsCount: ResolverTypeWrapper<ReactionsCount>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
   Cursor: ResolverTypeWrapper<Scalars['Cursor']>;
+  NonNegativeInt: ResolverTypeWrapper<Scalars['NonNegativeInt']>;
+  EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
   SocialAccountType: SocialAccountType;
   UserInput: UserInput;
   User: ResolverTypeWrapper<UserMapper>;
@@ -427,7 +432,6 @@ export type ResolversParentTypes = ResolversObject<{
   Connection: ResolversParentTypes['CommentConnection'] | ResolversParentTypes['PostConnection'] | ResolversParentTypes['SessionConnection'];
   PageInfo: PageInfo;
   Query: {};
-  Int: Scalars['Int'];
   Category: CategoryMapper;
   Post: PostMapper;
   GraphImage: GraphImage;
@@ -441,6 +445,8 @@ export type ResolversParentTypes = ResolversObject<{
   ReactionsCount: ReactionsCount;
   Date: Scalars['Date'];
   Cursor: Scalars['Cursor'];
+  NonNegativeInt: Scalars['NonNegativeInt'];
+  EmailAddress: Scalars['EmailAddress'];
   UserInput: UserInput;
   User: UserMapper;
   Session: Session;
@@ -521,14 +527,14 @@ export type PostResolvers<ContextType = GQLContext, ParentType extends Resolvers
   author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   viewerReaction?: Resolver<Maybe<ResolversTypes['ReactionType']>, ParentType, ContextType>;
   reactionsCount?: Resolver<ResolversTypes['ReactionsCount'], ParentType, ContextType>;
-  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  commentsCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   comments?: Resolver<ResolversTypes['CommentConnection'], ParentType, ContextType, RequireFields<PostCommentsArgs, 'first'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
 export type GraphImageResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['GraphImage'] = ResolversParentTypes['GraphImage']> = ResolversObject<{
-  width?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  width?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
+  height?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
@@ -573,8 +579,8 @@ export type ReactableResolvers<ContextType = GQLContext, ParentType extends Reso
 }>;
 
 export type ReactionsCountResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['ReactionsCount'] = ResolversParentTypes['ReactionsCount']> = ResolversObject<{
-  likesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  dislikesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  likesCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
+  dislikesCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
 
@@ -586,14 +592,22 @@ export interface CursorScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
   name: 'Cursor';
 }
 
+export interface NonNegativeIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['NonNegativeInt'], any> {
+  name: 'NonNegativeInt';
+}
+
+export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['EmailAddress'], any> {
+  name: 'EmailAddress';
+}
+
 export type UserResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['EmailAddress'], ParentType, ContextType>;
   thumbnailUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   googleProfileId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   facebookProfileId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  postsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  postsCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<UserPostsArgs, 'first'>>;
   sessions?: Resolver<ResolversTypes['SessionConnection'], ParentType, ContextType, RequireFields<UserSessionsArgs, 'first'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
@@ -641,6 +655,8 @@ export type Resolvers<ContextType = GQLContext> = ResolversObject<{
   ReactionsCount?: ReactionsCountResolvers<ContextType>;
   Date?: GraphQLScalarType;
   Cursor?: GraphQLScalarType;
+  NonNegativeInt?: GraphQLScalarType;
+  EmailAddress?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   Session?: SessionResolvers<ContextType>;
   SessionEdge?: SessionEdgeResolvers<ContextType>;

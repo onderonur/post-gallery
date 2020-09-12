@@ -1,6 +1,8 @@
 import { Resolvers } from '../../generated/graphql';
 import { GraphQLScalarType, Kind } from 'graphql';
 
+// We can use "graphql-scalars" for "Date" too.
+// But we use this resolver as an example.
 export const date: Resolvers['Date'] = new GraphQLScalarType({
   name: 'Date',
   description: 'Date custom scalar type',

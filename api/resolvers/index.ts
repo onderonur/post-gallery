@@ -1,6 +1,6 @@
 import { Resolvers } from '../generated/graphql';
 import merge from 'lodash/merge';
-import scalars from './scalars';
+import scalarResolvers from './scalars';
 import viewerResolvers from './viewer';
 import postResolvers from './post';
 import commentResolvers from './comment';
@@ -10,7 +10,7 @@ import categoryResolvers from './category';
 
 const resolvers: Resolvers = merge(
   {},
-  scalars,
+  scalarResolvers,
   postResolvers,
   viewerResolvers,
   commentResolvers,

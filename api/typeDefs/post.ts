@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-micro';
 const postSchema = gql`
   extend type Query {
     post(id: ID!): Post
-    posts(first: Int!, after: Cursor): PostConnection!
+    posts(first: NonNegativeInt!, after: Cursor): PostConnection!
     categories: [Category!]!
     category(slug: String!): Category
   }
@@ -17,7 +17,7 @@ const postSchema = gql`
     id: ID!
     name: String!
     slug: String!
-    posts(first: Int!, after: Cursor): PostConnection!
+    posts(first: NonNegativeInt!, after: Cursor): PostConnection!
   }
 
   type Post implements Reactable {
@@ -28,13 +28,13 @@ const postSchema = gql`
     author: User
     viewerReaction: ReactionType
     reactionsCount: ReactionsCount!
-    commentsCount: Int!
-    comments(first: Int!, after: Cursor): CommentConnection!
+    commentsCount: NonNegativeInt!
+    comments(first: NonNegativeInt!, after: Cursor): CommentConnection!
   }
 
   type GraphImage {
-    width: Int!
-    height: Int!
+    width: NonNegativeInt!
+    height: NonNegativeInt!
     url: String!
   }
 

@@ -28,8 +28,8 @@ const reactionSchema = gql`
   }
 
   type ReactionsCount {
-    likesCount: Int!
-    dislikesCount: Int!
+    likesCount: NonNegativeInt!
+    dislikesCount: NonNegativeInt!
   }
 `;
 

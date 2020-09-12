@@ -11,6 +11,8 @@ export type Scalars = {
   Float: number;
   Date: any;
   Cursor: any;
+  NonNegativeInt: any;
+  EmailAddress: any;
 };
 
 export type Mutation = {
@@ -136,7 +138,7 @@ export type QueryPostArgs = {
 
 
 export type QueryPostsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 
@@ -155,7 +157,7 @@ export type Category = {
 
 
 export type CategoryPostsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 
@@ -168,20 +170,20 @@ export type Post = Reactable & {
   author?: Maybe<User>;
   viewerReaction?: Maybe<ReactionType>;
   reactionsCount: ReactionsCount;
-  commentsCount: Scalars['Int'];
+  commentsCount: Scalars['NonNegativeInt'];
   comments: CommentConnection;
 };
 
 
 export type PostCommentsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 
 export type GraphImage = {
   __typename?: 'GraphImage';
-  width: Scalars['Int'];
-  height: Scalars['Int'];
+  width: Scalars['NonNegativeInt'];
+  height: Scalars['NonNegativeInt'];
   url: Scalars['String'];
 };
 
@@ -236,9 +238,11 @@ export type Reactable = {
 
 export type ReactionsCount = {
   __typename?: 'ReactionsCount';
-  likesCount: Scalars['Int'];
-  dislikesCount: Scalars['Int'];
+  likesCount: Scalars['NonNegativeInt'];
+  dislikesCount: Scalars['NonNegativeInt'];
 };
+
+
 
 
 
@@ -249,31 +253,31 @@ export enum SocialAccountType {
 
 export type UserInput = {
   displayName: Scalars['String'];
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
 };
 
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
   displayName: Scalars['String'];
-  email: Scalars['String'];
+  email: Scalars['EmailAddress'];
   thumbnailUrl?: Maybe<Scalars['String']>;
   googleProfileId?: Maybe<Scalars['String']>;
   facebookProfileId?: Maybe<Scalars['String']>;
-  postsCount: Scalars['Int'];
+  postsCount: Scalars['NonNegativeInt'];
   posts: PostConnection;
   sessions: SessionConnection;
 };
 
 
 export type UserPostsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 
 
 export type UserSessionsArgs = {
-  first: Scalars['Int'];
+  first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
 };
 

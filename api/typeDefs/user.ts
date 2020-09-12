@@ -23,19 +23,19 @@ const userSchema = gql`
 
   input UserInput {
     displayName: String!
-    email: String!
+    email: EmailAddress!
   }
 
   type User {
     id: ID!
     displayName: String!
-    email: String!
+    email: EmailAddress!
     thumbnailUrl: String
     googleProfileId: String
     facebookProfileId: String
-    postsCount: Int!
-    posts(first: Int!, after: Cursor): PostConnection!
-    sessions(first: Int!, after: Cursor): SessionConnection!
+    postsCount: NonNegativeInt!
+    posts(first: NonNegativeInt!, after: Cursor): PostConnection!
+    sessions(first: NonNegativeInt!, after: Cursor): SessionConnection!
   }
 
   type Session {

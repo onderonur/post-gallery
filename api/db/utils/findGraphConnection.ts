@@ -7,6 +7,7 @@ import Objection from 'objection';
 import knex from './knex';
 
 const maxConnectionNodeLimit = 100;
+const minConnectionNodeLimit = 0;
 
 export async function findGraphConnection<
   ModelClass extends Objection.Model
@@ -20,12 +21,16 @@ export async function findGraphConnection<
 }) {
   const { tableName, orderBy, after, getCursorFn, where } = args;
   let { first } = args;
-  first = first ?? 0;
+  first = first ?? minConnectionNodeLimit;
 
   // We validate the input parameters first.
   if (first > maxConnectionNodeLimit) {
     throw new UserInputError(
       `Max pagination size can be ${maxConnectionNodeLimit}.`,
+    );
+  } else if (first < minConnectionNodeLimit) {
+    throw new UserInputError(
+      `Min pagination size can be ${minConnectionNodeLimit}`,
     );
   }
 
