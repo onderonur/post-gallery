@@ -18,6 +18,7 @@ The project has changed a lot along the way. Trials were carried out with differ
 - Social media share buttons
 - Basic SEO optimization
 - CSRF protection
+- GraphQL Query Depth Limit
 
 ### Stack
 
