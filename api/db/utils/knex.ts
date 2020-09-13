@@ -17,10 +17,6 @@ class BaseModel extends Model {
   createdAt: Date;
   updatedAt: Date;
 
-  getGraphCursor() {
-    return this.id;
-  }
-
   // https://github.com/Vincit/objection.js/issues/46#issuecomment-496481331
   $beforeInsert() {
     if (!this.id) {

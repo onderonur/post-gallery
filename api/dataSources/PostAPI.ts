@@ -1,12 +1,38 @@
 import { ID } from '../types';
 import BaseDataSource from './BaseDataSource';
 import { PostGraphConnectionArgs } from '@api/db/post';
-import { PostInput } from '@api/generated/graphql';
+import { Maybe, Omit, PostInput } from '@api/generated/graphql';
+import { ApolloError } from 'apollo-server-micro';
+
+type FindPostConnectionArgs = Omit<PostGraphConnectionArgs, 'categoryId'> & {
+  categorySlug?: string;
+};
 
 class PostAPI extends BaseDataSource {
-  async findPostConnection(args: PostGraphConnectionArgs) {
+  async findPostConnection({
+    first,
+    after,
+    authorId,
+    categorySlug,
+  }: FindPostConnectionArgs) {
     const { db } = this.context;
-    const connection = await db.post.findConnection(args);
+    // TODO: This could be done in a single query by using a join.
+    // But to not make "findGraphConnection" more complicated,
+    // this is just skipped. May be improved later.
+    let categoryId: Maybe<ID>;
+    if (categorySlug) {
+      const category = await db.category.findOneBySlug(categorySlug);
+      if (!category) {
+        throw new ApolloError('Category not found');
+      }
+      categoryId = category.id;
+    }
+    const connection = await db.post.findConnection({
+      first,
+      after,
+      authorId,
+      categoryId,
+    });
     return connection;
   }
 

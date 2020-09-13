@@ -1,10 +1,8 @@
 import { NextApiRequest } from 'next';
-import { DB } from '..';
 
 interface BaseRepositoryContext {
   viewer: NextApiRequest['viewer'];
   authToken: NextApiRequest['authToken'];
-  db: DB;
 }
 
 class BaseRepository {

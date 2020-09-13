@@ -37,7 +37,7 @@ const postLoaders = () => ({
 
 export type PostGraphConnectionArgs = GraphConnectionArgs & {
   authorId?: Maybe<ID>;
-  categorySlug?: Maybe<string>;
+  categoryId?: Maybe<string>;
 };
 
 class PostRepository extends BaseRepository {
@@ -101,19 +101,7 @@ class PostRepository extends BaseRepository {
   }
 
   async findConnection(args: PostGraphConnectionArgs) {
-    const { first, after, authorId, categorySlug } = args;
-    // TODO: This could be done in a single query by using a join.
-    // But to not make "findGraphConnection" more complicated,
-    // this is just skipped. May be improved later.
-    const { db } = this.context;
-    let categoryId: Maybe<ID>;
-    if (categorySlug) {
-      const category = await db.category.findOneBySlug(categorySlug);
-      if (!category) {
-        throw new ApolloError('Category not found');
-      }
-      categoryId = category.id;
-    }
+    const { first, after, authorId, categoryId } = args;
     const connection = await findGraphConnection({
       after,
       first,
