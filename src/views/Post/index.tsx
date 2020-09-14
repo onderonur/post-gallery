@@ -207,7 +207,6 @@ function PostView() {
               }
               formikHelpers.setSubmitting(false);
               formikHelpers.resetForm();
-              formikHelpers.validateForm();
             }}
           />
           <CommentList

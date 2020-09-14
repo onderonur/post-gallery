@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import urls from '@src/utils/urls';
 import CategorySelect from './CategorySelect';
 import Stack from '@src/components/Stack';
-import { OnSubmit } from '@src/types';
+import { OnSubmitFn } from '@src/types';
 
 const CREATE_POST = gql`
   mutation CreatePost($title: String!, $categoryId: ID!, $mediaId: ID!) {
@@ -55,7 +55,7 @@ const CreatePostDialog = React.memo(function CreatePostDialog() {
     },
   });
 
-  const handleSubmit = useCallback<OnSubmit<PostInput>>(
+  const handleSubmit = useCallback<OnSubmitFn<PostInput>>(
     (values) => {
       createPost({ variables: values });
     },
@@ -71,7 +71,6 @@ const CreatePostDialog = React.memo(function CreatePostDialog() {
         <Formik<PostInput>
           initialValues={initialValues}
           validationSchema={validationSchema}
-          validateOnMount
           onSubmit={handleSubmit}
           onReset={close}
         >

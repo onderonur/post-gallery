@@ -42,6 +42,6 @@ declare global {
   }
 }
 
-export type OnSubmit<FormValues> = FormikConfig<FormValues>['onSubmit'];
+export type OnSubmitFn<FormValues> = FormikConfig<FormValues>['onSubmit'];
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

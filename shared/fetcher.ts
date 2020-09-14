@@ -1,16 +1,16 @@
 import { CustomError } from './CustomError';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { RequestHeader } from './RequestHeader';
+import { to } from './to';
 
-function handleResponse(response: AxiosResponse) {
+function handleResponse<ResponseData>(response: AxiosResponse<ResponseData>) {
   return response.data;
 }
 
 function handleError(err: AxiosError) {
   const { response } = err;
   const status = response?.status || 500;
-  const data = response?.data;
-  const message = data.message || response?.statusText;
+  const message = response?.data.message || response?.statusText;
   throw new CustomError(status, message);
 }
 
@@ -24,18 +24,24 @@ class Fetcher {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get = <Response = any>(url: string) => {
-    return axios.get<Response>(url).then(handleResponse).catch(handleError);
+  get = async <ResponseData = any>(url: string) => {
+    const result = await to<AxiosResponse<ResponseData>, AxiosError>(
+      axios.get<ResponseData>(url),
+    );
+    if (result.error) {
+      throw handleError(result.error);
+    }
+    return handleResponse(result.data);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  post = <Response = any, PostData = any>(
+  post = async <ResponseData = any, PostData = any>(
     url: string,
     data?: PostData,
     config?: FetcherPostConfig,
-  ): Promise<Response> => {
-    return axios
-      .post<Response>(url, data, {
+  ): Promise<ResponseData> => {
+    const result = await to<AxiosResponse<ResponseData>, AxiosError>(
+      axios.post<ResponseData>(url, data, {
         // https://gist.github.com/virolea/e1af9359fe071f24de3da3500ff0f429
         onUploadProgress: config?.onUploadProgress
           ? (progressEvent) => {
@@ -45,9 +51,12 @@ class Fetcher {
               config.onUploadProgress(percentCompleted);
             }
           : undefined,
-      })
-      .then(handleResponse)
-      .catch(handleError);
+      }),
+    );
+    if (result.error) {
+      throw handleError(result.error);
+    }
+    return handleResponse(result.data);
   };
 }
 

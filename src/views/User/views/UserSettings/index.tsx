@@ -8,7 +8,7 @@ import {
   UserInput,
 } from '@src/generated/graphql';
 import BaseFormActions from '@src/components/BaseFormActions';
-import { OnSubmit, ID } from '@src/types';
+import { OnSubmitFn, ID } from '@src/types';
 import * as Yup from 'yup';
 import { Box, Container, Divider } from '@material-ui/core';
 import UserLayout, { UserLayoutFragments } from '../../components/UserLayout';
@@ -85,7 +85,7 @@ function UserSettingsView() {
     [user],
   );
 
-  const handleSubmit = useCallback<OnSubmit<UserInput>>(
+  const handleSubmit = useCallback<OnSubmitFn<UserInput>>(
     async (values, formikHelpers) => {
       if (!user) {
         return;
@@ -99,7 +99,6 @@ function UserSettingsView() {
         return;
       }
       formikHelpers.setSubmitting(false);
-      formikHelpers.resetForm();
     },
     [updateUser, user],
   );
@@ -113,7 +112,6 @@ function UserSettingsView() {
           <Formik<UserInput>
             initialValues={initialValues}
             validationSchema={validationSchema}
-            validateOnMount
             onSubmit={handleSubmit}
           >
             {() => {

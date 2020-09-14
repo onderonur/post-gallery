@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik, Form, FormikConfig } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import BaseTextField from '@src/components/BaseTextField';
 import BaseFormActions from '@src/components/BaseFormActions';
@@ -8,13 +8,14 @@ import BaseLink from '@src/components/BaseLink';
 import urls from '@src/utils/urls';
 import useRequireAuth from '@src/hooks/useRequireAuth';
 import { Typography } from '@material-ui/core';
+import { OnSubmitFn } from '@src/types';
 
 interface CommentFormValues {
   text: string;
 }
 
 interface CommentFormProps {
-  onSubmit: FormikConfig<CommentFormValues>['onSubmit'];
+  onSubmit: OnSubmitFn<CommentFormValues>;
 }
 
 const CommentFormFallback = () => {
@@ -41,7 +42,6 @@ const CommentForm = React.memo<CommentFormProps>(function CommentForm({
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
-      validateOnMount
     >
       {({ isSubmitting }) => {
         if (isSubmitting) {
