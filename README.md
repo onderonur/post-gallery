@@ -4,7 +4,11 @@ Post Gallery is a fullstack GraphQL web application which started as a basic 9GA
 
 It has no custom server setup. Only the serverless functions of Next.js are used. This has resulted in a very simple, yet powerful structure.
 
-The project has changed a lot along the way. Trials were carried out with different ORMs like Sequelize, TypeORM, Prisma 2 and Objection/Knex. API and frontend were two separate projects at first, but they were combined after a while as an experiment. Even though it's much cleaner to create separate projects for various reasons, this structure also works pretty well.
+The project has changed a lot along the way. Trials were carried out with different ORMs like Sequelize, TypeORM, Prisma 2 and Objection/Knex. API and frontend were two separate projects at first, but they were combined after a while as an experiment. Even though it's much cleaner to create separate projects for various reasons, this structure also works pretty well.  
+
+It also has the settings for generating all the typings and custom @apollo/client hooks with `graphql-code-generator` based on the GraphQL schema. When this is used with VSCode [Apollo extension](https://www.apollographql.com/docs/devtools/editor-plugins/) which has features like autocompletion and showing warnings/errors based on the schema, it was just so easy to write all the queries/mutations/fragments.
+
+You can find a list of recommended extensions in `.vscode/extensions.json`.
 
 ### Features
 
