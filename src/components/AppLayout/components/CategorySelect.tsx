@@ -7,10 +7,7 @@ import { useGetCategoriesQuery } from '@src/generated/graphql';
 import { GET_CATEGORIES } from '@src/gql/queries';
 import React from 'react';
 
-type CategorySelectProps = {
-  name: BaseTextFieldProps['name'];
-  required: BaseTextFieldProps['required'];
-};
+type CategorySelectProps = Pick<BaseTextFieldProps, 'name' | 'required'>;
 
 const CategorySelect = React.memo<CategorySelectProps>(function CategorySelect(
   props,
@@ -22,7 +19,7 @@ const CategorySelect = React.memo<CategorySelectProps>(function CategorySelect(
     <BaseTextField
       {...props}
       select
-      placeholder="Select Category"
+      placeholder="Select category"
       label="Category"
     >
       {loading ? (
