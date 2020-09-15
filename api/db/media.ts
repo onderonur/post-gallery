@@ -4,7 +4,7 @@ import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
 import { ApolloError } from 'apollo-server-micro';
 import { omit } from 'lodash';
-import { MediaModel } from './utils/knex';
+import { MediaModel } from './knex';
 import { generateId } from './utils/generateId';
 
 const createMediaByPostIdLoader = createLoader<ID, MediaModel>(

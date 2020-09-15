@@ -3,7 +3,7 @@ import { ID, ObjectionModelToPojo } from '@api/types';
 import { Model, ModelOptions, Pojo } from 'objection';
 import { ReactionType } from '@api/generated/graphql';
 import { Maybe } from 'graphql/jsutils/Maybe';
-import { generateId } from './generateId';
+import { generateId } from '../utils/generateId';
 
 // https://github.com/irustm/koa-knex-typescript-example/blob/master/src/server/db/connection.ts
 const config = require('../../../knexfile').development;

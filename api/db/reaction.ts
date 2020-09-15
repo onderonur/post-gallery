@@ -4,7 +4,7 @@ import { ReactionType } from '@api/generated/graphql';
 import { ReactionsCount } from '../generated/graphql';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
-import { ReactionModel } from './utils/knex';
+import { ReactionModel } from './knex';
 
 export type ReactionsCountByReactableId = ReactionsCount & {
   reactableId: ID;

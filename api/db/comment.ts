@@ -4,7 +4,7 @@ import { ID } from '@api/types';
 import { GraphConnectionArgs } from '../types';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
-import { CommentModel, ReactableType } from './utils/knex';
+import { CommentModel, ReactableType } from './knex';
 import { findGraphConnection } from './utils/findGraphConnection';
 import { generateId } from './utils/generateId';
 

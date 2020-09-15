@@ -1,4 +1,4 @@
-import { UserModel } from '@api/db/utils/knex';
+import { UserModel } from '@api/db/knex';
 import { SocialAccountType } from '@api/generated/graphql';
 import { ID } from '@api/types';
 import { fetcher } from '@shared/fetcher';

@@ -6,7 +6,7 @@ import { GraphConnectionArgs, DecodedJwt } from '../types';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
 import { ForbiddenError, AuthenticationError } from 'apollo-server-micro';
-import { AuthTokenModel, UserModel } from './utils/knex';
+import { AuthTokenModel, UserModel } from './knex';
 import { Maybe, Session } from '@api/generated/graphql';
 import { findGraphConnection } from './utils/findGraphConnection';
 

@@ -1,12 +1,7 @@
 import { Scalars, Maybe, PageInfo } from './generated/graphql';
 import { DataSources } from './dataSources';
 import { NextApiRequest } from 'next';
-import {
-  CategoryModel,
-  CommentModel,
-  PostModel,
-  UserModel,
-} from './db/utils/knex';
+import { CategoryModel, CommentModel, PostModel, UserModel } from './db/knex';
 import { Model, NonFunctionPropertyNames } from 'objection';
 
 export type ID = Scalars['ID'];

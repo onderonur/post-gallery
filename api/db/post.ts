@@ -4,7 +4,7 @@ import { GraphConnectionArgs } from '../types';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
 import { PostInput, Maybe } from '@api/generated/graphql';
-import { PostModel, ReactableType } from './utils/knex';
+import { PostModel, ReactableType } from './knex';
 import { findGraphConnection } from './utils/findGraphConnection';
 import { generateId } from './utils/generateId';
 

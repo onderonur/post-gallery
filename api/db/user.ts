@@ -3,7 +3,7 @@ import { ID } from '@api/types';
 import { ApolloError, AuthenticationError } from 'apollo-server-micro';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
-import { UserModel } from './utils/knex';
+import { UserModel } from './knex';
 
 const createUserByIdLoader = createLoader<ID, UserModel>(
   (userIds) => UserModel.query().findByIds(userIds as ID[]),
