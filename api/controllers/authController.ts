@@ -1,7 +1,5 @@
 import { NextApiHandler } from 'next';
-import jwt from 'jsonwebtoken';
 import { setAuthTokenCookie, destroyAuthTokenCookie } from '@api/utils/auth';
-import { DecodedJwt } from '@api/types';
 import { SocialAccountType } from '@api/generated/graphql';
 import { BadRequestError } from '@api/utils/httpErrors';
 import { verifySocialAccountToken } from '@api/utils/verifySocialAccountToken';
@@ -63,7 +61,10 @@ const login: NextApiHandler = async (req, res) => {
   }
 
   const { useragent } = req;
-  const authToken = await db.authToken.signAndSaveToken(useragent, foundUser);
+  const authToken = await db.authToken.signAndSaveToken(
+    foundUser.id,
+    useragent,
+  );
 
   setAuthTokenCookie(res, authToken);
 
@@ -81,12 +82,12 @@ const logout: NextApiHandler<LogoutRespone> = async (req, res) => {
     return res.json({ success: true });
   }
 
-  const decodedToken = jwt.decode(authToken);
-  const { jti } = decodedToken as DecodedJwt;
   const { db } = req;
+  const decodedToken = db.authToken.decode(authToken);
+  const { jti } = decodedToken;
 
   // If the authToken can not be deleted from DB,
-  // we don't throw and error.
+  // we don't throw an error.
   // We just end the request. We already deleted
   // the cookie from the request.
   // This method might be handled with details in future.

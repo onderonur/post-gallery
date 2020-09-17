@@ -18,7 +18,7 @@ class ReactionAPI extends BaseDataSource {
     return result;
   }
 
-  async findViewerReaction(reactableId: ID) {
+  async findOneViewerReaction(reactableId: ID) {
     const { db, viewer } = this.context;
     if (!viewer) {
       return null;

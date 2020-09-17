@@ -3,9 +3,9 @@ import { Resolvers } from '../generated/graphql';
 const categoryResolvers: Resolvers = {
   Query: {
     categories: (parent, args, { dataSources }) =>
-      dataSources.categoryAPI.findCategories(),
+      dataSources.categoryAPI.findManyCategories(),
     category: (parent, { slug }, { dataSources }) =>
-      dataSources.categoryAPI.findCategoryBySlug(slug),
+      dataSources.categoryAPI.findOneCategoryBySlug(slug),
   },
   Category: {
     posts: ({ slug }, args, { dataSources }) =>

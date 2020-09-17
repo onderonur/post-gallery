@@ -15,13 +15,15 @@ class PostAPI extends BaseDataSource {
     authorId,
     categorySlug,
   }: FindPostConnectionArgs) {
-    const { db } = this.context;
+    const { db, dataSources } = this.context;
     // TODO: This could be done in a single query by using a join.
     // But to not make "findGraphConnection" more complicated,
     // this is just skipped. May be improved later.
     let categoryId: Maybe<ID>;
     if (categorySlug) {
-      const category = await db.category.findOneBySlug(categorySlug);
+      const category = await dataSources.categoryAPI.findOneCategoryBySlug(
+        categorySlug,
+      );
       if (!category) {
         throw new ApolloError('Category not found');
       }
@@ -36,7 +38,7 @@ class PostAPI extends BaseDataSource {
     return connection;
   }
 
-  async findPostById(id: ID) {
+  async findOnePostById(id: ID) {
     const { db } = this.context;
     const post = await db.post.findOneById(id);
     return post;

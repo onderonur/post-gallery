@@ -1,6 +1,6 @@
 import { Maybe } from '@api/generated/graphql';
 import { extractAuthToken, destroyAuthTokenCookie } from '@api/utils/auth';
-import { Viewer, DecodedJwt } from '../types';
+import { Viewer } from '../types';
 import { NextApiMiddleware } from './types';
 
 declare module 'next' {
@@ -16,14 +16,14 @@ const authenticate: NextApiMiddleware = (fn) => async (req, res) => {
     return fn(req, res);
   }
   const { db } = req;
-  const verified = await db.authToken.verifyAndDecode(authToken);
+  const verified = await db.authToken.verify(authToken);
   if (!verified) {
     // Destroying unverified authToken
     destroyAuthTokenCookie(res);
     return fn(req, res);
   }
-  const { sub } = verified as DecodedJwt;
-  const viewer = await db.user.findOneById(sub);
+  const { userId } = verified;
+  const viewer = await db.user.findOneById(userId);
   req.viewer = viewer;
   req.authToken = authToken;
 

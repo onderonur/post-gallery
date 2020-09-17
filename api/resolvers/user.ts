@@ -3,7 +3,7 @@ import { Resolvers } from '../generated/graphql';
 const viewerResolvers: Resolvers = {
   Query: {
     user: (parent, { id }, { dataSources }) =>
-      dataSources.userAPI.findUserById(id),
+      dataSources.userAPI.findOneUserById(id),
   },
   Mutation: {
     updateUser: (parent, { id, input }, { dataSources }) =>

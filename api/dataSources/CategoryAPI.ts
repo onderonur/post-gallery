@@ -1,13 +1,13 @@
 import BaseDataSource from './BaseDataSource';
 
 class CategoryAPI extends BaseDataSource {
-  async findCategories() {
+  async findManyCategories() {
     const { db } = this.context;
-    const categories = await db.category.find();
+    const categories = await db.category.findMany();
     return categories;
   }
 
-  async findCategoryBySlug(name: string) {
+  async findOneCategoryBySlug(name: string) {
     const { db } = this.context;
     const category = await db.category.findOneBySlug(name);
     return category;

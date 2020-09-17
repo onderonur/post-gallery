@@ -9,11 +9,11 @@ const commentResolvers: Resolvers = {
   },
   Comment: {
     commenter: ({ userId }, args, { dataSources }) =>
-      dataSources.userAPI.findUserById(userId),
+      dataSources.userAPI.findOneUserById(userId),
     reactionsCount: ({ id }, args, { dataSources }) =>
       dataSources.reactionAPI.countReactionsByReactableId(id),
     viewerReaction: ({ id }, args, { dataSources }) =>
-      dataSources.reactionAPI.findViewerReaction(id),
+      dataSources.reactionAPI.findOneViewerReaction(id),
   },
 };
 

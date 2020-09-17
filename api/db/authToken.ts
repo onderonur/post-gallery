@@ -6,7 +6,7 @@ import { GraphConnectionArgs, DecodedJwt } from '../types';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
 import { ForbiddenError, AuthenticationError } from 'apollo-server-micro';
-import { AuthTokenModel, UserModel } from './knex';
+import { AuthTokenModel } from './knex';
 import { Maybe, Session } from '@api/generated/graphql';
 import { findGraphConnection } from './utils/findGraphConnection';
 
@@ -54,7 +54,7 @@ class AuthTokenRepository extends BaseRepository {
       throw new AuthenticationError('You are not logged in');
     }
 
-    const decodedToken = jwt.decode(authToken) as DecodedJwt;
+    const decodedToken = this.decode(authToken);
 
     const deletedNum = await AuthTokenModel.query()
       .where({
@@ -70,7 +70,7 @@ class AuthTokenRepository extends BaseRepository {
 
   async deleteByJti(jti: ID) {
     const forbiddenError = new ForbiddenError(
-      'Not allowed to delete another users session.',
+      'Not allowed to delete another users session',
     );
 
     const { viewer } = this.context;
@@ -120,7 +120,7 @@ class AuthTokenRepository extends BaseRepository {
       },
     });
 
-    const decodedToken = jwt.decode(authToken);
+    const decodedToken = this.decode(authToken);
     const { jti } = decodedToken as DecodedJwt;
 
     return {
@@ -132,17 +132,14 @@ class AuthTokenRepository extends BaseRepository {
     };
   }
 
-  async signAndSaveToken(
-    useragent: NextApiRequest['useragent'],
-    user: UserModel,
-  ) {
+  async signAndSaveToken(userId: ID, useragent: NextApiRequest['useragent']) {
     const jti = uuidv4();
-    const token = jwt.sign({ sub: user.id }, process.env.AUTH_TOKEN_SECRET, {
+    const token = jwt.sign({ sub: userId }, process.env.AUTH_TOKEN_SECRET, {
       jwtid: jti,
     });
     await this.create({
       jti,
-      userId: user.id,
+      userId,
       browser: useragent?.browser,
       os: useragent?.os,
       platform: useragent?.platform,
@@ -150,7 +147,12 @@ class AuthTokenRepository extends BaseRepository {
     return token;
   }
 
-  async verifyAndDecode(authToken: string) {
+  decode(authToken: string) {
+    const decodedToken = jwt.decode(authToken) as DecodedJwt;
+    return decodedToken;
+  }
+
+  async verify(authToken: string) {
     let verified;
     try {
       verified = jwt.verify(authToken, process.env.AUTH_TOKEN_SECRET);
@@ -160,12 +162,13 @@ class AuthTokenRepository extends BaseRepository {
     if (!verified) {
       return null;
     }
-    const { jti } = verified as DecodedJwt;
+    const decoded = verified as DecodedJwt;
+    const { jti } = decoded;
     const foundAuthToken = await this.findOneByJti(jti);
     if (!foundAuthToken) {
       return null;
     }
-    return verified;
+    return foundAuthToken;
   }
 }
 

@@ -41,7 +41,7 @@ export type PostGraphConnectionArgs = GraphConnectionArgs & {
 };
 
 class PostRepository extends BaseRepository {
-  private laoder = postLoaders();
+  private loaders = postLoaders();
 
   async create(input: PostInput) {
     const { viewer } = this.context;
@@ -87,7 +87,7 @@ class PostRepository extends BaseRepository {
   }
 
   async findOneById(id: ID) {
-    const post = await this.laoder.postById.load(id);
+    const post = await this.loaders.postById.load(id);
     return post;
   }
 
@@ -96,7 +96,7 @@ class PostRepository extends BaseRepository {
   }
 
   async countByUserId(userId: ID) {
-    const result = await this.laoder.postsCountByUserId.load(userId);
+    const result = await this.loaders.postsCountByUserId.load(userId);
     return result?.count ?? 0;
   }
 

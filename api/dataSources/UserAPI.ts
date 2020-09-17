@@ -8,7 +8,7 @@ import { ID } from '@api/types';
 import { verifySocialAccountToken } from '@api/utils/verifySocialAccountToken';
 
 export class UserAPI extends BaseDataSource {
-  async findUserById(id: ID) {
+  async findOneUserById(id: ID) {
     const { db } = this.context;
     const user = await db.user.findOneById(id);
     return user;

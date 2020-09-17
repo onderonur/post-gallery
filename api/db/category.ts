@@ -14,7 +14,7 @@ const categoryLoaders = () => ({
 class CategoryRepository extends BaseRepository {
   loaders = categoryLoaders();
 
-  async find() {
+  async findMany() {
     const categories = await CategoryModel.query().orderBy('order');
     return categories;
   }
