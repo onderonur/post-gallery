@@ -16,16 +16,22 @@ export interface BaseIconButtonProps extends IconButtonProps {
 
 const BaseIconButton: React.FC<BaseIconButtonProps> = ({
   loading,
-  children,
+  disabled,
   size,
   isAuthRequired,
+  children,
   onClick,
   ...rest
 }) => {
   const privateOnClick = usePrivateAction({ isAuthRequired, action: onClick });
   const isSmall = size === 'small';
   return (
-    <IconButton size={size} onClick={privateOnClick} {...rest}>
+    <IconButton
+      size={size}
+      onClick={privateOnClick}
+      disabled={disabled || loading}
+      {...rest}
+    >
       {children}
       {loading && <Loading size={isSmall ? 30 : 48} />}
     </IconButton>

@@ -29,21 +29,21 @@ const ButtonLoading = styled(CircularProgress)`
 function BaseButton<T extends React.ElementType>({
   loading,
   disabled,
-  children,
   variant = 'contained',
   isAuthRequired,
   disableElevation = true,
+  children,
   onClick,
-  ...props
+  ...rest
 }: BaseButtonProps<T>) {
   const privateOnClick = usePrivateAction({ isAuthRequired, action: onClick });
   return (
     <Button
+      {...rest}
       variant={variant}
       disabled={loading || disabled}
       disableElevation={disableElevation}
       onClick={privateOnClick}
-      {...props}
     >
       {children}
       {loading && <ButtonLoading size={loadingSize} />}
