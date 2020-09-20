@@ -9,7 +9,7 @@ const handleErrors: NextApiMiddleware = (fn) => async (req, res) => {
     const maskedErr = maskSensitiveInfoFromError(err);
     const statusCode = maskedErr.statusCode || 500;
     const message = maskedErr.message || 'Something went wrong';
-    res.status(statusCode).json({ statusCode, message });
+    return res.status(statusCode).json({ statusCode, message });
   }
 };
 

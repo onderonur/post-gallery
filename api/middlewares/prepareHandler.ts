@@ -5,6 +5,7 @@ import authenticate from './authenticate';
 import withDb from './withDb';
 import { NextApiMiddleware } from './types';
 import csrfProtection from './csrfProtection';
+import rateLimiter from './rateLimiter';
 
 // https://www.freecodecamp.org/news/pipe-and-compose-in-javascript-5b04004ac937/
 const pipe = (...fns: NextApiMiddleware[]) => (x: NextApiHandler) =>
@@ -21,6 +22,7 @@ const prepareHandler = (fn: NextApiHandler) => (
   return pipe(
     handleErrors,
     useragent,
+    rateLimiter,
     withDb,
     csrfProtection,
     authenticate,

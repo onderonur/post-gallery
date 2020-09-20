@@ -23,6 +23,7 @@ You can find a list of recommended extensions in `.vscode/extensions.json`.
 - Basic SEO optimization
 - CSRF protection
 - GraphQL Query Depth Limit
+- Rate Limiter
 
 ### Stack
 

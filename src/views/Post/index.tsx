@@ -23,6 +23,7 @@ import { ID } from '@src/types';
 import PostSeo, { PostSeoFragments } from './components/PostSeo';
 import { gql } from '@apollo/client';
 import { to } from '@shared/to';
+import AlertError from '@src/components/AlertError';
 
 export const PostViewFragments = {
   post: gql`
@@ -170,6 +171,10 @@ function PostView() {
     },
     [post],
   );
+
+  if (getPostQueryError) {
+    return <AlertError error={getPostQueryError} />;
+  }
 
   if (!post) {
     if (loading) {

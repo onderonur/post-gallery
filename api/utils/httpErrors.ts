@@ -18,3 +18,9 @@ export class MethodNotAllowedError extends CustomError {
     super(HttpStatusCode.METHOD_NOT_ALLOWED, 'Method Not Allowed');
   }
 }
+
+export class TooManyRequestsError extends CustomError {
+  constructor() {
+    super(HttpStatusCode.TOO_MANY_REQUESTS, 'Too many requests');
+  }
+}

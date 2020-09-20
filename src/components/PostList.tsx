@@ -8,6 +8,7 @@ import { RootRef, Divider } from '@material-ui/core';
 import { Cursor } from '@src/types';
 import Stack from './Stack';
 import AlertInfo from './AlertInfo';
+import AlertError from './AlertError';
 
 export const PostListFragments = {
   postConnection: gql`
@@ -52,6 +53,10 @@ const PostList: React.FC<PostListProps> = ({
   }
 
   const edges = postConnection?.edges;
+
+  if (error) {
+    return <AlertError error={error} />;
+  }
 
   if (!edges?.length && !pageInfo?.hasNextPage) {
     return <AlertInfo message="There are no posts to display." />;

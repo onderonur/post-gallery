@@ -2,4 +2,5 @@ export enum HttpStatusCode {
   BAD_REQUEST = 400,
   UNAUTHORIZED = 401,
   METHOD_NOT_ALLOWED = 405,
+  TOO_MANY_REQUESTS = 429,
 }
