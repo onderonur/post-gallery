@@ -4,11 +4,35 @@ import { Model, ModelOptions, Pojo } from 'objection';
 import { ReactionType } from '@api/generated/graphql';
 import { Maybe } from 'graphql/jsutils/Maybe';
 import { generateId } from '../utils/generateId';
+import { isDev } from '@shared/isDev';
 
 // https://github.com/irustm/koa-knex-typescript-example/blob/master/src/server/db/connection.ts
 const config = require('../../../knexfile').development;
 
-const knex = Knex(config);
+declare global {
+  namespace NodeJS {
+    interface Global {
+      __KNEX_DB_CONNECTION__: Knex;
+    }
+  }
+}
+
+function getKnexConnection() {
+  if (!isDev()) {
+    return Knex(config);
+  }
+
+  // This `global` hack solves a long-standing issue appearing in development more,
+  // when successive hot-reloads lead to connections being leaked and eventually produce
+  // an unrecoverable error
+  // https://github.com/vercel/next.js/issues/7811#issuecomment-679076060
+  if (!global.__KNEX_DB_CONNECTION__) {
+    global.__KNEX_DB_CONNECTION__ = Knex(config);
+  }
+  return global.__KNEX_DB_CONNECTION__;
+}
+
+const knex = getKnexConnection();
 
 Model.knex(knex);
 
