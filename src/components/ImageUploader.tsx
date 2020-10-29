@@ -135,7 +135,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = (props) => {
               <BaseImage
                 src={lastUploadedImage.standardImage.url}
                 alt="Uploaded image for post"
-                lazyLoad={false}
                 objectFit="contain"
               />
               <RemoveFileButton

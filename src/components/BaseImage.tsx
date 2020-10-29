@@ -1,57 +1,52 @@
-import React, { useState, useEffect } from 'react';
-// import placeholderPng from "assets/images/placeholder.png";
-import { useTrackVisibility } from 'react-intersection-observer-hook';
+import React from 'react';
 import AspectRatio from './AspectRatio';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import styled from '@src/utils/styled';
-
-const defaultAlt = 'Not Loaded';
+import Image from 'next/image';
+import { shouldForwardProp } from '@src/utils/shouldForwardProp';
 
 interface ImgStyleProps {
-  objectFit: CSSProperties['objectFit'];
+  objectFit?: CSSProperties['objectFit'];
+  aspectRatio?: string | null;
 }
 
-const Img = styled.img<ImgStyleProps>`
+const Img = styled(Image, {
+  shouldForwardProp: shouldForwardProp<ImgStyleProps>([
+    'objectFit',
+    'aspectRatio',
+  ]),
+})<ImgStyleProps>`
   width: 100%;
   display: block;
   object-fit: ${({ objectFit }) => objectFit};
+  // To make next/image work with AspectRatio
+  position: ${({ aspectRatio }) => (aspectRatio ? 'absolute' : 'initial')};
 `;
 
-interface BaseImageProps {
+type BaseImageProps = ImgStyleProps & {
   src: string;
   alt: string;
-  aspectRatio?: string | null;
-  lazyLoad?: boolean;
-  objectFit?: ImgStyleProps['objectFit'];
-}
+};
 
 const BaseImage: React.FC<BaseImageProps> = ({
+  // TODO: Fix placeholder
   src /*= placeholderPng*/,
-  alt = defaultAlt,
+  alt,
   aspectRatio,
-  lazyLoad = true,
   objectFit = 'cover',
 }) => {
-  const [ref, { isVisible }] = useTrackVisibility();
-  const [lazyLoaded, setLazyLoaded] = useState(isVisible);
-
-  useEffect(() => {
-    if (isVisible) {
-      setLazyLoaded(true);
-    }
-  }, [isVisible]);
-
-  const image =
-    lazyLoad && !lazyLoaded ? null : (
-      <Img objectFit={objectFit} src={src} alt={alt} />
-    );
+  const image = (
+    <Img
+      aspectRatio={aspectRatio}
+      objectFit={objectFit}
+      src={src}
+      alt={alt}
+      unsized
+    />
+  );
 
   if (aspectRatio) {
-    return (
-      <AspectRatio ref={lazyLoad ? ref : undefined} aspectRatio={aspectRatio}>
-        {image}
-      </AspectRatio>
-    );
+    return <AspectRatio aspectRatio={aspectRatio}>{image}</AspectRatio>;
   }
 
   return image;

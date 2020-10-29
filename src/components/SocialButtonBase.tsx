@@ -6,6 +6,7 @@ import { Maybe } from '@src/generated/graphql';
 import AlertError from '@src/components/AlertError';
 import styled from '@src/utils/styled';
 import { Bold } from './Utils';
+import { shouldForwardProp } from '@src/utils/shouldForwardProp';
 
 interface StyleProps {
   backgroundColor: NonNullable<CSSProperties['backgroundColor']>;
@@ -14,13 +15,10 @@ interface StyleProps {
 
 const StyledButton = styled(BaseButton, {
   // To fix "react does not recognize the prop on a dom element" warnings
-  shouldForwardProp: (propName) => {
-    const invalidProps: Array<keyof StyleProps> = [
-      'backgroundColor',
-      'fontColor',
-    ];
-    return !invalidProps.includes(propName as never);
-  },
+  shouldForwardProp: shouldForwardProp<StyleProps>([
+    'backgroundColor',
+    'fontColor',
+  ]),
 })<StyleProps>`
   color: ${({ fontColor }) => fontColor};
   background-color: ${({ backgroundColor }) => backgroundColor};
