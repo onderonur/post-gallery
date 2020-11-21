@@ -75,7 +75,7 @@ GraphQL Playground is at `http://localhost:3000/api/graphql`.
 ### Migrations
 
 To create a new migration run:
-#### `npm run migrate:make -- name=<YOUR_MIGRATION_NAME>`
+#### `npm run migrate:make -- <YOUR_MIGRATION_NAME>`
 
 After that, add your changes to the created migration file and run:
 #### `npm run migrate:latest`
