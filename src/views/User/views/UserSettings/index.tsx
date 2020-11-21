@@ -90,14 +90,11 @@ function UserSettingsView() {
       if (!user) {
         return;
       }
-      const { error } = await to(
+      await to(
         updateUser({
           variables: { id: user.id, input: values },
         }),
       );
-      if (error) {
-        return;
-      }
       formikHelpers.setSubmitting(false);
     },
     [updateUser, user],

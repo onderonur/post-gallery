@@ -207,11 +207,10 @@ function PostView() {
                   },
                 }),
               );
-              if (error) {
-                return;
-              }
               formikHelpers.setSubmitting(false);
-              formikHelpers.resetForm();
+              if (!error) {
+                formikHelpers.resetForm();
+              }
             }}
           />
           <CommentList

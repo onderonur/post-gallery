@@ -1,10 +1,14 @@
-import { ApolloError, AuthenticationError } from 'apollo-server-micro';
+import {
+  ApolloError,
+  AuthenticationError,
+  ForbiddenError,
+} from 'apollo-server-micro';
 import { ID } from '@api/types';
 import { GraphConnectionArgs } from '../types';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
 import { PostInput, Maybe } from '@api/generated/graphql';
-import { PostModel, ReactableType } from './knex';
+import { MediaModel, PostModel, ReactableType } from './knex';
 import { findGraphConnection } from './utils/findGraphConnection';
 import { generateId } from './utils/generateId';
 
@@ -43,20 +47,23 @@ export type PostGraphConnectionArgs = GraphConnectionArgs & {
 class PostRepository extends BaseRepository {
   private loaders = postLoaders();
 
-  async create(input: PostInput) {
+  async create(input: PostInput, media: MediaModel) {
     const { viewer } = this.context;
     if (!viewer) {
       throw new AuthenticationError('You are not logged in');
     }
+    if (media.userId !== viewer.id) {
+      throw new ForbiddenError("You can not use another user's media");
+    }
     const postId = generateId();
-    const { title, categoryId, mediaId } = input;
+    const { title, categoryId } = input;
     const post = await PostModel.query().upsertGraph(
       {
         id: postId,
         title,
         category: { id: categoryId },
         user: { id: viewer.id },
-        media: { id: mediaId },
+        media: { id: media.id },
         reactable: {
           // We make reactable's id same with the post's id
           // to be able to reference it easily.

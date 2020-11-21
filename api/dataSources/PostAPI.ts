@@ -3,6 +3,7 @@ import BaseDataSource from './BaseDataSource';
 import { PostGraphConnectionArgs } from '@api/db/post';
 import { Maybe, Omit, PostInput } from '@api/generated/graphql';
 import { ApolloError } from 'apollo-server-micro';
+import { NotFoundError } from 'objection';
 
 type FindPostConnectionArgs = Omit<PostGraphConnectionArgs, 'categoryId'> & {
   categorySlug?: string;
@@ -45,8 +46,12 @@ class PostAPI extends BaseDataSource {
   }
 
   async createPost(input: PostInput) {
-    const { db } = this.context;
-    const post = await db.post.create(input);
+    const { db, dataSources } = this.context;
+    const media = await dataSources.mediaAPI.findOneById(input.mediaId);
+    if (!media) {
+      throw new NotFoundError('media not found');
+    }
+    const post = await db.post.create(input, media);
     return post;
   }
 

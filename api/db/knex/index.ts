@@ -53,7 +53,6 @@ class BaseModel extends Model {
     // We don't want id to be updated
     // Or we can accidentally update the id with "patch"
     // @ts-ignore
-    // delete this.id;
     this.updatedAt = new Date();
   }
 }
@@ -97,6 +96,7 @@ export class UserModel extends BaseModel {
 
   authTokens?: AuthTokenModel[];
   posts?: PostModel[];
+  medias?: MediaModel[];
   reactions?: ReactionModel[];
   comments?: CommentModel[];
 
@@ -128,6 +128,14 @@ export class UserModel extends BaseModel {
       join: {
         from: 'User.id',
         to: 'Post.userId',
+      },
+    },
+    medias: {
+      relation: Model.HasManyRelation,
+      modelClass: MediaModel,
+      join: {
+        from: 'User.id',
+        to: 'Media.userId',
       },
     },
     comments: {
@@ -334,6 +342,8 @@ export class PostModel extends BaseModel {
 export class MediaModel extends BaseModel {
   postId?: ID;
   post?: PostModel;
+  userId: ID;
+  user: UserModel;
   thumbnailWidth: number;
   thumbnailHeight: number;
   thumbnailUrl: string;
@@ -346,6 +356,24 @@ export class MediaModel extends BaseModel {
 
   static tableName = 'Media';
 
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: [
+        'userId',
+        'thumbnailWidth',
+        'thumbnailHeight',
+        'thumbnailUrl',
+        'smallImageWidth',
+        'smallImageHeight',
+        'smallImageUrl',
+        'standardImageWidth',
+        'standardImageHeight',
+        'standardImageUrl',
+      ],
+    };
+  }
+
   static relationMappings = () => ({
     post: {
       relation: Model.BelongsToOneRelation,
@@ -353,6 +381,14 @@ export class MediaModel extends BaseModel {
       join: {
         from: 'Media.postId',
         to: 'Post.id',
+      },
+    },
+    user: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: UserModel,
+      join: {
+        from: 'Media.userId',
+        to: 'User.id',
       },
     },
   });
@@ -373,6 +409,13 @@ export class ReactableModel extends BaseModel {
   reactions?: ReactableModel[];
 
   static tableName = 'Reactable';
+
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['type'],
+    };
+  }
 
   static relationMappings = () => ({
     post: {
@@ -411,6 +454,13 @@ export class ReactionModel extends BaseModel {
   user: UserModel;
 
   static tableName = 'Reaction';
+
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['type', 'reactableId', 'userId'],
+    };
+  }
 
   static relationMappings = () => ({
     reactable: {

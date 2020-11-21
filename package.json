@@ -9,9 +9,9 @@
     "gql-gen": "graphql-codegen --config codegen.yml",
     "typecheck": "tsc --noEmit",
     "lint:fix": "eslint --fix --max-warnings 0 --ext .js,.jsx,.ts,.tsx .",
-    "migrate:make": "knex migrate:make",
-    "migrate:latest": "(SET TS_NODE_PROJECT=tsconfig.knexcli.json) && (knex migrate:latest)",
-    "migrate:down": "(SET TS_NODE_PROJECT=tsconfig.knexcli.json) && (knex migrate:down)"
+    "migrate:make": "(SET TS_NODE_PROJECT=tsconfig.knexcli.json) && knex migrate:make",
+    "migrate:latest": "(SET TS_NODE_PROJECT=tsconfig.knexcli.json) && knex migrate:latest",
+    "migrate:down": "(SET TS_NODE_PROJECT=tsconfig.knexcli.json) && knex migrate:down"
   },
   "dependencies": {
     "@apollo/client": "^3.2.7",

@@ -69,6 +69,12 @@ export async function up(knex: Knex): Promise<void> {
         .references('id')
         .inTable('Post')
         .onDelete('CASCADE');
+      table
+        .string('userId')
+        .notNullable()
+        .references('id')
+        .inTable('User')
+        .onDelete('CASCADE');
     })
     .createTable('Comment', (table) => {
       createSharedColumns(knex, table);

@@ -2,10 +2,15 @@ import { ID } from '@api/types';
 import { Omit, GraphMedia } from '../generated/graphql';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
-import { ApolloError } from 'apollo-server-micro';
+import { ApolloError, AuthenticationError } from 'apollo-server-micro';
 import { omit } from 'lodash';
 import { MediaModel } from './knex';
 import { generateId } from './utils/generateId';
+
+const createMediaByIdLoader = createLoader<ID, MediaModel>(
+  (ids) => MediaModel.query().findByIds(ids as ID[]),
+  (media) => media.id,
+);
 
 const createMediaByPostIdLoader = createLoader<ID, MediaModel>(
   (postIds) => MediaModel.query().whereIn('postId', postIds as ID[]),
@@ -13,6 +18,7 @@ const createMediaByPostIdLoader = createLoader<ID, MediaModel>(
 );
 
 const mediaLoaders = () => ({
+  mediaById: createMediaByIdLoader(),
   mediaByPostId: createMediaByPostIdLoader(),
 });
 
@@ -59,8 +65,13 @@ class MediaRepository extends BaseRepository {
 
   async create(data: Omit<GraphMedia, 'id'>) {
     const { thumbnail, smallImage, standardImage } = data;
+    const { viewer } = this.context;
+    if (!viewer) {
+      throw new AuthenticationError('You are not logged in');
+    }
     const media = await MediaModel.query().insert({
       id: generateId(),
+      userId: viewer.id,
       thumbnailHeight: thumbnail.height,
       thumbnailWidth: thumbnail.width,
       thumbnailUrl: thumbnail.url,
@@ -73,6 +84,11 @@ class MediaRepository extends BaseRepository {
     });
     const formattedMedia = mapMediaToGraphMedia(media);
     return formattedMedia;
+  }
+
+  async findOneById(id: ID) {
+    const media = await this.loaders.mediaById.load(id);
+    return media;
   }
 
   async findOneByPostId(postId: ID) {

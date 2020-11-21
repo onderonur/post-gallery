@@ -29,8 +29,7 @@ type BaseImageProps = ImgStyleProps & {
 };
 
 const BaseImage: React.FC<BaseImageProps> = ({
-  // TODO: Fix placeholder
-  src /*= placeholderPng*/,
+  src,
   alt,
   aspectRatio,
   objectFit = 'cover',
@@ -39,7 +38,7 @@ const BaseImage: React.FC<BaseImageProps> = ({
     <Img
       aspectRatio={aspectRatio}
       objectFit={objectFit}
-      src={src}
+      src={src || `/placeholder.png`}
       alt={alt}
       layout="fill"
     />

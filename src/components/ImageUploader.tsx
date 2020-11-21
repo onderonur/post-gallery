@@ -22,6 +22,7 @@ import { css } from '@emotion/react';
 import BaseIconButton from './BaseIconButton';
 import { to } from '@shared/to';
 import { FlexCol } from './Utils';
+import { getAspectRatioString } from './AspectRatio';
 
 const RemoveFileButton = styled(BaseIconButton)`
   ${({ theme }) => css`
@@ -136,6 +137,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = (props) => {
                 src={lastUploadedImage.standardImage.url}
                 alt="Uploaded image for post"
                 objectFit="contain"
+                aspectRatio={getAspectRatioString(
+                  lastUploadedImage.standardImage.width,
+                  lastUploadedImage.standardImage.height,
+                )}
               />
               <RemoveFileButton
                 size="small"

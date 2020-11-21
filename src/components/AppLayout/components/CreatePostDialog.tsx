@@ -19,6 +19,7 @@ import urls from '@src/utils/urls';
 import CategorySelect from './CategorySelect';
 import Stack from '@src/components/Stack';
 import { OnSubmitFn } from '@src/types';
+import { to } from '@shared/to';
 
 const CREATE_POST = gql`
   mutation CreatePost($title: String!, $categoryId: ID!, $mediaId: ID!) {
@@ -56,8 +57,9 @@ const CreatePostDialog = React.memo(function CreatePostDialog() {
   });
 
   const handleSubmit = useCallback<OnSubmitFn<PostInput>>(
-    (values) => {
-      createPost({ variables: values });
+    async (values, formikHelpers) => {
+      await to(createPost({ variables: values }));
+      formikHelpers.setSubmitting(false);
     },
     [createPost],
   );
