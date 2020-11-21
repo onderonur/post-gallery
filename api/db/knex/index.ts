@@ -50,9 +50,6 @@ class BaseModel extends Model {
   }
 
   $beforeUpdate() {
-    // We don't want id to be updated
-    // Or we can accidentally update the id with "patch"
-    // @ts-ignore
     this.updatedAt = new Date();
   }
 }
