@@ -51,7 +51,7 @@ class PostAPI extends BaseDataSource {
     if (!media) {
       throw new NotFoundError('media not found');
     }
-    const post = await db.post.create(input, media);
+    const post = await db.post.create({ ...input, media });
     return post;
   }
 

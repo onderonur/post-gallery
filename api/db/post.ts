@@ -11,6 +11,7 @@ import { PostInput, Maybe } from '@api/generated/graphql';
 import { MediaModel, PostModel, ReactableType } from './knex';
 import { findGraphConnection } from './utils/findGraphConnection';
 import { generateId } from './utils/generateId';
+import { Omit } from '@src/types';
 
 const createPostByIdLoader = createLoader<ID, PostModel>(
   (postIds) => PostModel.query().findByIds(postIds as ID[]),
@@ -47,16 +48,16 @@ export type PostGraphConnectionArgs = GraphConnectionArgs & {
 class PostRepository extends BaseRepository {
   private loaders = postLoaders();
 
-  async create(input: PostInput, media: MediaModel) {
+  async create(input: Omit<PostInput, 'mediaId'> & { media: MediaModel }) {
     const { viewer } = this.context;
     if (!viewer) {
       throw new AuthenticationError('You are not logged in');
     }
+    const { title, categoryId, media } = input;
     if (media.userId !== viewer.id) {
       throw new ForbiddenError("You can not use another user's media");
     }
     const postId = generateId();
-    const { title, categoryId } = input;
     const post = await PostModel.query().upsertGraph(
       {
         id: postId,
