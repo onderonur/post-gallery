@@ -4,8 +4,7 @@ import BaseButton, { BaseButtonProps } from '@src/components/BaseButton';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
 import { Maybe } from '@src/generated/graphql';
 import AlertError from '@src/components/AlertError';
-import styled from '@src/utils/styled';
-import { Bold } from './Utils';
+import styled from '@emotion/styled';
 import { shouldForwardProp } from '@src/utils/shouldForwardProp';
 
 interface StyleProps {
@@ -65,9 +64,7 @@ function SocialButtonBase({
         backgroundColor={backgroundColor}
         variant="outlined"
       >
-        <ButtonText>
-          <Bold>{children}</Bold>
-        </ButtonText>
+        <ButtonText>{children}</ButtonText>
       </StyledButton>
     </div>
   );

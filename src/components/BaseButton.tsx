@@ -6,7 +6,8 @@ import {
   ButtonTypeMap,
 } from '@material-ui/core';
 import usePrivateAction from '@src/hooks/usePrivateAction';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
+import { Bold } from './Utils';
 
 export type BaseButtonProps<
   T extends React.ElementType = ButtonTypeMap['defaultComponent']
@@ -45,7 +46,7 @@ function BaseButton<T extends React.ElementType>({
       disableElevation={disableElevation}
       onClick={privateOnClick}
     >
-      {children}
+      <Bold>{children}</Bold>
       {loading && <ButtonLoading size={loadingSize} />}
     </Button>
   );

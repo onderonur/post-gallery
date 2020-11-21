@@ -2,7 +2,7 @@ import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { IconButton, IconButtonProps } from '@material-ui/core';
 import usePrivateAction from '@src/hooks/usePrivateAction';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 
 const Loading = styled(CircularProgress)`
   position: absolute;

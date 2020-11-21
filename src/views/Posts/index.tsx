@@ -9,7 +9,7 @@ import {
 } from '@src/generated/graphql';
 import { Cursor } from '@src/types';
 import { NextSeo } from 'next-seo';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import { GET_CATEGORIES } from '@src/gql/queries';
 import { Bold } from '@src/components/Utils';
 import useCategorySlug from '@src/hooks/useCategorySlug';

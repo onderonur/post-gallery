@@ -16,7 +16,7 @@ const linkSchema = gql`
   }
 `;
 
-export default [
+const schema = [
   linkSchema,
   scalarsSchema,
   connectionSchema,
@@ -25,3 +25,5 @@ export default [
   reactionSchema,
   userSchema,
 ];
+
+export default schema;

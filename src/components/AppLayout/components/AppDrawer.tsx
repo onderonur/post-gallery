@@ -12,7 +12,7 @@ import {
 import React from 'react';
 import { useGetCategoriesQuery } from '@src/generated/graphql';
 import Loading from '@src/components/Loading';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import useIsMobile from '@src/hooks/useIsMobile';
 import { useAppDrawer } from '../contexts/AppLayoutContext';
 import AppTitle from './AppTitle';

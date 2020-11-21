@@ -3,7 +3,7 @@ import { DialogTitle, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import BaseIconButton from '../../BaseIconButton';
 import { useBaseDialogContext } from '../contexts/BaseDialogContext';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 
 const StyledDialogTitle = styled(DialogTitle)`
   display: flex;

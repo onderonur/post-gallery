@@ -171,9 +171,10 @@ export class CommentModel extends BaseModel {
   }
 
   $parseJson(json: Pojo, opt: ModelOptions) {
-    const parsed = super.$parseJson(json, opt) as ObjectionModelToPojo<
-      CommentModel
-    >;
+    const parsed = super.$parseJson(
+      json,
+      opt,
+    ) as ObjectionModelToPojo<CommentModel>;
     if (typeof parsed.text === 'string') {
       parsed.text = parsed.text.trim();
     }
@@ -229,9 +230,10 @@ export class CategoryModel extends BaseModel {
   }
 
   $parseJson(json: Pojo, opt: ModelOptions) {
-    const parsed = super.$parseJson(json, opt) as ObjectionModelToPojo<
-      CategoryModel
-    >;
+    const parsed = super.$parseJson(
+      json,
+      opt,
+    ) as ObjectionModelToPojo<CategoryModel>;
     if (typeof parsed.name === 'string') {
       parsed.name = parsed.name.trim();
     }
@@ -279,9 +281,10 @@ export class PostModel extends BaseModel {
   // https://vincit.github.io/objection.js/api/model/instance-methods.html#parsejson
   $parseJson(json: Pojo, opt: ModelOptions) {
     // Remember to call the super class's implementation.
-    const parsed = super.$parseJson(json, opt) as ObjectionModelToPojo<
-      PostModel
-    >;
+    const parsed = super.$parseJson(
+      json,
+      opt,
+    ) as ObjectionModelToPojo<PostModel>;
     // Do your conversion here.
     // If we don't do it like this and linking relations between models
     // with "upsertGraph" vs, "title" will be "undefined" and this will

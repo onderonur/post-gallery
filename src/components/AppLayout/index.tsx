@@ -3,7 +3,7 @@ import AppHeader from '@src/components/AppLayout/components/AppHeader';
 import { Container, Box, Toolbar } from '@material-ui/core';
 import AppLayoutProvider from './contexts/AppLayoutContext';
 import AppDrawer from './components/AppDrawer';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import HideOnScroll from './components/HideOnScroll';
 
 const StyledContainer = styled(Container)`

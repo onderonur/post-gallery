@@ -11,7 +11,7 @@ import restClient from '@src/utils/restClient';
 import BaseMenuTrigger from '@src/components/BaseMenu/components/BaseMenuTrigger';
 import BaseMenu from '@src/components/BaseMenu';
 import BaseMenuList from '@src/components/BaseMenu/components/BaseMenuList';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 
 const AvatarButton = styled(BaseIconButton)`
   /* 

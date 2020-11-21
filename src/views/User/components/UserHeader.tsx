@@ -5,8 +5,8 @@ import { gql } from '@apollo/client';
 import { gradientBackground } from '@src/styles';
 import useIsMobile from '@src/hooks/useIsMobile';
 import { UserHeader_UserFragment } from '@src/generated/graphql';
-import { css } from '@emotion/core';
-import styled from '@src/utils/styled';
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 enum AvatarSize {
   LARGE = 12,

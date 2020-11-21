@@ -1,6 +1,6 @@
 import React from 'react';
 import { DialogContent, CircularProgress, Box } from '@material-ui/core';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 
 const StyledDialogContent = styled(DialogContent)`
   padding: ${({ theme }) => theme.spacing(2)}px;

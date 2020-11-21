@@ -1,6 +1,6 @@
 import React from 'react';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import { useSimpleLayout } from './AppLayout/contexts/AppLayoutContext';
 import { Box, BoxProps } from '@material-ui/core';
 

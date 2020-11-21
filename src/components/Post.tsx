@@ -22,7 +22,7 @@ import { useRouter } from 'next/router';
 import NextLink from './NextLink';
 import BaseMenuTrigger from './BaseMenu/components/BaseMenuTrigger';
 import BaseMenuList from './BaseMenu/components/BaseMenuList';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import ShareButtons from './ShareButtons';
 import Stack from './Stack';
 

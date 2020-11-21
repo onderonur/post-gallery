@@ -1,7 +1,7 @@
 import React from 'react';
 import AspectRatio from './AspectRatio';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import Image from 'next/image';
 import { shouldForwardProp } from '@src/utils/shouldForwardProp';
 
@@ -41,7 +41,7 @@ const BaseImage: React.FC<BaseImageProps> = ({
       objectFit={objectFit}
       src={src}
       alt={alt}
-      unsized
+      layout="fill"
     />
   );
 

@@ -1,6 +1,6 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import { Box, BoxProps } from '@material-ui/core';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 
 type StackProps = BoxProps & {
   spacing: number;

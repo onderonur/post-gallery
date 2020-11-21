@@ -9,7 +9,7 @@ import UserMenu from './UserMenu';
 import urls from '@src/utils/urls';
 import NextLink from '../../NextLink';
 import Stack from '@src/components/Stack';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import AppTitle from './AppTitle';
 
 const LoginButton = React.memo(function LoginButton() {

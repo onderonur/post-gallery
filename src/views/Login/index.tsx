@@ -15,7 +15,7 @@ import useLazyAsync from '@src/hooks/useLazyAsync';
 import restClient from '@src/utils/restClient';
 import { SocialAccountType } from '@src/generated/graphql';
 import { redirectToHome } from '@src/utils/redirectToHome';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import BasePaper from '@src/components/BasePaper';
 import LoginSeo from './components/LoginSeo';
 

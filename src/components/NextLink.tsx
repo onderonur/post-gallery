@@ -1,6 +1,6 @@
 import React from 'react';
 import Link, { LinkProps } from 'next/link';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import { Omit } from '@src/types';
 
 const Anchor = styled.a`

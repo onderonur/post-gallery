@@ -18,7 +18,7 @@ import withCSRF from '@src/hocs/withCSRF';
 import { appTitle } from '@src/utils/appTitle';
 import { getDataFromTree } from '@apollo/client/react/ssr';
 import BaseSnackbarProvider from '@src/contexts/BaseSnackbarProvider';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from '@emotion/react';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 
 Router.events.on('routeChangeStart', () => {

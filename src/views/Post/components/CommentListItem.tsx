@@ -30,7 +30,7 @@ import useRequireOwner from '@src/hooks/useRequireOwner';
 import NextLink from '@src/components/NextLink';
 import BaseMenuTrigger from '@src/components/BaseMenu/components/BaseMenuTrigger';
 import BaseMenuList from '@src/components/BaseMenu/components/BaseMenuList';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 import { Bold, BreakWord, FlexRow } from '@src/components/Utils';
 import { NamedMuiComponent } from '@material-ui/core/utils/isMuiElement';
 import BaseLinklify from '@src/components/BaseLinklify';

@@ -18,10 +18,10 @@ export interface CommentListItemReactionActionsProps {
   comment: CommentListItemReactionActions_CommentFragment;
 }
 
-const CommentListItemReactionActions = React.memo<
-  CommentListItemReactionActionsProps
->(function CommentListItemReactionActions({ comment }) {
-  return <ReactionActions reactable={comment} size="small" />;
-});
+const CommentListItemReactionActions = React.memo<CommentListItemReactionActionsProps>(
+  function CommentListItemReactionActions({ comment }) {
+    return <ReactionActions reactable={comment} size="small" />;
+  },
+);
 
 export default CommentListItemReactionActions;

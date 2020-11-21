@@ -1,6 +1,6 @@
 import React from 'react';
 import { CSSProperties } from '@material-ui/core/styles/withStyles';
-import styled from '@src/utils/styled';
+import styled from '@emotion/styled';
 
 // Instead of using "${number}:${number}" when setting aspectRatio prop, use this function.
 // Aspect ratio string format may change in the future, so we would just change this function
