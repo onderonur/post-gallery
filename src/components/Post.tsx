@@ -1,5 +1,4 @@
 import React from 'react';
-import BaseImage from '@src/components/BaseImage';
 import PostReactionActions, {
   PostReactionActionsFragments,
 } from './PostReactionActions';
@@ -9,7 +8,16 @@ import {
 } from '@src/generated/graphql';
 import { Bold, BreakWord, FlexCol, FlexRow } from './Utils';
 import { gql } from '@apollo/client';
-import { Avatar, Box, Divider, MenuItem, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Divider,
+  Grid,
+  MenuItem,
+  Theme,
+  Typography,
+  useMediaQuery,
+} from '@material-ui/core';
 import dayjs from 'dayjs';
 import BaseLink from './BaseLink';
 import BaseMenu from './BaseMenu';
@@ -25,6 +33,7 @@ import BaseMenuList from './BaseMenu/components/BaseMenuList';
 import styled from '@emotion/styled';
 import ShareButtons from './ShareButtons';
 import Stack from './Stack';
+import Image from 'next/image';
 
 const StyledLink = styled(BaseLink)`
   display: block;
@@ -117,10 +126,12 @@ const Post: React.FC<PostProps> = ({ post, asLink, showOptions }) => {
       </FlexRow>
       {standardImage ? (
         <FlexCol>
-          <BaseImage
-            aspectRatio={`${standardImage.width}:${standardImage.height}`}
+          <Image
             src={standardImage.url}
             alt={post.title}
+            height={standardImage.height}
+            width={standardImage.width}
+            layout="responsive"
           />
         </FlexCol>
       ) : null}
@@ -128,6 +139,10 @@ const Post: React.FC<PostProps> = ({ post, asLink, showOptions }) => {
   );
 
   const { author } = post;
+
+  const isXsDown = useMediaQuery<Theme>((theme) =>
+    theme.breakpoints.down('xs'),
+  );
 
   return (
     <div>
@@ -165,19 +180,31 @@ const Post: React.FC<PostProps> = ({ post, asLink, showOptions }) => {
       ) : (
         postContent
       )}
-      <FlexRow marginY={1} justifyContent="space-between">
-        <Stack flexDirection="row" spacing={1}>
-          <PostReactionActions post={post} />
-          <Divider orientation="vertical" flexItem />
-          <Typography
-            color="textSecondary"
-            variant="subtitle2"
-          >{`${post.commentsCount} Comments`}</Typography>
-        </Stack>
-        <ShareButtons
-          url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
-        />
-      </FlexRow>
+      <Box marginY={1}>
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={6}>
+            <Stack
+              flexDirection="row"
+              spacing={1}
+              justifyContent={isXsDown ? 'center' : 'flex-start'}
+            >
+              <PostReactionActions post={post} />
+              <Divider orientation="vertical" flexItem />
+              <Typography
+                color="textSecondary"
+                variant="subtitle2"
+              >{`${post.commentsCount} Comments`}</Typography>
+            </Stack>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FlexRow justifyContent={isXsDown ? 'center' : 'flex-end'}>
+              <ShareButtons
+                url={`${process.env.NEXT_PUBLIC_BASE_URL}${router.asPath}`}
+              />
+            </FlexRow>
+          </Grid>
+        </Grid>
+      </Box>
     </div>
   );
 };

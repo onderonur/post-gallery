@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import BaseImage from './BaseImage';
 import { ID } from '@src/types';
 import {
   Box,
@@ -22,7 +21,7 @@ import { css } from '@emotion/react';
 import BaseIconButton from './BaseIconButton';
 import { to } from '@shared/to';
 import { FlexCol } from './Utils';
-import { getAspectRatioString } from './AspectRatio';
+import Image from 'next/image';
 
 const RemoveFileButton = styled(BaseIconButton)`
   ${({ theme }) => css`
@@ -133,14 +132,13 @@ const ImageUploader: React.FC<ImageUploaderProps> = (props) => {
         {lastUploadedImage && (
           <Box marginY={1}>
             <Box position="relative">
-              <BaseImage
+              <Image
                 src={lastUploadedImage.standardImage.url}
                 alt="Uploaded image for post"
                 objectFit="contain"
-                aspectRatio={getAspectRatioString(
-                  lastUploadedImage.standardImage.width,
-                  lastUploadedImage.standardImage.height,
-                )}
+                height={lastUploadedImage.standardImage.height}
+                width={lastUploadedImage.standardImage.width}
+                layout="responsive"
               />
               <RemoveFileButton
                 size="small"

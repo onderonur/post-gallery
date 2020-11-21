@@ -1,7 +1,9 @@
 import { useMediaQuery, Theme } from '@material-ui/core';
 
 const useIsMobile = () => {
-  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  // https://material-ui.com/customization/breakpoints/#default-breakpoints
+  // https://material-ui.com/customization/breakpoints/#theme-breakpoints-down-key-media-query
+  const matches = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'));
   return matches;
 };
 
