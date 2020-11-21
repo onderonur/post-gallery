@@ -92,7 +92,7 @@ export class UserModel extends BaseModel {
   facebookProfileId: Maybe<ID>;
   displayName: string;
   email: string;
-  thumbnailUrl?: Maybe<string>;
+  thumbnailUrl: Maybe<string>;
 
   authTokens?: AuthTokenModel[];
   posts?: PostModel[];
