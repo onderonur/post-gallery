@@ -46,7 +46,7 @@ function BaseButton<T extends React.ElementType>({
       disableElevation={disableElevation}
       onClick={privateOnClick}
     >
-      <Bold>{children}</Bold>
+      {children}
       {loading && <ButtonLoading size={loadingSize} />}
     </Button>
   );

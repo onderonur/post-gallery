@@ -6,6 +6,7 @@ import { Maybe } from '@src/generated/graphql';
 import AlertError from '@src/components/AlertError';
 import styled from '@emotion/styled';
 import { shouldForwardProp } from '@src/utils/shouldForwardProp';
+import { Bold } from './Utils';
 
 interface StyleProps {
   backgroundColor: NonNullable<CSSProperties['backgroundColor']>;
@@ -64,7 +65,9 @@ function SocialButtonBase({
         backgroundColor={backgroundColor}
         variant="outlined"
       >
-        <ButtonText>{children}</ButtonText>
+        <ButtonText>
+          <Bold>{children}</Bold>
+        </ButtonText>
       </StyledButton>
     </div>
   );
