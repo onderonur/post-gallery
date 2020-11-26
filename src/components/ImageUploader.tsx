@@ -19,7 +19,7 @@ import apiClient from '@src/utils/restClient';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import BaseIconButton from './BaseIconButton';
-import { to } from '@shared/to';
+import { go } from '@shared/go';
 import { FlexCol } from './Utils';
 import Image from 'next/image';
 
@@ -77,7 +77,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = (props) => {
       if (acceptedFiles.length) {
         const file = acceptedFiles[0];
         setLoading(true);
-        const { error, data: media } = await to(
+        const { error, data: media } = await go(() =>
           apiClient.upload.uploadImage(file, {
             onUploadProgress: setUploadProgress,
           }),

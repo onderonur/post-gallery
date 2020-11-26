@@ -1,7 +1,7 @@
 import { CustomError } from './CustomError';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import { RequestHeader } from './RequestHeader';
-import { to } from './to';
+import { go } from './go';
 
 function handleResponse<ResponseData>(response: AxiosResponse<ResponseData>) {
   return response.data;
@@ -25,7 +25,7 @@ class Fetcher {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get = async <ResponseData = any>(url: string) => {
-    const result = await to<AxiosResponse<ResponseData>, AxiosError>(
+    const result = await go<AxiosResponse<ResponseData>, AxiosError>(() =>
       axios.get<ResponseData>(url),
     );
     if (result.error) {
@@ -40,7 +40,7 @@ class Fetcher {
     data?: PostData,
     config?: FetcherPostConfig,
   ): Promise<ResponseData> => {
-    const result = await to<AxiosResponse<ResponseData>, AxiosError>(
+    const result = await go<AxiosResponse<ResponseData>, AxiosError>(() =>
       axios.post<ResponseData>(url, data, {
         // https://gist.github.com/virolea/e1af9359fe071f24de3da3500ff0f429
         onUploadProgress: config?.onUploadProgress

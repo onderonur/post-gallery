@@ -3,7 +3,7 @@ import { setAuthTokenCookie, destroyAuthTokenCookie } from '@api/utils/auth';
 import { SocialAccountType } from '@api/generated/graphql';
 import { BadRequestError } from '@api/utils/httpErrors';
 import { verifySocialAccountToken } from '@api/utils/verifySocialAccountToken';
-import { to } from '@shared/to';
+import { go } from '@shared/go';
 
 type LoginResponse = {
   success: true;
@@ -91,7 +91,7 @@ const logout: NextApiHandler<LogoutRespone> = async (req, res) => {
   // We just end the request. We already deleted
   // the cookie from the request.
   // This method might be handled with details in future.
-  await to(db.authToken.deleteByJti(jti));
+  await go(() => db.authToken.deleteByJti(jti));
 
   return res.json({ success: true });
 };

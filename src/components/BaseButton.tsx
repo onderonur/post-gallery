@@ -7,7 +7,6 @@ import {
 } from '@material-ui/core';
 import usePrivateAction from '@src/hooks/usePrivateAction';
 import styled from '@emotion/styled';
-import { Bold } from './Utils';
 
 export type BaseButtonProps<
   T extends React.ElementType = ButtonTypeMap['defaultComponent']

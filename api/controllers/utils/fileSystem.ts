@@ -1,4 +1,4 @@
-import { to } from '@shared/to';
+import { go } from '@shared/go';
 import { promises as fs, constants as fsConstants } from 'fs';
 import sharp from 'sharp';
 
@@ -10,7 +10,7 @@ const defaultJpgQuality = 70;
 const STORAGE_DIR = process.env.STORAGE_DIR;
 
 const dirExists = async (dirPath: string) => {
-  const { error } = await to(fs.access(dirPath, fsConstants.F_OK));
+  const { error } = await go(() => fs.access(dirPath, fsConstants.F_OK));
   return !error;
 };
 

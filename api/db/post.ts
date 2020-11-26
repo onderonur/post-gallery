@@ -7,11 +7,10 @@ import { ID } from '@api/types';
 import { GraphConnectionArgs } from '../types';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
-import { PostInput, Maybe } from '@api/generated/graphql';
+import { PostInput, Maybe, Omit } from '@api/generated/graphql';
 import { MediaModel, PostModel, ReactableType } from './knex';
 import { findGraphConnection } from './utils/findGraphConnection';
 import { generateId } from './utils/generateId';
-import { Omit } from '@src/types';
 
 const createPostByIdLoader = createLoader<ID, PostModel>(
   (postIds) => PostModel.query().findByIds(postIds as ID[]),

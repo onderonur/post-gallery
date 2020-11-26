@@ -1,4 +1,4 @@
-import { to } from '@shared/to';
+import { go } from '@shared/go';
 import { Maybe } from '@src/generated/graphql';
 import { useCallback, useRef, useState } from 'react';
 
@@ -23,7 +23,7 @@ const useLazyAsync = <Data, Variables>(
       setLoading(true);
       setError(null);
 
-      const result = await to(promiseFn(variables));
+      const result = await go(() => promiseFn(variables));
 
       setLoading(false);
 
