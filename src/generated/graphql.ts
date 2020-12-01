@@ -2,6 +2,8 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -1107,7 +1109,7 @@ export const GetPostDocument = gql`
  *   },
  * });
  */
-export function useGetPostQuery(baseOptions?: Apollo.QueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+export function useGetPostQuery(baseOptions: Apollo.QueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
         return Apollo.useQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, baseOptions);
       }
 export function useGetPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
@@ -1178,7 +1180,7 @@ export const GetCategoryWithPostsDocument = gql`
  *   },
  * });
  */
-export function useGetCategoryWithPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>) {
+export function useGetCategoryWithPostsQuery(baseOptions: Apollo.QueryHookOptions<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>) {
         return Apollo.useQuery<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>(GetCategoryWithPostsDocument, baseOptions);
       }
 export function useGetCategoryWithPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>) {
@@ -1216,7 +1218,7 @@ ${PostList_PostConnectionFragmentDoc}`;
  *   },
  * });
  */
-export function useGetUserWithPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>) {
+export function useGetUserWithPostsQuery(baseOptions: Apollo.QueryHookOptions<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>) {
         return Apollo.useQuery<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(GetUserWithPostsDocument, baseOptions);
       }
 export function useGetUserWithPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>) {
@@ -1266,7 +1268,7 @@ export const GetUserWithSessionsDocument = gql`
  *   },
  * });
  */
-export function useGetUserWithSessionsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>) {
+export function useGetUserWithSessionsQuery(baseOptions: Apollo.QueryHookOptions<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>) {
         return Apollo.useQuery<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>(GetUserWithSessionsDocument, baseOptions);
       }
 export function useGetUserWithSessionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>) {
@@ -1430,7 +1432,7 @@ ${UserSocialAccounts_UserFragmentDoc}`;
  *   },
  * });
  */
-export function useGetUserQuery(baseOptions?: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
         return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
       }
 export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {

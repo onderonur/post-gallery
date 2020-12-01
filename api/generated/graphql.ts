@@ -2,6 +2,8 @@ import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from '
 import { PostMapper, CategoryMapper, CommentMapper, UserMapper, GQLContext } from '../types';
 export type Maybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -370,7 +372,7 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}> = (obj: T, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
@@ -475,19 +477,19 @@ export type CommentResolvers<ContextType = GQLContext, ParentType extends Resolv
   commenter?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   reactionsCount?: Resolver<ResolversTypes['ReactionsCount'], ParentType, ContextType>;
   viewerReaction?: Resolver<Maybe<ResolversTypes['ReactionType']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type CommentEdgeResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['CommentEdge'] = ResolversParentTypes['CommentEdge']> = ResolversObject<{
   node?: Resolver<ResolversTypes['Comment'], ParentType, ContextType>;
   cursor?: Resolver<ResolversTypes['Cursor'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type CommentConnectionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['CommentConnection'] = ResolversParentTypes['CommentConnection']> = ResolversObject<{
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   edges?: Resolver<Array<ResolversTypes['CommentEdge']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ConnectionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Connection'] = ResolversParentTypes['Connection']> = ResolversObject<{
@@ -498,7 +500,7 @@ export type ConnectionResolvers<ContextType = GQLContext, ParentType extends Res
 export type PageInfoResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
   endCursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
   hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -516,7 +518,7 @@ export type CategoryResolvers<ContextType = GQLContext, ParentType extends Resol
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<CategoryPostsArgs, 'first'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PostResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = ResolversObject<{
@@ -529,14 +531,14 @@ export type PostResolvers<ContextType = GQLContext, ParentType extends Resolvers
   reactionsCount?: Resolver<ResolversTypes['ReactionsCount'], ParentType, ContextType>;
   commentsCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   comments?: Resolver<ResolversTypes['CommentConnection'], ParentType, ContextType, RequireFields<PostCommentsArgs, 'first'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GraphImageResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['GraphImage'] = ResolversParentTypes['GraphImage']> = ResolversObject<{
   width?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   height?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GraphMediaResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['GraphMedia'] = ResolversParentTypes['GraphMedia']> = ResolversObject<{
@@ -544,31 +546,31 @@ export type GraphMediaResolvers<ContextType = GQLContext, ParentType extends Res
   thumbnail?: Resolver<ResolversTypes['GraphImage'], ParentType, ContextType>;
   smallImage?: Resolver<ResolversTypes['GraphImage'], ParentType, ContextType>;
   standardImage?: Resolver<ResolversTypes['GraphImage'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PostEdgeResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['PostEdge'] = ResolversParentTypes['PostEdge']> = ResolversObject<{
   node?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
   cursor?: Resolver<ResolversTypes['Cursor'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PostConnectionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['PostConnection'] = ResolversParentTypes['PostConnection']> = ResolversObject<{
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   edges?: Resolver<Array<ResolversTypes['PostEdge']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AddReactionPayloadResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['AddReactionPayload'] = ResolversParentTypes['AddReactionPayload']> = ResolversObject<{
   reactableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   viewerReaction?: Resolver<ResolversTypes['ReactionType'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RemoveReactionPayloadResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['RemoveReactionPayload'] = ResolversParentTypes['RemoveReactionPayload']> = ResolversObject<{
   reactableId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   viewerReaction?: Resolver<Maybe<ResolversTypes['ReactionType']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ReactableResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Reactable'] = ResolversParentTypes['Reactable']> = ResolversObject<{
@@ -581,7 +583,7 @@ export type ReactableResolvers<ContextType = GQLContext, ParentType extends Reso
 export type ReactionsCountResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['ReactionsCount'] = ResolversParentTypes['ReactionsCount']> = ResolversObject<{
   likesCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   dislikesCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -610,7 +612,7 @@ export type UserResolvers<ContextType = GQLContext, ParentType extends Resolvers
   postsCount?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<UserPostsArgs, 'first'>>;
   sessions?: Resolver<ResolversTypes['SessionConnection'], ParentType, ContextType, RequireFields<UserSessionsArgs, 'first'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type SessionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Session'] = ResolversParentTypes['Session']> = ResolversObject<{
@@ -620,19 +622,19 @@ export type SessionResolvers<ContextType = GQLContext, ParentType extends Resolv
   os?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   isCurrent?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type SessionEdgeResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['SessionEdge'] = ResolversParentTypes['SessionEdge']> = ResolversObject<{
   node?: Resolver<ResolversTypes['Session'], ParentType, ContextType>;
   cursor?: Resolver<ResolversTypes['Cursor'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type SessionConnectionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['SessionConnection'] = ResolversParentTypes['SessionConnection']> = ResolversObject<{
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   edges?: Resolver<Array<ResolversTypes['SessionEdge']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = GQLContext> = ResolversObject<{
