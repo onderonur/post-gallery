@@ -18,7 +18,7 @@ import UserSocialAccounts, {
   UserSocialAccountsFragments,
 } from './components/UserSocialAccounts';
 import Stack from '@src/components/Stack';
-import { go } from '@shared/go';
+import { goTry } from 'go-try';
 
 const validationSchema = Yup.object().shape<UserInput>({
   displayName: Yup.string()
@@ -90,7 +90,7 @@ function UserSettingsView() {
       if (!user) {
         return;
       }
-      await go(() =>
+      await goTry(() =>
         updateUser({
           variables: { id: user.id, input: values },
         }),

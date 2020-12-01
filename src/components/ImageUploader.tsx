@@ -19,9 +19,9 @@ import apiClient from '@src/utils/restClient';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import BaseIconButton from './BaseIconButton';
-import { go } from '@shared/go';
 import { FlexCol } from './Utils';
 import Image from 'next/image';
+import { goTry } from 'go-try';
 
 const RemoveFileButton = styled(BaseIconButton)`
   ${({ theme }) => css`
@@ -77,7 +77,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = (props) => {
       if (acceptedFiles.length) {
         const file = acceptedFiles[0];
         setLoading(true);
-        const { error, data: media } = await go(() =>
+        const { error, data: media } = await goTry(() =>
           apiClient.upload.uploadImage(file, {
             onUploadProgress: setUploadProgress,
           }),

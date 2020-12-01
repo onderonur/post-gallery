@@ -1,5 +1,5 @@
-import { go } from '@shared/go';
 import { promises as fs, constants as fsConstants } from 'fs';
+import { goTry } from 'go-try';
 import sharp from 'sharp';
 
 // A good example: https://github.com/withspectrum/spectrum/blob/alpha/api/utils/file-system.js
@@ -10,7 +10,7 @@ const defaultJpgQuality = 70;
 const STORAGE_DIR = process.env.STORAGE_DIR;
 
 const dirExists = async (dirPath: string) => {
-  const { error } = await go(() => fs.access(dirPath, fsConstants.F_OK));
+  const { error } = await goTry(() => fs.access(dirPath, fsConstants.F_OK));
   return !error;
 };
 

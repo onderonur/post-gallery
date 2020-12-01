@@ -1,5 +1,5 @@
-import { go } from '@shared/go';
 import { Maybe } from '@src/generated/graphql';
+import { goTry } from 'go-try';
 import { useCallback, useRef, useState } from 'react';
 
 type UseLazyAsyncResult<Data, Variables> = [
@@ -23,7 +23,7 @@ const useLazyAsync = <Data, Variables>(
       setLoading(true);
       setError(null);
 
-      const result = await go(() => promiseFn(variables));
+      const result = await goTry(() => promiseFn(variables));
 
       setLoading(false);
 

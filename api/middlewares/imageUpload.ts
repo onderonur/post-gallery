@@ -4,7 +4,7 @@ import { Maybe } from '@api/generated/graphql';
 import path from 'path';
 import { NextApiMiddleware } from './types';
 import { convertMbToBytes } from '@api/utils/convertMbToBytes';
-import { goSync } from '@shared/go';
+import { goTrySync } from 'go-try';
 
 // first we need to disable the default body parser to handle uploads
 export const config = {
@@ -38,7 +38,7 @@ const upload = multer({
   },
   // https://stackoverflow.com/a/60408823/10876256
   fileFilter: (req, file, cb) => {
-    const result = goSync(() => isImageFile(file));
+    const result = goTrySync(() => isImageFile(file));
     if (result.error) {
       return cb(result.error);
     }

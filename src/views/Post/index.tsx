@@ -22,8 +22,8 @@ import { useRouter } from 'next/router';
 import { ID } from '@src/types';
 import PostSeo, { PostSeoFragments } from './components/PostSeo';
 import { gql } from '@apollo/client';
-import { go } from '@shared/go';
 import AlertError from '@src/components/AlertError';
+import { goTry } from 'go-try';
 
 export const PostViewFragments = {
   post: gql`
@@ -199,7 +199,7 @@ function PostView() {
           <CommentForm
             onSubmit={async (values, formikHelpers) => {
               const { text } = values;
-              const { error } = await go(() =>
+              const { error } = await goTry(() =>
                 addPostComment({
                   variables: {
                     postId: post.id,

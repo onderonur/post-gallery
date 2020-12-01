@@ -9,7 +9,7 @@ import { ForbiddenError, AuthenticationError } from 'apollo-server-micro';
 import { AuthTokenModel } from './knex';
 import { Maybe, Session } from '@api/generated/graphql';
 import { findGraphConnection } from './utils/findGraphConnection';
-import { goSync } from '@shared/go';
+import { goTrySync } from 'go-try';
 
 export type AuthTokenGraphConnectionArgs = GraphConnectionArgs & {
   userId: Maybe<ID>;
@@ -154,7 +154,7 @@ class AuthTokenRepository extends BaseRepository {
   }
 
   async verify(authToken: string) {
-    const result = goSync(() =>
+    const result = goTrySync(() =>
       jwt.verify(authToken, process.env.AUTH_TOKEN_SECRET),
     );
     if (result.error) {

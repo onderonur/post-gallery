@@ -2,8 +2,8 @@ import { UserModel } from '@api/db/knex';
 import { SocialAccountType } from '@api/generated/graphql';
 import { ID } from '@api/types';
 import { fetcher } from '@shared/fetcher';
-import { go } from '@shared/go';
 import { ApolloError } from 'apollo-server-micro';
+import { goTry } from 'go-try';
 import { OAuth2Client } from 'google-auth-library';
 import { nanoid } from 'nanoid';
 import { BadRequestError } from './httpErrors';
@@ -27,7 +27,7 @@ const verifyGoogleToken: VerifySocialAccountFn = async (token: string) => {
     process.env.GOOGLE_OAUTH_CLIENT_SECRET,
   );
 
-  const { error, data: ticket } = await go(() =>
+  const { error, data: ticket } = await goTry(() =>
     client.verifyIdToken({
       idToken: token,
       audience: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID,

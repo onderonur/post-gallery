@@ -19,7 +19,7 @@ import urls from '@src/utils/urls';
 import CategorySelect from './CategorySelect';
 import Stack from '@src/components/Stack';
 import { OnSubmitFn } from '@src/types';
-import { go } from '@shared/go';
+import { goTry } from 'go-try';
 
 const CREATE_POST = gql`
   mutation CreatePost($title: String!, $categoryId: ID!, $mediaId: ID!) {
@@ -58,7 +58,7 @@ const CreatePostDialog = React.memo(function CreatePostDialog() {
 
   const handleSubmit = useCallback<OnSubmitFn<PostInput>>(
     async (values, formikHelpers) => {
-      await go(() => createPost({ variables: values }));
+      await goTry(() => createPost({ variables: values }));
       formikHelpers.setSubmitting(false);
     },
     [createPost],
