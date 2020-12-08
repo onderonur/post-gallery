@@ -4,8 +4,7 @@ import { SnackbarProvider } from 'notistack';
 import BaseIconButton from '@src/components/BaseIconButton';
 
 // add action to all snackbars
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const notistackRef = React.createRef<any>();
+const notistackRef = React.createRef<SnackbarProvider>();
 
 // This is used to show snackbars from outside the App,
 // e.g., in the "onError" handler of the "withApollo" hoc.
@@ -13,11 +12,11 @@ export const notifyErrorByRef = (message: string) => {
   notistackRef.current?.enqueueSnackbar(message, { variant: 'error' });
 };
 
-const onClickDismiss = (key: string) => () => {
-  notistackRef.current.closeSnackbar(key);
-};
-const renderSnackbarAction = (key: string) => (
-  <BaseIconButton color="inherit" onClick={onClickDismiss(key)}>
+const renderSnackbarAction = (key: React.ReactText) => (
+  <BaseIconButton
+    color="inherit"
+    onClick={() => notistackRef.current?.closeSnackbar(key)}
+  >
     <CloseIcon fontSize="inherit" />
   </BaseIconButton>
 );
