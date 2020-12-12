@@ -1,1 +1,1 @@
-export const appTitle = 'Post Gallery';
+export const APP_TITLE = 'Post Gallery';

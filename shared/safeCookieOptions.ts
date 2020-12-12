@@ -6,7 +6,7 @@ const convertYearsToSeconds = (years: number) => {
   return oneYearAsSeconds * years;
 };
 
-export const safeCookieOptions: CookieSerializeOptions = {
+export const SAFE_COOKIE_OPTIONS: CookieSerializeOptions = {
   // We need to set "path". Otherwise, the cookie will be
   // set for "/api" path.
   path: '/',

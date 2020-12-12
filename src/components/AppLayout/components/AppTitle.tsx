@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseLink from '../../BaseLink';
 import urls from '@src/utils/urls';
-import { appTitle } from '@src/utils/appTitle';
+import { APP_TITLE } from '@src/utils/appTitle';
 import Stack from '@src/components/Stack';
 import { Bold } from '@src/components/Utils';
 import { useAppDrawer } from '../contexts/AppLayoutContext';
@@ -20,7 +20,7 @@ const AppTitle = React.memo(function AppTitle() {
         </BaseIconButton>
       )}
       <BaseLink href={urls.home.href} variant="h6" color="primary">
-        <Bold>{appTitle}</Bold>
+        <Bold>{APP_TITLE}</Bold>
       </BaseLink>
     </Stack>
   );

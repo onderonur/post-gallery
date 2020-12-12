@@ -1,14 +1,14 @@
 import React from 'react';
 import SocialButtonBase, { SocialButtonBaseProps } from './SocialButtonBase';
-import FacebookIcon, { facebookBlue, facebookWhite } from './FacebookIcon';
+import FacebookIcon, { FACEBOOK_BLUE, FACEBOOK_WHITE } from './FacebookIcon';
 import { SocialAccountType } from '@src/generated/graphql';
 import GoogleIcon from './GoogleIcon';
 
 const options = {
   [SocialAccountType.Facebook]: {
     icon: <FacebookIcon />,
-    backgroundColor: facebookBlue,
-    fontColor: facebookWhite,
+    backgroundColor: FACEBOOK_BLUE,
+    fontColor: FACEBOOK_WHITE,
   },
   [SocialAccountType.Google]: {
     icon: <GoogleIcon />,

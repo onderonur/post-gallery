@@ -3,7 +3,7 @@ import nookies from 'nookies';
 import { AppProps, AppContext } from 'next/app';
 import { NextPageContext } from 'next';
 import { Maybe } from '@src/generated/graphql';
-import { safeCookieOptions } from '@shared/safeCookieOptions';
+import { SAFE_COOKIE_OPTIONS } from '@shared/safeCookieOptions';
 import Tokens from 'csrf';
 import { isServer } from '@src/utils/isServer';
 import { fetcher } from '@shared/fetcher';
@@ -59,7 +59,7 @@ const withCSRF = (AppComponent: any) => {
           appContext.ctx,
           csrfSecretKey,
           csrfSecret,
-          safeCookieOptions,
+          SAFE_COOKIE_OPTIONS,
         );
         // Lastly, add it to the current request cookies.
         // This is important if a user opens the app for the first time,

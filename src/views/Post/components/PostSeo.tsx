@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 import { NextSeo } from 'next-seo';
 import { PostSeo_PostFragment } from '@src/generated/graphql';
 import { OpenGraphImages } from 'next-seo/lib/types';
-import { appTitle } from '@src/utils/appTitle';
+import { APP_TITLE } from '@src/utils/appTitle';
 
 export const PostSeoFragments = {
   post: gql`
@@ -55,7 +55,7 @@ const PostSeo = React.memo<PostSeoProps>(function PostSeo({ post }) {
   return (
     <NextSeo
       title={post.title}
-      description={`${post.title} - Post page of ${appTitle}`}
+      description={`${post.title} - Post page of ${APP_TITLE}`}
       openGraph={{
         images,
       }}

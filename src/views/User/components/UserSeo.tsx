@@ -2,7 +2,7 @@ import React from 'react';
 import { gql } from '@apollo/client';
 import { NextSeo } from 'next-seo';
 import { UserSeo_UserFragment } from '@src/generated/graphql';
-import { appTitle } from '@src/utils/appTitle';
+import { APP_TITLE } from '@src/utils/appTitle';
 import { OpenGraphImages } from 'next-seo/lib/types';
 
 export const UserSeoFragments = {
@@ -27,7 +27,7 @@ const UserSeo = React.memo<UserSeoProps>(function UserSeo({ user }) {
   return (
     <NextSeo
       title={user.displayName}
-      description={`${user.displayName} - Profile Page of ${appTitle}`}
+      description={`${user.displayName} - Profile Page of ${APP_TITLE}`}
       openGraph={{
         images,
       }}

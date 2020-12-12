@@ -9,7 +9,7 @@ import useRequireAuth from '@src/hooks/useRequireAuth';
 import { useRouter } from 'next/router';
 import Redirect from '@src/components/Redirect';
 import urls from '@src/utils/urls';
-import { appTitle } from '@src/utils/appTitle';
+import { APP_TITLE } from '@src/utils/appTitle';
 import Stack from '@src/components/Stack';
 import useLazyAsync from '@src/hooks/useLazyAsync';
 import restClient from '@src/utils/restClient';
@@ -64,7 +64,7 @@ function LoginView() {
               align="center"
               gutterBottom
             >
-              <Bold>{appTitle}</Bold>
+              <Bold>{APP_TITLE}</Bold>
             </Typography>
           </Box>
           <Typography variant="subtitle1" color="textSecondary">

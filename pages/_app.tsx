@@ -15,7 +15,7 @@ import NProgress from 'nprogress';
 import { Router } from 'next/router';
 import Head from 'next/head';
 import withCSRF from '@src/hocs/withCSRF';
-import { appTitle } from '@src/utils/appTitle';
+import { APP_TITLE } from '@src/utils/appTitle';
 import { getDataFromTree } from '@apollo/client/react/ssr';
 import BaseSnackbarProvider from '@src/contexts/BaseSnackbarProvider';
 import { ThemeProvider } from '@emotion/react';
@@ -35,18 +35,18 @@ const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const getDefaultSeoConfig = (pathname: string): DefaultSeoProps => {
   const url = `${NEXT_PUBLIC_BASE_URL}${pathname}`;
-  const description = `${appTitle} Web Site`;
+  const description = `${APP_TITLE} Web Site`;
   return {
-    titleTemplate: `%s | ${appTitle}`,
+    titleTemplate: `%s | ${APP_TITLE}`,
     description,
     canonical: url,
     openGraph: {
-      title: appTitle,
+      title: APP_TITLE,
       description,
       type: 'website',
       locale: 'en_IE',
       url,
-      site_name: appTitle,
+      site_name: APP_TITLE,
     },
     additionalMetaTags: [
       {
@@ -55,7 +55,7 @@ const getDefaultSeoConfig = (pathname: string): DefaultSeoProps => {
       },
       {
         name: 'application-name',
-        content: appTitle,
+        content: APP_TITLE,
       },
     ],
   };

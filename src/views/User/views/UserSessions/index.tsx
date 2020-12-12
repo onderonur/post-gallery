@@ -8,7 +8,7 @@ import {
 import Loading from '@src/components/Loading';
 import { List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
-import { dateTimeFormat } from '@src/utils/dataTimeFormat';
+import { DATE_TIME_FORMAT } from '@src/utils/dataTimeFormat';
 import { Bold, FlexRow } from '@src/components/Utils';
 import { useRouter } from 'next/router';
 import { ID } from '@src/types';
@@ -131,7 +131,7 @@ function UserSessionsView() {
                   secondary={
                     <>
                       <span>{`${node.browser} • ${dayjs(node.createdAt).format(
-                        dateTimeFormat,
+                        DATE_TIME_FORMAT,
                       )}`}</span>
                       {node.isCurrent ? (
                         <span>

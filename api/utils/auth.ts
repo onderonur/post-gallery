@@ -1,13 +1,13 @@
 import { NextApiResponse } from 'next';
 import cookie, { CookieSerializeOptions } from 'cookie';
 import { NextApiRequestCookies } from 'next/dist/next-server/server/api-utils';
-import { safeCookieOptions } from '../../shared/safeCookieOptions';
+import { SAFE_COOKIE_OPTIONS } from '../../shared/safeCookieOptions';
+
+const authTokenCookieName = 'authToken';
 
 export const extractAuthToken = (cookies: NextApiRequestCookies) => {
   return cookies[authTokenCookieName];
 };
-
-export const authHeaderKey = 'Authorization';
 
 export const getAuthHeaderValue = (authToken: string) => {
   return `Bearer ${authToken}`;
@@ -35,10 +35,8 @@ const setCookie = (
   res.setHeader('Set-Cookie', finalCookies);
 };
 
-const authTokenCookieName = 'authToken';
-
 export const setAuthTokenCookie = (res: NextApiResponse, authToken: string) => {
-  setCookie(res, authTokenCookieName, authToken, safeCookieOptions);
+  setCookie(res, authTokenCookieName, authToken, SAFE_COOKIE_OPTIONS);
 };
 
 export const destroyAuthTokenCookie = (res: NextApiResponse) => {
