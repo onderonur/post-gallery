@@ -18,6 +18,38 @@ export type Scalars = {
   EmailAddress: any;
 };
 
+export type Query = {
+  __typename?: 'Query';
+  _: Scalars['Boolean'];
+  categories: Array<Category>;
+  category?: Maybe<Category>;
+  post?: Maybe<Post>;
+  posts: PostConnection;
+  user?: Maybe<User>;
+  viewer?: Maybe<User>;
+};
+
+
+export type QueryCategoryArgs = {
+  slug: Scalars['String'];
+};
+
+
+export type QueryPostArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryPostsArgs = {
+  first: Scalars['NonNegativeInt'];
+  after?: Maybe<Scalars['Cursor']>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   _: Scalars['Boolean'];
@@ -81,6 +113,20 @@ export type MutationUpdateUserArgs = {
   input: UserInput;
 };
 
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  posts: PostConnection;
+};
+
+
+export type CategoryPostsArgs = {
+  first: Scalars['NonNegativeInt'];
+  after?: Maybe<Scalars['Cursor']>;
+};
+
 export type AddPostCommentInput = {
   postId: Scalars['ID'];
   text: Scalars['String'];
@@ -106,62 +152,6 @@ export type CommentConnection = Connection & {
   __typename?: 'CommentConnection';
   pageInfo: PageInfo;
   edges: Array<CommentEdge>;
-};
-
-export type Connection = {
-  pageInfo: PageInfo;
-};
-
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  endCursor?: Maybe<Scalars['Cursor']>;
-  hasNextPage: Scalars['Boolean'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  _: Scalars['Boolean'];
-  categories: Array<Category>;
-  category?: Maybe<Category>;
-  post?: Maybe<Post>;
-  posts: PostConnection;
-  user?: Maybe<User>;
-  viewer?: Maybe<User>;
-};
-
-
-export type QueryCategoryArgs = {
-  slug: Scalars['String'];
-};
-
-
-export type QueryPostArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryPostsArgs = {
-  first: Scalars['NonNegativeInt'];
-  after?: Maybe<Scalars['Cursor']>;
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['ID'];
-};
-
-export type Category = {
-  __typename?: 'Category';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  slug: Scalars['String'];
-  posts: PostConnection;
-};
-
-
-export type CategoryPostsArgs = {
-  first: Scalars['NonNegativeInt'];
-  after?: Maybe<Scalars['Cursor']>;
 };
 
 export type Post = Reactable & {
@@ -248,6 +238,16 @@ export type ReactionsCount = {
 
 
 
+
+export type Connection = {
+  pageInfo: PageInfo;
+};
+
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  endCursor?: Maybe<Scalars['Cursor']>;
+  hasNextPage: Scalars['Boolean'];
+};
 
 export enum SocialAccountType {
   Facebook = 'FACEBOOK',
@@ -509,7 +509,7 @@ export type UserProfileSeo_UserFragment = (
   & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
 );
 
-export type UserSettings_UserFragment = (
+export type UserSettingsForm_UserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'displayName' | 'email'>
 );
@@ -524,28 +524,8 @@ export type UpdateUserMutation = (
   { __typename?: 'Mutation' }
   & { updateUser: (
     { __typename?: 'User' }
-    & UserSettings_UserFragment
+    & UserSettingsForm_UserFragment
   ) }
-);
-
-export type GetUserQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type GetUserQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & UserProfileLayout_UserFragment
-    & UserSettings_UserFragment
-    & UserSocialAccounts_UserFragment
-  )> }
-);
-
-export type UserSettingsForm_UserFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'displayName' | 'email'>
 );
 
 export type UserSocialAccountLinker_UserFragment = (
@@ -701,6 +681,21 @@ export type DeleteViewerSessionsMutation = (
   & Pick<Mutation, 'deleteViewerSessions'>
 );
 
+export type GetUserQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetUserQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & UserProfileLayout_UserFragment
+    & UserSettingsForm_UserFragment
+    & UserSocialAccounts_UserFragment
+  )> }
+);
+
 export const ReactionActions_ReactableFragmentDoc = gql`
     fragment ReactionActions_reactable on Reactable {
   id
@@ -773,13 +768,6 @@ export const UserProfileLayout_UserFragmentDoc = gql`
 }
     ${UserProfileSeo_UserFragmentDoc}
 ${UserProfileHeader_UserFragmentDoc}`;
-export const UserSettings_UserFragmentDoc = gql`
-    fragment UserSettings_user on User {
-  id
-  displayName
-  email
-}
-    `;
 export const UserSettingsForm_UserFragmentDoc = gql`
     fragment UserSettingsForm_user on User {
   id
@@ -1109,10 +1097,10 @@ export type RemoveReactionMutationOptions = Apollo.BaseMutationOptions<RemoveRea
 export const UpdateUserDocument = gql`
     mutation UpdateUser($id: ID!, $input: UserInput!) {
   updateUser(id: $id, input: $input) {
-    ...UserSettings_user
+    ...UserSettingsForm_user
   }
 }
-    ${UserSettings_UserFragmentDoc}`;
+    ${UserSettingsForm_UserFragmentDoc}`;
 export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
@@ -1140,45 +1128,6 @@ export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
-export const GetUserDocument = gql`
-    query GetUser($id: ID!) {
-  user(id: $id) {
-    ...UserProfileLayout_user
-    ...UserSettings_user
-    ...UserSocialAccounts_user
-  }
-}
-    ${UserProfileLayout_UserFragmentDoc}
-${UserSettings_UserFragmentDoc}
-${UserSocialAccounts_UserFragmentDoc}`;
-
-/**
- * __useGetUserQuery__
- *
- * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
-      }
-export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
-        }
-export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
-export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
-export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
 export const LinkViewerSocialAccountDocument = gql`
     mutation LinkViewerSocialAccount($socialAccountType: SocialAccountType!, $token: String!) {
   linkViewerSocialAccount(socialAccountType: $socialAccountType, token: $token) {
@@ -1478,3 +1427,42 @@ export function useDeleteViewerSessionsMutation(baseOptions?: Apollo.MutationHoo
 export type DeleteViewerSessionsMutationHookResult = ReturnType<typeof useDeleteViewerSessionsMutation>;
 export type DeleteViewerSessionsMutationResult = Apollo.MutationResult<DeleteViewerSessionsMutation>;
 export type DeleteViewerSessionsMutationOptions = Apollo.BaseMutationOptions<DeleteViewerSessionsMutation, DeleteViewerSessionsMutationVariables>;
+export const GetUserDocument = gql`
+    query GetUser($id: ID!) {
+  user(id: $id) {
+    ...UserProfileLayout_user
+    ...UserSettingsForm_user
+    ...UserSocialAccounts_user
+  }
+}
+    ${UserProfileLayout_UserFragmentDoc}
+${UserSettingsForm_UserFragmentDoc}
+${UserSocialAccounts_UserFragmentDoc}`;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+      }
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        }
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;

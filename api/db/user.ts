@@ -1,5 +1,5 @@
 import { SocialAccountType } from '@api/generated/graphql';
-import { ID } from '@api/types';
+import { ID } from '@api/shared/shared.types';
 import { ApolloError, AuthenticationError } from 'apollo-server-micro';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';

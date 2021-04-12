@@ -1,5 +1,5 @@
 import { AuthenticationError } from 'apollo-server-micro';
-import { ID } from '@api/types';
+import { ID } from '@api/shared/shared.types';
 import { ReactionType } from '@api/generated/graphql';
 import { ReactionsCount } from '../generated/graphql';
 import BaseRepository from './utils/BaseRepository';

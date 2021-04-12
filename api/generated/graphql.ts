@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { PostMapper, CategoryMapper, CommentMapper, UserMapper, GQLContext } from '../types';
+import { PostMapper, CategoryMapper, CommentMapper, UserMapper, GQLContext } from '@api/shared/shared.types';
 export type Maybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -17,6 +17,38 @@ export type Scalars = {
   Cursor: any;
   NonNegativeInt: any;
   EmailAddress: any;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  _: Scalars['Boolean'];
+  categories: Array<Category>;
+  category?: Maybe<Category>;
+  post?: Maybe<Post>;
+  posts: PostConnection;
+  user?: Maybe<User>;
+  viewer?: Maybe<User>;
+};
+
+
+export type QueryCategoryArgs = {
+  slug: Scalars['String'];
+};
+
+
+export type QueryPostArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryPostsArgs = {
+  first: Scalars['NonNegativeInt'];
+  after?: Maybe<Scalars['Cursor']>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID'];
 };
 
 export type Mutation = {
@@ -82,6 +114,20 @@ export type MutationUpdateUserArgs = {
   input: UserInput;
 };
 
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  posts: PostConnection;
+};
+
+
+export type CategoryPostsArgs = {
+  first: Scalars['NonNegativeInt'];
+  after?: Maybe<Scalars['Cursor']>;
+};
+
 export type AddPostCommentInput = {
   postId: Scalars['ID'];
   text: Scalars['String'];
@@ -107,62 +153,6 @@ export type CommentConnection = Connection & {
   __typename?: 'CommentConnection';
   pageInfo: PageInfo;
   edges: Array<CommentEdge>;
-};
-
-export type Connection = {
-  pageInfo: PageInfo;
-};
-
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  endCursor?: Maybe<Scalars['Cursor']>;
-  hasNextPage: Scalars['Boolean'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  _: Scalars['Boolean'];
-  categories: Array<Category>;
-  category?: Maybe<Category>;
-  post?: Maybe<Post>;
-  posts: PostConnection;
-  user?: Maybe<User>;
-  viewer?: Maybe<User>;
-};
-
-
-export type QueryCategoryArgs = {
-  slug: Scalars['String'];
-};
-
-
-export type QueryPostArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryPostsArgs = {
-  first: Scalars['NonNegativeInt'];
-  after?: Maybe<Scalars['Cursor']>;
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['ID'];
-};
-
-export type Category = {
-  __typename?: 'Category';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  slug: Scalars['String'];
-  posts: PostConnection;
-};
-
-
-export type CategoryPostsArgs = {
-  first: Scalars['NonNegativeInt'];
-  after?: Maybe<Scalars['Cursor']>;
 };
 
 export type Post = Reactable & {
@@ -249,6 +239,16 @@ export type ReactionsCount = {
 
 
 
+
+export type Connection = {
+  pageInfo: PageInfo;
+};
+
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  endCursor?: Maybe<Scalars['Cursor']>;
+  hasNextPage: Scalars['Boolean'];
+};
 
 export enum SocialAccountType {
   Facebook = 'FACEBOOK',
@@ -386,18 +386,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Mutation: ResolverTypeWrapper<{}>;
+  Query: ResolverTypeWrapper<{}>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Category: ResolverTypeWrapper<CategoryMapper>;
   AddPostCommentInput: AddPostCommentInput;
   Comment: ResolverTypeWrapper<CommentMapper>;
   CommentEdge: ResolverTypeWrapper<Omit<CommentEdge, 'node'> & { node: ResolversTypes['Comment'] }>;
   CommentConnection: ResolverTypeWrapper<Omit<CommentConnection, 'edges'> & { edges: Array<ResolversTypes['CommentEdge']> }>;
-  Connection: ResolversTypes['CommentConnection'] | ResolversTypes['PostConnection'] | ResolversTypes['SessionConnection'];
-  PageInfo: ResolverTypeWrapper<PageInfo>;
-  Query: ResolverTypeWrapper<{}>;
-  Category: ResolverTypeWrapper<CategoryMapper>;
   Post: ResolverTypeWrapper<PostMapper>;
   GraphImage: ResolverTypeWrapper<GraphImage>;
   GraphMedia: ResolverTypeWrapper<GraphMedia>;
@@ -413,6 +411,8 @@ export type ResolversTypes = ResolversObject<{
   Cursor: ResolverTypeWrapper<Scalars['Cursor']>;
   NonNegativeInt: ResolverTypeWrapper<Scalars['NonNegativeInt']>;
   EmailAddress: ResolverTypeWrapper<Scalars['EmailAddress']>;
+  Connection: ResolversTypes['CommentConnection'] | ResolversTypes['PostConnection'] | ResolversTypes['SessionConnection'];
+  PageInfo: ResolverTypeWrapper<PageInfo>;
   SocialAccountType: SocialAccountType;
   UserInput: UserInput;
   User: ResolverTypeWrapper<UserMapper>;
@@ -423,18 +423,16 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Mutation: {};
+  Query: {};
   Boolean: Scalars['Boolean'];
-  ID: Scalars['ID'];
   String: Scalars['String'];
+  ID: Scalars['ID'];
+  Mutation: {};
+  Category: CategoryMapper;
   AddPostCommentInput: AddPostCommentInput;
   Comment: CommentMapper;
   CommentEdge: Omit<CommentEdge, 'node'> & { node: ResolversParentTypes['Comment'] };
   CommentConnection: Omit<CommentConnection, 'edges'> & { edges: Array<ResolversParentTypes['CommentEdge']> };
-  Connection: ResolversParentTypes['CommentConnection'] | ResolversParentTypes['PostConnection'] | ResolversParentTypes['SessionConnection'];
-  PageInfo: PageInfo;
-  Query: {};
-  Category: CategoryMapper;
   Post: PostMapper;
   GraphImage: GraphImage;
   GraphMedia: GraphMedia;
@@ -449,11 +447,23 @@ export type ResolversParentTypes = ResolversObject<{
   Cursor: Scalars['Cursor'];
   NonNegativeInt: Scalars['NonNegativeInt'];
   EmailAddress: Scalars['EmailAddress'];
+  Connection: ResolversParentTypes['CommentConnection'] | ResolversParentTypes['PostConnection'] | ResolversParentTypes['SessionConnection'];
+  PageInfo: PageInfo;
   UserInput: UserInput;
   User: UserMapper;
   Session: Session;
   SessionEdge: SessionEdge;
   SessionConnection: SessionConnection;
+}>;
+
+export type QueryResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  _?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
+  category?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<QueryCategoryArgs, 'slug'>>;
+  post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>;
+  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<QueryPostsArgs, 'first'>>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+  viewer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 }>;
 
 export type MutationResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -468,6 +478,14 @@ export type MutationResolvers<ContextType = GQLContext, ParentType extends Resol
   removeReaction?: Resolver<ResolversTypes['RemoveReactionPayload'], ParentType, ContextType, RequireFields<MutationRemoveReactionArgs, 'reactableId'>>;
   unlinkViewerSocialAccount?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUnlinkViewerSocialAccountArgs, 'socialAccountType'>>;
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'input'>>;
+}>;
+
+export type CategoryResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<CategoryPostsArgs, 'first'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type CommentResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = ResolversObject<{
@@ -489,35 +507,6 @@ export type CommentEdgeResolvers<ContextType = GQLContext, ParentType extends Re
 export type CommentConnectionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['CommentConnection'] = ResolversParentTypes['CommentConnection']> = ResolversObject<{
   pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
   edges?: Resolver<Array<ResolversTypes['CommentEdge']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ConnectionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Connection'] = ResolversParentTypes['Connection']> = ResolversObject<{
-  __resolveType: TypeResolveFn<'CommentConnection' | 'PostConnection' | 'SessionConnection', ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-}>;
-
-export type PageInfoResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
-  endCursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
-  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type QueryResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  _?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
-  category?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<QueryCategoryArgs, 'slug'>>;
-  post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>;
-  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<QueryPostsArgs, 'first'>>;
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
-  viewer?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-}>;
-
-export type CategoryResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  posts?: Resolver<ResolversTypes['PostConnection'], ParentType, ContextType, RequireFields<CategoryPostsArgs, 'first'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -602,6 +591,17 @@ export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<Resolv
   name: 'EmailAddress';
 }
 
+export type ConnectionResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['Connection'] = ResolversParentTypes['Connection']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'CommentConnection' | 'PostConnection' | 'SessionConnection', ParentType, ContextType>;
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+}>;
+
+export type PageInfoResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = ResolversObject<{
+  endCursor?: Resolver<Maybe<ResolversTypes['Cursor']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type UserResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -638,14 +638,12 @@ export type SessionConnectionResolvers<ContextType = GQLContext, ParentType exte
 }>;
 
 export type Resolvers<ContextType = GQLContext> = ResolversObject<{
+  Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Category?: CategoryResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
   CommentEdge?: CommentEdgeResolvers<ContextType>;
   CommentConnection?: CommentConnectionResolvers<ContextType>;
-  Connection?: ConnectionResolvers<ContextType>;
-  PageInfo?: PageInfoResolvers<ContextType>;
-  Query?: QueryResolvers<ContextType>;
-  Category?: CategoryResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
   GraphImage?: GraphImageResolvers<ContextType>;
   GraphMedia?: GraphMediaResolvers<ContextType>;
@@ -659,6 +657,8 @@ export type Resolvers<ContextType = GQLContext> = ResolversObject<{
   Cursor?: GraphQLScalarType;
   NonNegativeInt?: GraphQLScalarType;
   EmailAddress?: GraphQLScalarType;
+  Connection?: ConnectionResolvers<ContextType>;
+  PageInfo?: PageInfoResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   Session?: SessionResolvers<ContextType>;
   SessionEdge?: SessionEdgeResolvers<ContextType>;

@@ -1,5 +1,5 @@
 import Knex from 'knex';
-import { ID, ObjectionModelToPojo } from '@api/types';
+import { ID, ObjectionModelToPojo } from '@api/shared/shared.types';
 import { Model, ModelOptions, Pojo } from 'objection';
 import { ReactionType } from '@api/generated/graphql';
 import { Maybe } from 'graphql/jsutils/Maybe';

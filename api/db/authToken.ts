@@ -1,8 +1,8 @@
 import { NextApiRequest } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
-import { GraphConnection, ID } from '@api/types';
-import { GraphConnectionArgs, DecodedJwt } from '../types';
+import { GraphConnection, ID } from '@api/shared/shared.types';
+import { GraphConnectionArgs, DecodedJwt } from '../shared/shared.types';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
 import { ForbiddenError, AuthenticationError } from 'apollo-server-micro';

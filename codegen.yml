@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - 'api/typeDefs/*.ts'
+  - 'api/**/*.schema.ts'
 config:
   # https://graphql-code-generator.com/docs/generated-config/typescript#maybevalue-string-default-value-t--null
   maybeValue: T | null | undefined
@@ -16,7 +16,7 @@ generates:
       useIndexSignature: true
       # Passing the GraphQLContext type automatically to the generated types
       # https://github.com/dotansimha/graphql-code-generator/blob/master/docs/plugins/typescript-resolvers.md#custom-context-type
-      contextType: ../types#GQLContext
+      contextType: '@api/shared/shared.types#GQLContext'
       # To map our TypeScript model interfaces to GraphQL types
       # For example, if "Query.post" doesn't return the all fields of "Post" type,
       # and they have field resolvers like "Post.viewerHasReacted", "Post.likesCount" etc,
@@ -27,10 +27,10 @@ generates:
       # https://github.com/dotansimha/graphql-code-generator/blob/master/docs/plugins/typescript-resolvers.md#mappers---overwrite-parents-and-resolved-values
       # https://github.com/dotansimha/graphql-code-generator/issues/1219#issuecomment-549244957
       mappers:
-        Post: ../types#PostMapper
-        Category: ../types#CategoryMapper
-        Comment: ../types#CommentMapper
-        User: ../types#UserMapper
+        Post: '@api/shared/shared.types#PostMapper'
+        Category: '@api/shared/shared.types#CategoryMapper'
+        Comment: '@api/shared/shared.types#CommentMapper'
+        User: '@api/shared/shared.types#UserMapper'
   # For client-side
   src/generated/graphql.ts:
     documents:

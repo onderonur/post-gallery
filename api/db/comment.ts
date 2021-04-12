@@ -1,7 +1,7 @@
 import { AddPostCommentInput } from '@api/generated/graphql';
 import { AuthenticationError, ApolloError } from 'apollo-server-micro';
-import { ID } from '@api/types';
-import { GraphConnectionArgs } from '../types';
+import { ID } from '@api/shared/shared.types';
+import { GraphConnectionArgs } from '../shared/shared.types';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
 import { CommentModel, ReactableType } from './knex';

@@ -1,5 +1,5 @@
-import authController from '@api/controllers/authController';
-import createHandler from '@api/middlewares/createHandler';
+import authController from '@api/auth/auth.controller';
+import createHandler from '@api/shared/create-handler.middleware';
 
 const logout = createHandler({
   POST: authController.logout,

@@ -1,6 +1,6 @@
 import { Maybe } from '@api/generated/graphql';
-import { ObjectionModelToPojo } from '@api/types';
-import { getLastOfArray } from '@api/utils/getLastOfArray';
+import { ObjectionModelToPojo } from '@api/shared/shared.types';
+import { getLastOfArray } from '@api/shared/shared.utils';
 import { UserInputError } from 'apollo-server-micro';
 import Knex from 'knex';
 import Objection from 'objection';

@@ -1,4 +1,4 @@
-import { ID } from '@api/types';
+import { ID } from '@api/shared/shared.types';
 import { Omit, GraphMedia } from '../generated/graphql';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';

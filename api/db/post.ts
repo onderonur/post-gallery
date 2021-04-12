@@ -3,8 +3,8 @@ import {
   AuthenticationError,
   ForbiddenError,
 } from 'apollo-server-micro';
-import { ID } from '@api/types';
-import { GraphConnectionArgs } from '../types';
+import { ID } from '@api/shared/shared.types';
+import { GraphConnectionArgs } from '../shared/shared.types';
 import BaseRepository from './utils/BaseRepository';
 import { createLoader } from './utils/createLoader';
 import { PostInput, Maybe, Omit } from '@api/generated/graphql';
