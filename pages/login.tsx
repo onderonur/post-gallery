@@ -1,3 +1,3 @@
-import LoginView from '@src/views/Login';
+import LoginView from '@src/views/LoginView';
 
 export default LoginView;

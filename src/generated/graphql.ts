@@ -4,6 +4,7 @@ export type Maybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -305,6 +306,67 @@ export type SessionConnection = Connection & {
   edges: Array<SessionEdge>;
 };
 
+export type GetViewerQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetViewerQuery = (
+  { __typename?: 'Query' }
+  & { viewer?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'displayName' | 'email' | 'thumbnailUrl'>
+  )> }
+);
+
+export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCategoriesQuery = (
+  { __typename?: 'Query' }
+  & { categories: Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name' | 'slug'>
+  )> }
+);
+
+export type CommentList_CommentEdgeFragment = (
+  { __typename?: 'CommentEdge' }
+  & Pick<CommentEdge, 'cursor'>
+  & { node: (
+    { __typename?: 'Comment' }
+    & CommentListItem_CommentFragment
+  ) }
+);
+
+export type CommentList_PageInfoFragment = (
+  { __typename?: 'PageInfo' }
+  & Pick<PageInfo, 'hasNextPage'>
+);
+
+export type CommentListItem_CommentFragment = (
+  { __typename?: 'Comment' }
+  & Pick<Comment, 'id' | 'text' | 'createdAt'>
+  & { commenter?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
+  )> }
+  & CommentListItemReactionActions_CommentFragment
+);
+
+export type RemovePostCommentMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type RemovePostCommentMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removePostComment'>
+);
+
+export type CommentListItemReactionActions_CommentFragment = (
+  { __typename?: 'Comment' }
+  & ReactionActions_Reactable_Comment_Fragment
+);
+
 export type CreatePostMutationVariables = Exact<{
   title: Scalars['String'];
   categoryId: Scalars['ID'];
@@ -367,6 +429,22 @@ export type PostReactionActions_PostFragment = (
   & ReactionActions_Reactable_Post_Fragment
 );
 
+export type PostSeo_PostFragment = (
+  { __typename?: 'Post' }
+  & Pick<Post, 'id' | 'title'>
+  & { media?: Maybe<(
+    { __typename?: 'GraphMedia' }
+    & Pick<GraphMedia, 'id'>
+    & { smallImage: (
+      { __typename?: 'GraphImage' }
+      & Pick<GraphImage, 'height' | 'width' | 'url'>
+    ), standardImage: (
+      { __typename?: 'GraphImage' }
+      & Pick<GraphImage, 'height' | 'width' | 'url'>
+    ) }
+  )> }
+);
+
 type ReactionActions_Reactable_Comment_Fragment = (
   { __typename?: 'Comment' }
   & Pick<Comment, 'id' | 'viewerReaction'>
@@ -414,81 +492,97 @@ export type RemoveReactionMutation = (
   ) }
 );
 
-export type GetViewerQueryVariables = Exact<{ [key: string]: never; }>;
+export type UserProfileHeader_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'thumbnailUrl' | 'displayName'>
+);
+
+export type UserProfileLayout_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'postsCount'>
+  & UserProfileSeo_UserFragment
+  & UserProfileHeader_UserFragment
+);
+
+export type UserProfileSeo_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
+);
+
+export type UserSettings_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'displayName' | 'email'>
+);
+
+export type UpdateUserMutationVariables = Exact<{
+  id: Scalars['ID'];
+  input: UserInput;
+}>;
 
 
-export type GetViewerQuery = (
-  { __typename?: 'Query' }
-  & { viewer?: Maybe<(
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'displayName' | 'email' | 'thumbnailUrl'>
-  )> }
-);
-
-export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetCategoriesQuery = (
-  { __typename?: 'Query' }
-  & { categories: Array<(
-    { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'name' | 'slug'>
-  )> }
-);
-
-export type CommentList_CommentEdgeFragment = (
-  { __typename?: 'CommentEdge' }
-  & Pick<CommentEdge, 'cursor'>
-  & { node: (
-    { __typename?: 'Comment' }
-    & CommentListItem_CommentFragment
+    & UserSettings_UserFragment
   ) }
 );
 
-export type CommentList_PageInfoFragment = (
-  { __typename?: 'PageInfo' }
-  & Pick<PageInfo, 'hasNextPage'>
-);
-
-export type CommentListItem_CommentFragment = (
-  { __typename?: 'Comment' }
-  & Pick<Comment, 'id' | 'text' | 'createdAt'>
-  & { commenter?: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
-  )> }
-  & CommentListItemReactionActions_CommentFragment
-);
-
-export type RemovePostCommentMutationVariables = Exact<{
+export type GetUserQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type RemovePostCommentMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'removePostComment'>
-);
-
-export type CommentListItemReactionActions_CommentFragment = (
-  { __typename?: 'Comment' }
-  & ReactionActions_Reactable_Comment_Fragment
-);
-
-export type PostSeo_PostFragment = (
-  { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'title'>
-  & { media?: Maybe<(
-    { __typename?: 'GraphMedia' }
-    & Pick<GraphMedia, 'id'>
-    & { smallImage: (
-      { __typename?: 'GraphImage' }
-      & Pick<GraphImage, 'height' | 'width' | 'url'>
-    ), standardImage: (
-      { __typename?: 'GraphImage' }
-      & Pick<GraphImage, 'height' | 'width' | 'url'>
-    ) }
+export type GetUserQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & UserProfileLayout_UserFragment
+    & UserSettings_UserFragment
+    & UserSocialAccounts_UserFragment
   )> }
+);
+
+export type UserSettingsForm_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'displayName' | 'email'>
+);
+
+export type UserSocialAccountLinker_UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'googleProfileId' | 'facebookProfileId'>
+);
+
+export type LinkViewerSocialAccountMutationVariables = Exact<{
+  socialAccountType: SocialAccountType;
+  token: Scalars['String'];
+}>;
+
+
+export type LinkViewerSocialAccountMutation = (
+  { __typename?: 'Mutation' }
+  & { linkViewerSocialAccount: (
+    { __typename?: 'User' }
+    & UserSocialAccountLinker_UserFragment
+  ) }
+);
+
+export type UnlinkViewerSocialAccountMutationVariables = Exact<{
+  socialAccountType: SocialAccountType;
+}>;
+
+
+export type UnlinkViewerSocialAccountMutation = (
+  { __typename?: 'Mutation' }
+  & { unlinkViewerSocialAccount: (
+    { __typename?: 'User' }
+    & UserSocialAccountLinker_UserFragment
+  ) }
+);
+
+export type UserSocialAccounts_UserFragment = (
+  { __typename?: 'User' }
+  & UserSocialAccountLinker_UserFragment
 );
 
 export type PostView_PostFragment = (
@@ -554,23 +648,6 @@ export type GetCategoryWithPostsQuery = (
   )> }
 );
 
-export type UserHeader_UserFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'thumbnailUrl' | 'displayName'>
-);
-
-export type UserLayout_UserFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'postsCount'>
-  & UserSeo_UserFragment
-  & UserHeader_UserFragment
-);
-
-export type UserSeo_UserFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'displayName' | 'thumbnailUrl'>
-);
-
 export type GetUserWithPostsQueryVariables = Exact<{
   id: Scalars['ID'];
   after?: Maybe<Scalars['Cursor']>;
@@ -585,7 +662,7 @@ export type GetUserWithPostsQuery = (
       { __typename?: 'PostConnection' }
       & PostList_PostConnectionFragment
     ) }
-    & UserLayout_UserFragment
+    & UserProfileLayout_UserFragment
   )> }
 );
 
@@ -612,7 +689,7 @@ export type GetUserWithSessionsQuery = (
         ) }
       )> }
     ) }
-    & UserLayout_UserFragment
+    & UserProfileLayout_UserFragment
   )> }
 );
 
@@ -622,77 +699,6 @@ export type DeleteViewerSessionsMutationVariables = Exact<{ [key: string]: never
 export type DeleteViewerSessionsMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteViewerSessions'>
-);
-
-export type UserSocialAccountLinker_UserFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'googleProfileId' | 'facebookProfileId'>
-);
-
-export type LinkViewerSocialAccountMutationVariables = Exact<{
-  socialAccountType: SocialAccountType;
-  token: Scalars['String'];
-}>;
-
-
-export type LinkViewerSocialAccountMutation = (
-  { __typename?: 'Mutation' }
-  & { linkViewerSocialAccount: (
-    { __typename?: 'User' }
-    & UserSocialAccountLinker_UserFragment
-  ) }
-);
-
-export type UnlinkViewerSocialAccountMutationVariables = Exact<{
-  socialAccountType: SocialAccountType;
-}>;
-
-
-export type UnlinkViewerSocialAccountMutation = (
-  { __typename?: 'Mutation' }
-  & { unlinkViewerSocialAccount: (
-    { __typename?: 'User' }
-    & UserSocialAccountLinker_UserFragment
-  ) }
-);
-
-export type UserSocialAccounts_UserFragment = (
-  { __typename?: 'User' }
-  & UserSocialAccountLinker_UserFragment
-);
-
-export type UserSettings_UserFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'displayName' | 'email'>
-);
-
-export type UpdateUserMutationVariables = Exact<{
-  id: Scalars['ID'];
-  input: UserInput;
-}>;
-
-
-export type UpdateUserMutation = (
-  { __typename?: 'Mutation' }
-  & { updateUser: (
-    { __typename?: 'User' }
-    & UserSettings_UserFragment
-  ) }
-);
-
-export type GetUserQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type GetUserQuery = (
-  { __typename?: 'Query' }
-  & { user?: Maybe<(
-    { __typename?: 'User' }
-    & UserLayout_UserFragment
-    & UserSettings_UserFragment
-    & UserSocialAccounts_UserFragment
-  )> }
 );
 
 export const ReactionActions_ReactableFragmentDoc = gql`
@@ -745,6 +751,54 @@ export const PostList_PostConnectionFragmentDoc = gql`
   }
 }
     ${Post_PostFragmentDoc}`;
+export const UserProfileSeo_UserFragmentDoc = gql`
+    fragment UserProfileSeo_user on User {
+  id
+  displayName
+  thumbnailUrl
+}
+    `;
+export const UserProfileHeader_UserFragmentDoc = gql`
+    fragment UserProfileHeader_user on User {
+  id
+  thumbnailUrl
+  displayName
+}
+    `;
+export const UserProfileLayout_UserFragmentDoc = gql`
+    fragment UserProfileLayout_user on User {
+  ...UserProfileSeo_user
+  ...UserProfileHeader_user
+  postsCount
+}
+    ${UserProfileSeo_UserFragmentDoc}
+${UserProfileHeader_UserFragmentDoc}`;
+export const UserSettings_UserFragmentDoc = gql`
+    fragment UserSettings_user on User {
+  id
+  displayName
+  email
+}
+    `;
+export const UserSettingsForm_UserFragmentDoc = gql`
+    fragment UserSettingsForm_user on User {
+  id
+  displayName
+  email
+}
+    `;
+export const UserSocialAccountLinker_UserFragmentDoc = gql`
+    fragment UserSocialAccountLinker_user on User {
+  id
+  googleProfileId
+  facebookProfileId
+}
+    `;
+export const UserSocialAccounts_UserFragmentDoc = gql`
+    fragment UserSocialAccounts_user on User {
+  ...UserSocialAccountLinker_user
+}
+    ${UserSocialAccountLinker_UserFragmentDoc}`;
 export const PostSeo_PostFragmentDoc = gql`
     fragment PostSeo_post on Post {
   id
@@ -799,7 +853,7 @@ export const PostView_PostFragmentDoc = gql`
     fragment PostView_post on Post {
   ...PostSeo_post
   ...Post_post
-  comments(first: 10, after: $commentsAfter) @connection(key: "comments") {
+  comments(first: 10, after: $commentsAfter) {
     edges {
       ...CommentList_commentEdge
     }
@@ -813,47 +867,110 @@ export const PostView_PostFragmentDoc = gql`
 ${Post_PostFragmentDoc}
 ${CommentList_CommentEdgeFragmentDoc}
 ${CommentList_PageInfoFragmentDoc}`;
-export const UserSeo_UserFragmentDoc = gql`
-    fragment UserSeo_user on User {
-  id
-  displayName
-  thumbnailUrl
+export const GetViewerDocument = gql`
+    query GetViewer {
+  viewer {
+    id
+    displayName
+    email
+    thumbnailUrl
+  }
 }
     `;
-export const UserHeader_UserFragmentDoc = gql`
-    fragment UserHeader_user on User {
-  id
-  thumbnailUrl
-  displayName
+
+/**
+ * __useGetViewerQuery__
+ *
+ * To run a query within a React component, call `useGetViewerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetViewerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetViewerQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetViewerQuery(baseOptions?: Apollo.QueryHookOptions<GetViewerQuery, GetViewerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetViewerQuery, GetViewerQueryVariables>(GetViewerDocument, options);
+      }
+export function useGetViewerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetViewerQuery, GetViewerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetViewerQuery, GetViewerQueryVariables>(GetViewerDocument, options);
+        }
+export type GetViewerQueryHookResult = ReturnType<typeof useGetViewerQuery>;
+export type GetViewerLazyQueryHookResult = ReturnType<typeof useGetViewerLazyQuery>;
+export type GetViewerQueryResult = Apollo.QueryResult<GetViewerQuery, GetViewerQueryVariables>;
+export const GetCategoriesDocument = gql`
+    query GetCategories {
+  categories {
+    id
+    name
+    slug
+  }
 }
     `;
-export const UserLayout_UserFragmentDoc = gql`
-    fragment UserLayout_user on User {
-  ...UserSeo_user
-  ...UserHeader_user
-  postsCount
-}
-    ${UserSeo_UserFragmentDoc}
-${UserHeader_UserFragmentDoc}`;
-export const UserSocialAccountLinker_UserFragmentDoc = gql`
-    fragment UserSocialAccountLinker_user on User {
-  id
-  googleProfileId
-  facebookProfileId
+
+/**
+ * __useGetCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
+      }
+export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, options);
+        }
+export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
+export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
+export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
+export const RemovePostCommentDocument = gql`
+    mutation RemovePostComment($id: ID!) {
+  removePostComment(id: $id)
 }
     `;
-export const UserSocialAccounts_UserFragmentDoc = gql`
-    fragment UserSocialAccounts_user on User {
-  ...UserSocialAccountLinker_user
-}
-    ${UserSocialAccountLinker_UserFragmentDoc}`;
-export const UserSettings_UserFragmentDoc = gql`
-    fragment UserSettings_user on User {
-  id
-  displayName
-  email
-}
-    `;
+export type RemovePostCommentMutationFn = Apollo.MutationFunction<RemovePostCommentMutation, RemovePostCommentMutationVariables>;
+
+/**
+ * __useRemovePostCommentMutation__
+ *
+ * To run a mutation, you first call `useRemovePostCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemovePostCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removePostCommentMutation, { data, loading, error }] = useRemovePostCommentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemovePostCommentMutation(baseOptions?: Apollo.MutationHookOptions<RemovePostCommentMutation, RemovePostCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemovePostCommentMutation, RemovePostCommentMutationVariables>(RemovePostCommentDocument, options);
+      }
+export type RemovePostCommentMutationHookResult = ReturnType<typeof useRemovePostCommentMutation>;
+export type RemovePostCommentMutationResult = Apollo.MutationResult<RemovePostCommentMutation>;
+export type RemovePostCommentMutationOptions = Apollo.BaseMutationOptions<RemovePostCommentMutation, RemovePostCommentMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($title: String!, $categoryId: ID!, $mediaId: ID!) {
   createPost(input: {title: $title, categoryId: $categoryId, mediaId: $mediaId}) {
@@ -883,7 +1000,8 @@ export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, C
  * });
  */
 export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>) {
-        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, options);
       }
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
@@ -913,7 +1031,8 @@ export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, D
  * });
  */
 export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
-        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, options);
       }
 export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
@@ -947,7 +1066,8 @@ export type AddReactionMutationFn = Apollo.MutationFunction<AddReactionMutation,
  * });
  */
 export function useAddReactionMutation(baseOptions?: Apollo.MutationHookOptions<AddReactionMutation, AddReactionMutationVariables>) {
-        return Apollo.useMutation<AddReactionMutation, AddReactionMutationVariables>(AddReactionDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddReactionMutation, AddReactionMutationVariables>(AddReactionDocument, options);
       }
 export type AddReactionMutationHookResult = ReturnType<typeof useAddReactionMutation>;
 export type AddReactionMutationResult = Apollo.MutationResult<AddReactionMutation>;
@@ -980,110 +1100,152 @@ export type RemoveReactionMutationFn = Apollo.MutationFunction<RemoveReactionMut
  * });
  */
 export function useRemoveReactionMutation(baseOptions?: Apollo.MutationHookOptions<RemoveReactionMutation, RemoveReactionMutationVariables>) {
-        return Apollo.useMutation<RemoveReactionMutation, RemoveReactionMutationVariables>(RemoveReactionDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveReactionMutation, RemoveReactionMutationVariables>(RemoveReactionDocument, options);
       }
 export type RemoveReactionMutationHookResult = ReturnType<typeof useRemoveReactionMutation>;
 export type RemoveReactionMutationResult = Apollo.MutationResult<RemoveReactionMutation>;
 export type RemoveReactionMutationOptions = Apollo.BaseMutationOptions<RemoveReactionMutation, RemoveReactionMutationVariables>;
-export const GetViewerDocument = gql`
-    query GetViewer {
-  viewer {
-    id
-    displayName
-    email
-    thumbnailUrl
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($id: ID!, $input: UserInput!) {
+  updateUser(id: $id, input: $input) {
+    ...UserSettings_user
   }
 }
-    `;
+    ${UserSettings_UserFragmentDoc}`;
+export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**
- * __useGetViewerQuery__
+ * __useUpdateUserMutation__
  *
- * To run a query within a React component, call `useGetViewerQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetViewerQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetViewerQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetViewerQuery(baseOptions?: Apollo.QueryHookOptions<GetViewerQuery, GetViewerQueryVariables>) {
-        return Apollo.useQuery<GetViewerQuery, GetViewerQueryVariables>(GetViewerDocument, baseOptions);
-      }
-export function useGetViewerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetViewerQuery, GetViewerQueryVariables>) {
-          return Apollo.useLazyQuery<GetViewerQuery, GetViewerQueryVariables>(GetViewerDocument, baseOptions);
-        }
-export type GetViewerQueryHookResult = ReturnType<typeof useGetViewerQuery>;
-export type GetViewerLazyQueryHookResult = ReturnType<typeof useGetViewerLazyQuery>;
-export type GetViewerQueryResult = Apollo.QueryResult<GetViewerQuery, GetViewerQueryVariables>;
-export const GetCategoriesDocument = gql`
-    query GetCategories {
-  categories {
-    id
-    name
-    slug
-  }
-}
-    `;
-
-/**
- * __useGetCategoriesQuery__
- *
- * To run a query within a React component, call `useGetCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCategoriesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-        return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
-      }
-export function useGetCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
-          return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
-        }
-export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
-export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
-export type GetCategoriesQueryResult = Apollo.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
-export const RemovePostCommentDocument = gql`
-    mutation RemovePostComment($id: ID!) {
-  removePostComment(id: $id)
-}
-    `;
-export type RemovePostCommentMutationFn = Apollo.MutationFunction<RemovePostCommentMutation, RemovePostCommentMutationVariables>;
-
-/**
- * __useRemovePostCommentMutation__
- *
- * To run a mutation, you first call `useRemovePostCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemovePostCommentMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [removePostCommentMutation, { data, loading, error }] = useRemovePostCommentMutation({
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const GetUserDocument = gql`
+    query GetUser($id: ID!) {
+  user(id: $id) {
+    ...UserProfileLayout_user
+    ...UserSettings_user
+    ...UserSocialAccounts_user
+  }
+}
+    ${UserProfileLayout_UserFragmentDoc}
+${UserSettings_UserFragmentDoc}
+${UserSocialAccounts_UserFragmentDoc}`;
+
+/**
+ * __useGetUserQuery__
+ *
+ * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useRemovePostCommentMutation(baseOptions?: Apollo.MutationHookOptions<RemovePostCommentMutation, RemovePostCommentMutationVariables>) {
-        return Apollo.useMutation<RemovePostCommentMutation, RemovePostCommentMutationVariables>(RemovePostCommentDocument, baseOptions);
+export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
       }
-export type RemovePostCommentMutationHookResult = ReturnType<typeof useRemovePostCommentMutation>;
-export type RemovePostCommentMutationResult = Apollo.MutationResult<RemovePostCommentMutation>;
-export type RemovePostCommentMutationOptions = Apollo.BaseMutationOptions<RemovePostCommentMutation, RemovePostCommentMutationVariables>;
+export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, options);
+        }
+export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
+export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
+export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export const LinkViewerSocialAccountDocument = gql`
+    mutation LinkViewerSocialAccount($socialAccountType: SocialAccountType!, $token: String!) {
+  linkViewerSocialAccount(socialAccountType: $socialAccountType, token: $token) {
+    ...UserSocialAccountLinker_user
+  }
+}
+    ${UserSocialAccountLinker_UserFragmentDoc}`;
+export type LinkViewerSocialAccountMutationFn = Apollo.MutationFunction<LinkViewerSocialAccountMutation, LinkViewerSocialAccountMutationVariables>;
+
+/**
+ * __useLinkViewerSocialAccountMutation__
+ *
+ * To run a mutation, you first call `useLinkViewerSocialAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLinkViewerSocialAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [linkViewerSocialAccountMutation, { data, loading, error }] = useLinkViewerSocialAccountMutation({
+ *   variables: {
+ *      socialAccountType: // value for 'socialAccountType'
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useLinkViewerSocialAccountMutation(baseOptions?: Apollo.MutationHookOptions<LinkViewerSocialAccountMutation, LinkViewerSocialAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LinkViewerSocialAccountMutation, LinkViewerSocialAccountMutationVariables>(LinkViewerSocialAccountDocument, options);
+      }
+export type LinkViewerSocialAccountMutationHookResult = ReturnType<typeof useLinkViewerSocialAccountMutation>;
+export type LinkViewerSocialAccountMutationResult = Apollo.MutationResult<LinkViewerSocialAccountMutation>;
+export type LinkViewerSocialAccountMutationOptions = Apollo.BaseMutationOptions<LinkViewerSocialAccountMutation, LinkViewerSocialAccountMutationVariables>;
+export const UnlinkViewerSocialAccountDocument = gql`
+    mutation UnlinkViewerSocialAccount($socialAccountType: SocialAccountType!) {
+  unlinkViewerSocialAccount(socialAccountType: $socialAccountType) {
+    ...UserSocialAccountLinker_user
+  }
+}
+    ${UserSocialAccountLinker_UserFragmentDoc}`;
+export type UnlinkViewerSocialAccountMutationFn = Apollo.MutationFunction<UnlinkViewerSocialAccountMutation, UnlinkViewerSocialAccountMutationVariables>;
+
+/**
+ * __useUnlinkViewerSocialAccountMutation__
+ *
+ * To run a mutation, you first call `useUnlinkViewerSocialAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnlinkViewerSocialAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unlinkViewerSocialAccountMutation, { data, loading, error }] = useUnlinkViewerSocialAccountMutation({
+ *   variables: {
+ *      socialAccountType: // value for 'socialAccountType'
+ *   },
+ * });
+ */
+export function useUnlinkViewerSocialAccountMutation(baseOptions?: Apollo.MutationHookOptions<UnlinkViewerSocialAccountMutation, UnlinkViewerSocialAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnlinkViewerSocialAccountMutation, UnlinkViewerSocialAccountMutationVariables>(UnlinkViewerSocialAccountDocument, options);
+      }
+export type UnlinkViewerSocialAccountMutationHookResult = ReturnType<typeof useUnlinkViewerSocialAccountMutation>;
+export type UnlinkViewerSocialAccountMutationResult = Apollo.MutationResult<UnlinkViewerSocialAccountMutation>;
+export type UnlinkViewerSocialAccountMutationOptions = Apollo.BaseMutationOptions<UnlinkViewerSocialAccountMutation, UnlinkViewerSocialAccountMutationVariables>;
 export const GetPostDocument = gql`
     query GetPost($id: ID!, $commentsAfter: Cursor) {
   post(id: $id) {
@@ -1110,10 +1272,12 @@ export const GetPostDocument = gql`
  * });
  */
 export function useGetPostQuery(baseOptions: Apollo.QueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
-        return Apollo.useQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
       }
 export function useGetPostLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
-          return Apollo.useLazyQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, options);
         }
 export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
 export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
@@ -1146,7 +1310,8 @@ export type AddPostCommentMutationFn = Apollo.MutationFunction<AddPostCommentMut
  * });
  */
 export function useAddPostCommentMutation(baseOptions?: Apollo.MutationHookOptions<AddPostCommentMutation, AddPostCommentMutationVariables>) {
-        return Apollo.useMutation<AddPostCommentMutation, AddPostCommentMutationVariables>(AddPostCommentDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddPostCommentMutation, AddPostCommentMutationVariables>(AddPostCommentDocument, options);
       }
 export type AddPostCommentMutationHookResult = ReturnType<typeof useAddPostCommentMutation>;
 export type AddPostCommentMutationResult = Apollo.MutationResult<AddPostCommentMutation>;
@@ -1156,7 +1321,7 @@ export const GetCategoryWithPostsDocument = gql`
   category(slug: $slug) {
     id
     name
-    posts(first: 10, after: $after) @connection(key: "categoryPosts") {
+    posts(first: 10, after: $after) {
       ...PostList_postConnection
     }
   }
@@ -1181,10 +1346,12 @@ export const GetCategoryWithPostsDocument = gql`
  * });
  */
 export function useGetCategoryWithPostsQuery(baseOptions: Apollo.QueryHookOptions<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>) {
-        return Apollo.useQuery<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>(GetCategoryWithPostsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>(GetCategoryWithPostsDocument, options);
       }
 export function useGetCategoryWithPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>) {
-          return Apollo.useLazyQuery<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>(GetCategoryWithPostsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCategoryWithPostsQuery, GetCategoryWithPostsQueryVariables>(GetCategoryWithPostsDocument, options);
         }
 export type GetCategoryWithPostsQueryHookResult = ReturnType<typeof useGetCategoryWithPostsQuery>;
 export type GetCategoryWithPostsLazyQueryHookResult = ReturnType<typeof useGetCategoryWithPostsLazyQuery>;
@@ -1192,13 +1359,13 @@ export type GetCategoryWithPostsQueryResult = Apollo.QueryResult<GetCategoryWith
 export const GetUserWithPostsDocument = gql`
     query GetUserWithPosts($id: ID!, $after: Cursor) {
   user(id: $id) {
-    ...UserLayout_user
-    posts(first: 10, after: $after) @connection(key: "userPosts") {
+    ...UserProfileLayout_user
+    posts(first: 10, after: $after) {
       ...PostList_postConnection
     }
   }
 }
-    ${UserLayout_UserFragmentDoc}
+    ${UserProfileLayout_UserFragmentDoc}
 ${PostList_PostConnectionFragmentDoc}`;
 
 /**
@@ -1219,10 +1386,12 @@ ${PostList_PostConnectionFragmentDoc}`;
  * });
  */
 export function useGetUserWithPostsQuery(baseOptions: Apollo.QueryHookOptions<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>) {
-        return Apollo.useQuery<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(GetUserWithPostsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(GetUserWithPostsDocument, options);
       }
 export function useGetUserWithPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>) {
-          return Apollo.useLazyQuery<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(GetUserWithPostsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(GetUserWithPostsDocument, options);
         }
 export type GetUserWithPostsQueryHookResult = ReturnType<typeof useGetUserWithPostsQuery>;
 export type GetUserWithPostsLazyQueryHookResult = ReturnType<typeof useGetUserWithPostsLazyQuery>;
@@ -1230,8 +1399,8 @@ export type GetUserWithPostsQueryResult = Apollo.QueryResult<GetUserWithPostsQue
 export const GetUserWithSessionsDocument = gql`
     query GetUserWithSessions($id: ID!, $after: Cursor) {
   user(id: $id) {
-    ...UserLayout_user
-    sessions(first: 10, after: $after) @connection(key: "userSessions") {
+    ...UserProfileLayout_user
+    sessions(first: 10, after: $after) {
       pageInfo {
         hasNextPage
         endCursor
@@ -1249,7 +1418,7 @@ export const GetUserWithSessionsDocument = gql`
     }
   }
 }
-    ${UserLayout_UserFragmentDoc}`;
+    ${UserProfileLayout_UserFragmentDoc}`;
 
 /**
  * __useGetUserWithSessionsQuery__
@@ -1269,10 +1438,12 @@ export const GetUserWithSessionsDocument = gql`
  * });
  */
 export function useGetUserWithSessionsQuery(baseOptions: Apollo.QueryHookOptions<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>) {
-        return Apollo.useQuery<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>(GetUserWithSessionsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>(GetUserWithSessionsDocument, options);
       }
 export function useGetUserWithSessionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>) {
-          return Apollo.useLazyQuery<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>(GetUserWithSessionsDocument, baseOptions);
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserWithSessionsQuery, GetUserWithSessionsQueryVariables>(GetUserWithSessionsDocument, options);
         }
 export type GetUserWithSessionsQueryHookResult = ReturnType<typeof useGetUserWithSessionsQuery>;
 export type GetUserWithSessionsLazyQueryHookResult = ReturnType<typeof useGetUserWithSessionsLazyQuery>;
@@ -1301,143 +1472,9 @@ export type DeleteViewerSessionsMutationFn = Apollo.MutationFunction<DeleteViewe
  * });
  */
 export function useDeleteViewerSessionsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteViewerSessionsMutation, DeleteViewerSessionsMutationVariables>) {
-        return Apollo.useMutation<DeleteViewerSessionsMutation, DeleteViewerSessionsMutationVariables>(DeleteViewerSessionsDocument, baseOptions);
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteViewerSessionsMutation, DeleteViewerSessionsMutationVariables>(DeleteViewerSessionsDocument, options);
       }
 export type DeleteViewerSessionsMutationHookResult = ReturnType<typeof useDeleteViewerSessionsMutation>;
 export type DeleteViewerSessionsMutationResult = Apollo.MutationResult<DeleteViewerSessionsMutation>;
 export type DeleteViewerSessionsMutationOptions = Apollo.BaseMutationOptions<DeleteViewerSessionsMutation, DeleteViewerSessionsMutationVariables>;
-export const LinkViewerSocialAccountDocument = gql`
-    mutation LinkViewerSocialAccount($socialAccountType: SocialAccountType!, $token: String!) {
-  linkViewerSocialAccount(socialAccountType: $socialAccountType, token: $token) {
-    ...UserSocialAccountLinker_user
-  }
-}
-    ${UserSocialAccountLinker_UserFragmentDoc}`;
-export type LinkViewerSocialAccountMutationFn = Apollo.MutationFunction<LinkViewerSocialAccountMutation, LinkViewerSocialAccountMutationVariables>;
-
-/**
- * __useLinkViewerSocialAccountMutation__
- *
- * To run a mutation, you first call `useLinkViewerSocialAccountMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLinkViewerSocialAccountMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [linkViewerSocialAccountMutation, { data, loading, error }] = useLinkViewerSocialAccountMutation({
- *   variables: {
- *      socialAccountType: // value for 'socialAccountType'
- *      token: // value for 'token'
- *   },
- * });
- */
-export function useLinkViewerSocialAccountMutation(baseOptions?: Apollo.MutationHookOptions<LinkViewerSocialAccountMutation, LinkViewerSocialAccountMutationVariables>) {
-        return Apollo.useMutation<LinkViewerSocialAccountMutation, LinkViewerSocialAccountMutationVariables>(LinkViewerSocialAccountDocument, baseOptions);
-      }
-export type LinkViewerSocialAccountMutationHookResult = ReturnType<typeof useLinkViewerSocialAccountMutation>;
-export type LinkViewerSocialAccountMutationResult = Apollo.MutationResult<LinkViewerSocialAccountMutation>;
-export type LinkViewerSocialAccountMutationOptions = Apollo.BaseMutationOptions<LinkViewerSocialAccountMutation, LinkViewerSocialAccountMutationVariables>;
-export const UnlinkViewerSocialAccountDocument = gql`
-    mutation UnlinkViewerSocialAccount($socialAccountType: SocialAccountType!) {
-  unlinkViewerSocialAccount(socialAccountType: $socialAccountType) {
-    ...UserSocialAccountLinker_user
-  }
-}
-    ${UserSocialAccountLinker_UserFragmentDoc}`;
-export type UnlinkViewerSocialAccountMutationFn = Apollo.MutationFunction<UnlinkViewerSocialAccountMutation, UnlinkViewerSocialAccountMutationVariables>;
-
-/**
- * __useUnlinkViewerSocialAccountMutation__
- *
- * To run a mutation, you first call `useUnlinkViewerSocialAccountMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnlinkViewerSocialAccountMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [unlinkViewerSocialAccountMutation, { data, loading, error }] = useUnlinkViewerSocialAccountMutation({
- *   variables: {
- *      socialAccountType: // value for 'socialAccountType'
- *   },
- * });
- */
-export function useUnlinkViewerSocialAccountMutation(baseOptions?: Apollo.MutationHookOptions<UnlinkViewerSocialAccountMutation, UnlinkViewerSocialAccountMutationVariables>) {
-        return Apollo.useMutation<UnlinkViewerSocialAccountMutation, UnlinkViewerSocialAccountMutationVariables>(UnlinkViewerSocialAccountDocument, baseOptions);
-      }
-export type UnlinkViewerSocialAccountMutationHookResult = ReturnType<typeof useUnlinkViewerSocialAccountMutation>;
-export type UnlinkViewerSocialAccountMutationResult = Apollo.MutationResult<UnlinkViewerSocialAccountMutation>;
-export type UnlinkViewerSocialAccountMutationOptions = Apollo.BaseMutationOptions<UnlinkViewerSocialAccountMutation, UnlinkViewerSocialAccountMutationVariables>;
-export const UpdateUserDocument = gql`
-    mutation UpdateUser($id: ID!, $input: UserInput!) {
-  updateUser(id: $id, input: $input) {
-    ...UserSettings_user
-  }
-}
-    ${UserSettings_UserFragmentDoc}`;
-export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
-
-/**
- * __useUpdateUserMutation__
- *
- * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
- *   variables: {
- *      id: // value for 'id'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
-        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
-      }
-export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
-export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
-export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
-export const GetUserDocument = gql`
-    query GetUser($id: ID!) {
-  user(id: $id) {
-    ...UserLayout_user
-    ...UserSettings_user
-    ...UserSocialAccounts_user
-  }
-}
-    ${UserLayout_UserFragmentDoc}
-${UserSettings_UserFragmentDoc}
-${UserSocialAccounts_UserFragmentDoc}`;
-
-/**
- * __useGetUserQuery__
- *
- * To run a query within a React component, call `useGetUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetUserQuery(baseOptions: Apollo.QueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-        return Apollo.useQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
-      }
-export function useGetUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserQuery, GetUserQueryVariables>) {
-          return Apollo.useLazyQuery<GetUserQuery, GetUserQueryVariables>(GetUserDocument, baseOptions);
-        }
-export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
-export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
-export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;

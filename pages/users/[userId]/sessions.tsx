@@ -1,3 +1,3 @@
-import UserSessionsView from '@src/views/User/views/UserSessions';
+import UserSessionsView from '@src/views/UserSessions';
 
 export default UserSessionsView;

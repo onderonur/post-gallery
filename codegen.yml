@@ -47,6 +47,6 @@ generates:
       withComponent: false
       # for @apollo/client 3
       reactApolloVersion: 3
-  ./graphql.schema.json:
+  src/generated//graphql.schema.json:
     plugins:
       - 'introspection'

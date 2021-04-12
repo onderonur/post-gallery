@@ -2,7 +2,7 @@ module.exports = {
   client: {
     service: {
       name: 'post-gallery',
-      localSchemaFile: 'graphql.schema.json',
+      localSchemaFile: 'src/generated/graphql.schema.json',
     },
     excludes: ['**/generated/**', '**/gql/**'],
   },

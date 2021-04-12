@@ -1,3 +1,3 @@
-import PostsView from '@src/views/Posts';
+import PostsView from '@src/views/PostsView';
 
 export default PostsView;
