@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import BaseButton from '@src/modules/shared/BaseButton';
 import { useViewer } from '../auth/ViewerContext';
 import { Box } from '@material-ui/core';
-import CreatePostDialog from './CreatePostDialog';
+import CreatePostDialog from '../post/CreatePostDialog';
 import UserMenu from './UserMenu';
 import { urls } from '@src/modules/routing/RoutingUtils';
 import NextLink from '@src/modules/routing/NextLink';
