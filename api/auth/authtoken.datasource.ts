@@ -1,7 +1,7 @@
 import BaseDataSource from '../shared/base.datasource';
-import { AuthTokenGraphConnectionArgs } from '../db/authToken';
+import { AuthTokenGraphConnectionArgs } from './authtoken.repository';
 
-export class AuthAPI extends BaseDataSource {
+export class AuthTokenAPI extends BaseDataSource {
   async deleteViewerAuthTokensExceptCurrent() {
     const { db } = this.context;
     const isDeleted = await db.authToken.deleteAllExceptCurrent();

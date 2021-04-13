@@ -113,6 +113,33 @@ export type MutationUpdateUserArgs = {
   input: UserInput;
 };
 
+export enum SocialAccountType {
+  Facebook = 'FACEBOOK',
+  Google = 'GOOGLE'
+}
+
+export type Session = {
+  __typename?: 'Session';
+  id: Scalars['ID'];
+  browser?: Maybe<Scalars['String']>;
+  platform?: Maybe<Scalars['String']>;
+  os?: Maybe<Scalars['String']>;
+  createdAt: Scalars['Date'];
+  isCurrent: Scalars['Boolean'];
+};
+
+export type SessionEdge = {
+  __typename?: 'SessionEdge';
+  node: Session;
+  cursor: Scalars['Cursor'];
+};
+
+export type SessionConnection = Connection & {
+  __typename?: 'SessionConnection';
+  pageInfo: PageInfo;
+  edges: Array<SessionEdge>;
+};
+
 export type Category = {
   __typename?: 'Category';
   id: Scalars['ID'];
@@ -154,6 +181,21 @@ export type CommentConnection = Connection & {
   edges: Array<CommentEdge>;
 };
 
+export type GraphImage = {
+  __typename?: 'GraphImage';
+  height: Scalars['NonNegativeInt'];
+  url: Scalars['String'];
+  width: Scalars['NonNegativeInt'];
+};
+
+export type GraphMedia = {
+  __typename?: 'GraphMedia';
+  id: Scalars['ID'];
+  smallImage: GraphImage;
+  standardImage: GraphImage;
+  thumbnail: GraphImage;
+};
+
 export type Post = Reactable & {
   __typename?: 'Post';
   id: Scalars['ID'];
@@ -171,21 +213,6 @@ export type Post = Reactable & {
 export type PostCommentsArgs = {
   first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
-};
-
-export type GraphImage = {
-  __typename?: 'GraphImage';
-  width: Scalars['NonNegativeInt'];
-  height: Scalars['NonNegativeInt'];
-  url: Scalars['String'];
-};
-
-export type GraphMedia = {
-  __typename?: 'GraphMedia';
-  id: Scalars['ID'];
-  thumbnail: GraphImage;
-  smallImage: GraphImage;
-  standardImage: GraphImage;
 };
 
 export type PostEdge = {
@@ -249,11 +276,6 @@ export type PageInfo = {
   hasNextPage: Scalars['Boolean'];
 };
 
-export enum SocialAccountType {
-  Facebook = 'FACEBOOK',
-  Google = 'GOOGLE'
-}
-
 export type UserInput = {
   displayName: Scalars['String'];
   email: Scalars['EmailAddress'];
@@ -282,28 +304,6 @@ export type UserPostsArgs = {
 export type UserSessionsArgs = {
   first: Scalars['NonNegativeInt'];
   after?: Maybe<Scalars['Cursor']>;
-};
-
-export type Session = {
-  __typename?: 'Session';
-  id: Scalars['ID'];
-  browser?: Maybe<Scalars['String']>;
-  platform?: Maybe<Scalars['String']>;
-  os?: Maybe<Scalars['String']>;
-  createdAt: Scalars['Date'];
-  isCurrent: Scalars['Boolean'];
-};
-
-export type SessionEdge = {
-  __typename?: 'SessionEdge';
-  node: Session;
-  cursor: Scalars['Cursor'];
-};
-
-export type SessionConnection = Connection & {
-  __typename?: 'SessionConnection';
-  pageInfo: PageInfo;
-  edges: Array<SessionEdge>;
 };
 
 export type GetViewerQueryVariables = Exact<{ [key: string]: never; }>;

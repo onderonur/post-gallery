@@ -1,6 +1,6 @@
 import { ID } from '../shared/shared.types';
 import BaseDataSource from '../shared/base.datasource';
-import { PostGraphConnectionArgs } from '@api/db/post';
+import { PostGraphConnectionArgs } from '@api/posts/post.repository';
 import { Maybe, Omit, PostInput } from '@api/generated/graphql';
 import { ApolloError } from 'apollo-server-micro';
 

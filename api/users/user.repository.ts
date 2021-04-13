@@ -1,9 +1,9 @@
 import { SocialAccountType } from '@api/generated/graphql';
 import { ID } from '@api/shared/shared.types';
 import { ApolloError, AuthenticationError } from 'apollo-server-micro';
-import BaseRepository from './utils/BaseRepository';
-import { createLoader } from './utils/createLoader';
-import { UserModel } from './knex';
+import BaseRepository from '../db/utils/BaseRepository';
+import { createLoader } from '../db/utils/createLoader';
+import { UserModel } from '../db/knex';
 
 const createUserByIdLoader = createLoader<ID, UserModel>(
   (userIds) => UserModel.query().findByIds(userIds as ID[]),

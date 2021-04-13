@@ -23,19 +23,6 @@ const postSchema = gql`
     comments(first: NonNegativeInt!, after: Cursor): CommentConnection!
   }
 
-  type GraphImage {
-    width: NonNegativeInt!
-    height: NonNegativeInt!
-    url: String!
-  }
-
-  type GraphMedia {
-    id: ID!
-    thumbnail: GraphImage!
-    smallImage: GraphImage!
-    standardImage: GraphImage!
-  }
-
   type PostEdge {
     node: Post!
     cursor: Cursor!

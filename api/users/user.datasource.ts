@@ -5,7 +5,7 @@ import {
   UserInput,
 } from '../generated/graphql';
 import { ID } from '@api/shared/shared.types';
-import { verifySocialAccountToken } from '@api/auth/auth.utils';
+import { verifySocialAccountToken } from '@api/auth/authtoken.utils';
 
 export class UserAPI extends BaseDataSource {
   async findOneUserById(id: ID) {

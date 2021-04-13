@@ -1,4 +1,4 @@
-import getDb, { DB } from '.';
+import getDb, { DB } from './get-db';
 import { NextApiMiddleware } from '@api/shared/shared.types';
 
 declare module 'next' {

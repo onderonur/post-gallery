@@ -7,7 +7,7 @@ import commentResolvers from '../comments/comment.resolver';
 import reactionResolvers from '../reactions/reaction.resolver';
 import userResolvers from '../users/user.resolver';
 import categoryResolvers from '../categories/category.resolver';
-import authResolvers from '@api/auth/auth.resolver';
+import authResolvers from '@api/auth/authtoken.resolver';
 
 const resolvers: Resolvers = merge(
   {},

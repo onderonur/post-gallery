@@ -5,12 +5,12 @@ import {
 } from 'apollo-server-micro';
 import { ID } from '@api/shared/shared.types';
 import { GraphConnectionArgs } from '../shared/shared.types';
-import BaseRepository from './utils/BaseRepository';
-import { createLoader } from './utils/createLoader';
+import BaseRepository from '../db/utils/BaseRepository';
+import { createLoader } from '../db/utils/createLoader';
 import { PostInput, Maybe, Omit } from '@api/generated/graphql';
-import { MediaModel, PostModel, ReactableType } from './knex';
-import { findGraphConnection } from './utils/findGraphConnection';
-import { generateId } from './utils/generateId';
+import { MediaModel, PostModel, ReactableType } from '../db/knex';
+import { findGraphConnection } from '../db/utils/findGraphConnection';
+import { generateId } from '../db/utils/generateId';
 
 const createPostByIdLoader = createLoader<ID, PostModel>(
   (postIds) => PostModel.query().findByIds(postIds as ID[]),

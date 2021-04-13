@@ -5,7 +5,7 @@ import {
 } from '@api/auth/authcookie.utils';
 import { SocialAccountType } from '@api/generated/graphql';
 import { BadRequestError } from '@api/error-handling/http-errors';
-import { verifySocialAccountToken } from '@api/auth/auth.utils';
+import { verifySocialAccountToken } from '@api/auth/authtoken.utils';
 import { goTry } from 'go-try';
 
 type LoginResponse = {

@@ -9,7 +9,7 @@ const userResolvers: Resolvers = {
     updateUser: (parent, { id, input }, { dataSources }) =>
       dataSources.userAPI.updateUser(id, input),
     deleteViewerSessions: (parent, args, { dataSources }) =>
-      dataSources.authAPI.deleteViewerAuthTokensExceptCurrent(),
+      dataSources.authTokenAPI.deleteViewerAuthTokensExceptCurrent(),
     linkViewerSocialAccount: (parent, args, { dataSources }) =>
       dataSources.userAPI.linkViewerSocialAccount(args),
     unlinkViewerSocialAccount: (parent, args, { dataSources }) =>
@@ -21,7 +21,7 @@ const userResolvers: Resolvers = {
     posts: ({ id }, args, { dataSources }) =>
       dataSources.postAPI.findPostConnection({ ...args, authorId: id }),
     sessions: async ({ id }, args, { dataSources }) =>
-      dataSources.authAPI.findAuthTokenConnectionByUserId({
+      dataSources.authTokenAPI.findAuthTokenConnectionByUserId({
         ...args,
         userId: id,
       }),

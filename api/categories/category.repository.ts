@@ -1,6 +1,6 @@
-import BaseRepository from './utils/BaseRepository';
-import { createLoader } from './utils/createLoader';
-import { CategoryModel } from './knex';
+import BaseRepository from '../db/utils/BaseRepository';
+import { createLoader } from '../db/utils/createLoader';
+import { CategoryModel } from '../db/knex';
 
 const createCategoryBySlugLoader = createLoader<string, CategoryModel>(
   (slugs) => CategoryModel.query().whereIn('slug', slugs as string[]),

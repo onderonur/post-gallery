@@ -3,7 +3,7 @@ import { Resolvers } from '../generated/graphql';
 const authResolvers: Resolvers = {
   Mutation: {
     deleteViewerSessions: (parent, args, { dataSources }) =>
-      dataSources.authAPI.deleteViewerAuthTokensExceptCurrent(),
+      dataSources.authTokenAPI.deleteViewerAuthTokensExceptCurrent(),
   },
 };
 

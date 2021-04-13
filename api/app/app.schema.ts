@@ -6,7 +6,8 @@ import commentSchema from '../comments/comment.schema';
 import reactionSchema from '../reactions/reaction.schema';
 import userSchema from '../users/user.schema';
 import categorySchema from '@api/categories/category.schema';
-import authSchema from '@api/auth/auth.schema';
+import authSchema from '@api/auth/authtoken.schema';
+import mediaSchema from '@api/media/media.schema';
 
 const linkSchema = gql`
   type Query {
@@ -23,6 +24,7 @@ const schema = [
   scalarsSchema,
   connectionSchema,
   categorySchema,
+  mediaSchema,
   postSchema,
   commentSchema,
   reactionSchema,
