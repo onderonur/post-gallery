@@ -2,7 +2,7 @@ import { SocialAccountType } from '@api/generated/graphql';
 import { ID } from '@api/shared/shared.types';
 import { ApolloError, AuthenticationError } from 'apollo-server-micro';
 import BaseRepository from '../shared/base.repository';
-import { createLoader } from '../db/utils/createLoader';
+import { createLoader } from '@api/dataloader/dataloader.utils';
 import { UserModel } from './user.model';
 
 const createUserByIdLoader = createLoader<ID, UserModel>(

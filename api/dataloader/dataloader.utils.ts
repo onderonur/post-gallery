@@ -1,7 +1,10 @@
-import { DataLoaderCacheKey } from './types';
 import DataLoader from 'dataloader';
-import { getDataLoaderCacheKey } from './getDataLoaderCacheKey';
+import hash from 'object-hash';
 import { Maybe } from '@api/generated/graphql';
+import { DataLoaderCacheKey } from './dataloader.types';
+
+const getDataLoaderCacheKey = <Key>(key: Key) =>
+  typeof key === 'object' ? hash(key) : `${key}`;
 
 export function createLoader<Key, Data, Result = Data>(
   batchFn: (keys: ReadonlyArray<Key>) => Promise<Data[]>,

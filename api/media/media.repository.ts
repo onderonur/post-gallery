@@ -1,7 +1,7 @@
 import { ID } from '@api/shared/shared.types';
 import { Omit, GraphMedia } from '../generated/graphql';
 import BaseRepository from '../shared/base.repository';
-import { createLoader } from '../db/utils/createLoader';
+import { createLoader } from '@api/dataloader/dataloader.utils';
 import { ApolloError, AuthenticationError } from 'apollo-server-micro';
 import { omit } from 'lodash';
 import { generateId } from '../db/db.utils';

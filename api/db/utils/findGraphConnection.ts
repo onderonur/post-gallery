@@ -1,3 +1,4 @@
+// TODO: Bu dosyayı da uygun bi yere taşımak lazım
 import { Maybe } from '@api/generated/graphql';
 import { ObjectionModelToPojo } from '@api/shared/shared.types';
 import { getLastOfArray } from '@api/shared/shared.utils';

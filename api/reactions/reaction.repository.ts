@@ -3,7 +3,7 @@ import { ID } from '@api/shared/shared.types';
 import { ReactionType } from '@api/generated/graphql';
 import { ReactionsCount } from '../generated/graphql';
 import BaseRepository from '../shared/base.repository';
-import { createLoader } from '../db/utils/createLoader';
+import { createLoader } from '@api/dataloader/dataloader.utils';
 import { ReactionModel } from './reaction.model';
 
 export type ReactionsCountByReactableId = ReactionsCount & {

@@ -1,5 +1,5 @@
 import BaseRepository from '../shared/base.repository';
-import { createLoader } from '../db/utils/createLoader';
+import { createLoader } from '@api/dataloader/dataloader.utils';
 import { CategoryModel } from './category.model';
 
 const createCategoryBySlugLoader = createLoader<string, CategoryModel>(

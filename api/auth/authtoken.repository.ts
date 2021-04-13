@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { GraphConnection, ID } from '@api/shared/shared.types';
 import { GraphConnectionArgs, DecodedJwt } from '../shared/shared.types';
 import BaseRepository from '../shared/base.repository';
-import { createLoader } from '../db/utils/createLoader';
+import { createLoader } from '@api/dataloader/dataloader.utils';
 import { ForbiddenError, AuthenticationError } from 'apollo-server-micro';
 import { Maybe, Session } from '@api/generated/graphql';
 import { findGraphConnection } from '../db/utils/findGraphConnection';

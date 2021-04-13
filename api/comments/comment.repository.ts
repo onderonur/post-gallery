@@ -3,7 +3,7 @@ import { AuthenticationError, ApolloError } from 'apollo-server-micro';
 import { ID } from '@api/shared/shared.types';
 import { GraphConnectionArgs } from '../shared/shared.types';
 import BaseRepository from '../shared/base.repository';
-import { createLoader } from '../db/utils/createLoader';
+import { createLoader } from '@api/dataloader/dataloader.utils';
 import { findGraphConnection } from '../db/utils/findGraphConnection';
 import { generateId } from '../db/db.utils';
 import { CommentModel } from './comment.model';
