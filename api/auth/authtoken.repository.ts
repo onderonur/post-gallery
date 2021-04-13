@@ -7,7 +7,7 @@ import BaseRepository from '../shared/base.repository';
 import { createLoader } from '@api/dataloader/dataloader.utils';
 import { ForbiddenError, AuthenticationError } from 'apollo-server-micro';
 import { Maybe, Session } from '@api/generated/graphql';
-import { findGraphConnection } from '../db/utils/findGraphConnection';
+import { findGraphConnection } from '@api/db/db.utils';
 import { goTrySync } from 'go-try';
 import { AuthTokenModel } from './authtoken.model';
 
