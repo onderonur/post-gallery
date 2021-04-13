@@ -1,10 +1,10 @@
-import PostAPI from '../posts/post.datasource';
-import MediaAPI from '../media/media.datasource';
-import CommentAPI from '../comments/comment.datasource';
-import { UserAPI } from '../users/user.datasource';
-import ReactionAPI from '../reactions/reaction.datasource';
-import { AuthTokenAPI } from '../auth/authtoken.datasource';
-import CategoryAPI from '../categories/category.datasource';
+import PostAPI from '@api/posts/post.datasource';
+import MediaAPI from '@api/media/media.datasource';
+import CommentAPI from '@api/comments/comment.datasource';
+import { UserAPI } from '@api/users/user.datasource';
+import ReactionAPI from '@api/reactions/reaction.datasource';
+import { AuthTokenAPI } from '@api/auth/authtoken.datasource';
+import CategoryAPI from '@api/categories/category.datasource';
 
 const dataSources = () => ({
   postAPI: new PostAPI(),
