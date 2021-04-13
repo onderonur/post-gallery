@@ -1,3 +1,3 @@
-import UserPostsView from '@src/views/User/views/UserPosts';
+import UserPostsView from '@src/views/UserPostsView';
 
 export default UserPostsView;

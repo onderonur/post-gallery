@@ -1,5 +1,5 @@
-import prepareHandler from '@api/middlewares/prepareHandler';
-import apolloServer from '@api/apollo';
+import prepareHandler from '@api/shared/prepare-handler.middleware';
+import apolloServer from '@api/apollo/apollo-server';
 
 // Note about CORS:
 // https://nextjs.org/docs/api-routes/introduction

@@ -1,3 +1,3 @@
-import UserSettingsView from '@src/views/User/views/UserSettings';
+import UserSettingsView from '@src/views/UserSettingsView';
 
 export default UserSettingsView;
