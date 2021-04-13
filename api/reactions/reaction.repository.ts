@@ -2,9 +2,9 @@ import { AuthenticationError } from 'apollo-server-micro';
 import { ID } from '@api/shared/shared.types';
 import { ReactionType } from '@api/generated/graphql';
 import { ReactionsCount } from '../generated/graphql';
-import BaseRepository from '../db/utils/BaseRepository';
+import BaseRepository from '../shared/base.repository';
 import { createLoader } from '../db/utils/createLoader';
-import { ReactionModel } from '../db/knex';
+import { ReactionModel } from './reaction.model';
 
 export type ReactionsCountByReactableId = ReactionsCount & {
   reactableId: ID;

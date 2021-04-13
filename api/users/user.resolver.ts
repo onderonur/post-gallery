@@ -8,12 +8,6 @@ const userResolvers: Resolvers = {
   Mutation: {
     updateUser: (parent, { id, input }, { dataSources }) =>
       dataSources.userAPI.updateUser(id, input),
-    deleteViewerSessions: (parent, args, { dataSources }) =>
-      dataSources.authTokenAPI.deleteViewerAuthTokensExceptCurrent(),
-    linkViewerSocialAccount: (parent, args, { dataSources }) =>
-      dataSources.userAPI.linkViewerSocialAccount(args),
-    unlinkViewerSocialAccount: (parent, args, { dataSources }) =>
-      dataSources.userAPI.unlinkViewerSocialAccount(args),
   },
   User: {
     postsCount: ({ id }, args, { dataSources }) =>

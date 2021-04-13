@@ -4,7 +4,7 @@ import { getLastOfArray } from '@api/shared/shared.utils';
 import { UserInputError } from 'apollo-server-micro';
 import Knex from 'knex';
 import Objection from 'objection';
-import knex from '../knex';
+import { knex } from '../base.model';
 
 const maxConnectionNodeLimit = 100;
 const minConnectionNodeLimit = 0;

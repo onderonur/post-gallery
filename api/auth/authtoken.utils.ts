@@ -1,6 +1,6 @@
-import { UserModel } from '@api/db/knex';
 import { SocialAccountType } from '@api/generated/graphql';
 import { ID } from '@api/shared/shared.types';
+import { UserModel } from '@api/users/user.model';
 import { fetcher } from '@shared/fetcher';
 import { ApolloError } from 'apollo-server-micro';
 import { goTry } from 'go-try';

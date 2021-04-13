@@ -1,8 +1,11 @@
 import { Scalars, Maybe, PageInfo } from '../generated/graphql';
 import { DataSources } from '../app/app.datasource';
-import { CategoryModel, CommentModel, PostModel, UserModel } from '../db/knex';
 import { Model, NonFunctionPropertyNames } from 'objection';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import { UserModel } from '@api/users/user.model';
+import { PostModel } from '@api/posts/post.model';
+import { CategoryModel } from '@api/categories/category.model';
+import { CommentModel } from '@api/comments/comment.model';
 
 export type ID = Scalars['ID'];
 export type Cursor = Scalars['Cursor'];

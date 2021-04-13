@@ -3,13 +3,13 @@ import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { GraphConnection, ID } from '@api/shared/shared.types';
 import { GraphConnectionArgs, DecodedJwt } from '../shared/shared.types';
-import BaseRepository from '../db/utils/BaseRepository';
+import BaseRepository from '../shared/base.repository';
 import { createLoader } from '../db/utils/createLoader';
 import { ForbiddenError, AuthenticationError } from 'apollo-server-micro';
-import { AuthTokenModel } from '../db/knex';
 import { Maybe, Session } from '@api/generated/graphql';
 import { findGraphConnection } from '../db/utils/findGraphConnection';
 import { goTrySync } from 'go-try';
+import { AuthTokenModel } from './authtoken.model';
 
 export type AuthTokenGraphConnectionArgs = GraphConnectionArgs & {
   userId: Maybe<ID>;

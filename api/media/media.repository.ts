@@ -1,11 +1,11 @@
 import { ID } from '@api/shared/shared.types';
 import { Omit, GraphMedia } from '../generated/graphql';
-import BaseRepository from '../db/utils/BaseRepository';
+import BaseRepository from '../shared/base.repository';
 import { createLoader } from '../db/utils/createLoader';
 import { ApolloError, AuthenticationError } from 'apollo-server-micro';
 import { omit } from 'lodash';
-import { MediaModel } from '../db/knex';
-import { generateId } from '../db/utils/generateId';
+import { generateId } from '../db/db.utils';
+import { MediaModel } from './media.model';
 
 const createMediaByIdLoader = createLoader<ID, MediaModel>(
   (ids) => MediaModel.query().findByIds(ids as ID[]),

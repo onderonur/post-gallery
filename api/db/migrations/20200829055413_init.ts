@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { generateId } from '../utils/generateId';
+import { generateId } from '../db.utils';
 
 const createSharedColumns = (knex: Knex, table: Knex.CreateTableBuilder) => {
   table.string('id').primary();

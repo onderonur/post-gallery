@@ -2,8 +2,15 @@ import { gql } from 'apollo-server-micro';
 
 const authSchema = gql`
   extend type Query {
-    user(id: ID!): User
     viewer: User
+  }
+
+  extend type Mutation {
+    linkViewerSocialAccount(
+      socialAccountType: SocialAccountType!
+      token: String!
+    ): User!
+    unlinkViewerSocialAccount(socialAccountType: SocialAccountType!): User!
   }
 
   enum SocialAccountType {
