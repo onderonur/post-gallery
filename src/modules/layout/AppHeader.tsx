@@ -17,7 +17,7 @@ const LoginButton = React.memo(function LoginButton() {
     <BaseButton
       variant="text"
       color="inherit"
-      href={urls.login.href}
+      href={urls.login()}
       component={NextLink}
     >
       Login

@@ -52,7 +52,7 @@ const CreatePostDialog = React.memo(function CreatePostDialog() {
         return;
       }
       close();
-      router.push(urls.post.href, urls.post.as(id));
+      router.push(urls.post(id));
     },
   });
 

@@ -66,15 +66,13 @@ const AppDrawer = React.memo(function AppDrawer() {
           <List subheader={<li />}>
             <ListSubheader>CATEGORIES</ListSubheader>
             {data?.categories.map((category) => {
-              const href = urls.categoryPosts.href;
-              const hrefAs = urls.categoryPosts.as(category.slug);
+              const href = urls.categoryPosts(category.slug);
               return (
                 <ListItem
                   key={category.id}
                   button
                   component={NextLink}
                   href={href}
-                  hrefAs={hrefAs}
                   selected={Boolean(
                     categorySlug && category.slug === categorySlug,
                   )}

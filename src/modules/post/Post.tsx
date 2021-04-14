@@ -85,7 +85,7 @@ const Post: React.FC<PostProps> = ({ post, asLink, showOptions }) => {
     mutation: DELETE_POST,
     variables: { postId: post.id },
     onCompleted: () => {
-      router.push(urls.home.href);
+      router.push(urls.home());
     },
   });
 
@@ -152,15 +152,13 @@ const Post: React.FC<PostProps> = ({ post, asLink, showOptions }) => {
         <Avatar
           src={author?.thumbnailUrl || undefined}
           alt={author?.displayName}
-          href={urls.userProfile.href}
-          hrefAs={urls.userProfile.as(author?.id ?? '')}
+          href={urls.userProfile(author?.id ?? '')}
           component={NextLink}
         />
         <Box marginLeft={1} overflow="hidden">
           <StyledLink
             variant="subtitle2"
-            href={urls.userProfile.href}
-            hrefAs={urls.userProfile.as(author?.id ?? '')}
+            href={urls.userProfile(author?.id ?? '')}
             color="textPrimary"
             noWrap
           >
@@ -172,11 +170,7 @@ const Post: React.FC<PostProps> = ({ post, asLink, showOptions }) => {
         </Box>
       </FlexRow>
       {asLink ? (
-        <StyledLink
-          href={urls.post.href}
-          hrefAs={urls.post.as(post.id)}
-          color="textPrimary"
-        >
+        <StyledLink href={urls.post(post.id)} color="textPrimary">
           <Bold>{postContent}</Bold>
         </StyledLink>
       ) : (

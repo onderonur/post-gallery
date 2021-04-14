@@ -1,36 +1,17 @@
 import { ID } from '@src/types';
 
 export const urls = {
-  home: {
-    href: '/',
-  },
-  login: {
-    href: '/login',
-  },
-  categoryPosts: {
-    href: `/[categorySlug]`,
-    as: (categorySlug: string) => `/${categorySlug}`,
-  },
-  post: {
-    href: '/posts/[postId]',
-    as: (postId: ID) => `/posts/${postId}`,
-  },
-  userProfile: {
-    href: '/users/[userId]',
-    as: (userId: ID) => `/users/${userId}`,
-  },
-  userProfileSettings: {
-    href: '/users/[userId]/settings',
-    as: (userId: ID) => `/users/${userId}/settings`,
-  },
-  userProfileSessions: {
-    href: '/users/[userId]/sessions',
-    as: (userId: ID) => `/users/${userId}/sessions`,
-  },
+  home: () => '/',
+  login: () => '/login',
+  categoryPosts: (categorySlug: string) => `/${categorySlug}`,
+  post: (postId: ID) => `/posts/${postId}`,
+  userProfile: (userId: ID) => `/users/${userId}`,
+  userProfileSettings: (userId: ID) => `/users/${userId}/settings`,
+  userProfileSessions: (userId: ID) => `/users/${userId}/sessions`,
 };
 
 export const redirectToHome = (logoutTimeStamp?: string) => {
-  let href = urls.home.href;
+  let href = urls.home();
   if (logoutTimeStamp) {
     href = `${href}?logout=${logoutTimeStamp}`;
   }

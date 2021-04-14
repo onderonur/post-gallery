@@ -33,7 +33,7 @@ const isMutationOperation = (operation: Operation) => {
 };
 
 const redirectToLogin = () => {
-  window.location.href = urls.login.href;
+  window.location.href = urls.login();
 };
 
 const errorLink = onError(({ graphQLErrors, networkError, operation }) => {

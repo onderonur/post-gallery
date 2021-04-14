@@ -53,5 +53,5 @@ export const usePrivateAction = ({
   if (!isAuthRequired) {
     return action;
   }
-  return requireAuth(action, () => router.push(urls.login.href));
+  return requireAuth(action, () => router.push(urls.login()));
 };

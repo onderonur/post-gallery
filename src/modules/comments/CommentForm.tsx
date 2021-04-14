@@ -21,7 +21,7 @@ interface CommentFormProps {
 const CommentFormFallback = () => {
   return (
     <Typography>
-      Please <BaseLink href={urls.login.href}>log in</BaseLink> to comment this
+      Please <BaseLink href={urls.login()}>log in</BaseLink> to comment this
       post.
     </Typography>
   );

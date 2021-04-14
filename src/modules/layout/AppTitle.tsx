@@ -19,7 +19,7 @@ const AppTitle = React.memo(function AppTitle() {
           <MenuIcon />
         </BaseIconButton>
       )}
-      <BaseLink href={urls.home.href} variant="h6" color="primary">
+      <BaseLink href={urls.home()} variant="h6" color="primary">
         <Bold>{APP_TITLE}</Bold>
       </BaseLink>
     </Stack>

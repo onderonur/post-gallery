@@ -45,33 +45,30 @@ const UserProfileLayout: React.FC<UserProfileLayoutProps> = ({
       <UserProfileHeader user={user} />
       <BasePaper>
         <Tabs
-          value={router.pathname}
+          value={router.asPath}
           indicatorColor="primary"
           textColor="primary"
           aria-label="user profile tabs"
         >
           <Tab
             label={`Posts (${user.postsCount})`}
-            value={urls.userProfile.href}
-            href={urls.userProfile.href}
-            hrefAs={urls.userProfile.as(user.id)}
+            value={urls.userProfile(user.id)}
+            href={urls.userProfile(user.id)}
             component={NextLink}
           />
           {requireOwner(
             <Tab
               label="Settings"
-              value={urls.userProfileSettings.href}
-              href={urls.userProfileSettings.href}
-              hrefAs={urls.userProfileSettings.as(user.id)}
+              value={urls.userProfileSettings(user.id)}
+              href={urls.userProfileSettings(user.id)}
               component={NextLink}
             />,
           )}
           {requireOwner(
             <Tab
               label="Sessions"
-              value={urls.userProfileSessions.href}
-              href={urls.userProfileSessions.href}
-              hrefAs={urls.userProfileSessions.as(user.id)}
+              value={urls.userProfileSessions(user.id)}
+              href={urls.userProfileSessions(user.id)}
               component={NextLink}
             />,
           )}

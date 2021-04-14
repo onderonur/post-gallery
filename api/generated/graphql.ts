@@ -184,17 +184,17 @@ export type CommentConnection = Connection & {
 
 export type GraphImage = {
   __typename?: 'GraphImage';
+  width: Scalars['NonNegativeInt'];
   height: Scalars['NonNegativeInt'];
   url: Scalars['String'];
-  width: Scalars['NonNegativeInt'];
 };
 
 export type GraphMedia = {
   __typename?: 'GraphMedia';
   id: Scalars['ID'];
+  thumbnail: GraphImage;
   smallImage: GraphImage;
   standardImage: GraphImage;
-  thumbnail: GraphImage;
 };
 
 export type Post = Reactable & {
@@ -533,17 +533,17 @@ export type CommentConnectionResolvers<ContextType = GQLContext, ParentType exte
 }>;
 
 export type GraphImageResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['GraphImage'] = ResolversParentTypes['GraphImage']> = ResolversObject<{
+  width?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   height?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  width?: Resolver<ResolversTypes['NonNegativeInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GraphMediaResolvers<ContextType = GQLContext, ParentType extends ResolversParentTypes['GraphMedia'] = ResolversParentTypes['GraphMedia']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  thumbnail?: Resolver<ResolversTypes['GraphImage'], ParentType, ContextType>;
   smallImage?: Resolver<ResolversTypes['GraphImage'], ParentType, ContextType>;
   standardImage?: Resolver<ResolversTypes['GraphImage'], ParentType, ContextType>;
-  thumbnail?: Resolver<ResolversTypes['GraphImage'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

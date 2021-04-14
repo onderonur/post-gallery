@@ -41,10 +41,7 @@ const UserMenu = React.memo(function UserMenu() {
       <BaseMenuList>
         <MenuItem
           onClick={() => {
-            router.push(
-              urls.userProfile.href,
-              urls.userProfile.as(viewer?.id ?? ''),
-            );
+            router.push(urls.userProfile(viewer?.id ?? ''));
           }}
         >
           Profile

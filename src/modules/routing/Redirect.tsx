@@ -4,20 +4,19 @@ import { useRouter } from 'next/router';
 
 interface RedirectProps {
   href: LinkProps['href'];
-  hrefAs?: LinkProps['as'];
   replace?: boolean;
 }
 
-const Redirect: React.FC<RedirectProps> = ({ href, hrefAs, replace }) => {
+const Redirect: React.FC<RedirectProps> = ({ href, replace }) => {
   const router = useRouter();
 
   useEffect(() => {
     if (replace) {
-      router.replace(href, hrefAs);
+      router.replace(href);
     } else {
-      router.push(href, hrefAs);
+      router.push(href);
     }
-  }, [href, hrefAs, replace, router]);
+  }, [href, replace, router]);
 
   return <>{null}</>;
 };

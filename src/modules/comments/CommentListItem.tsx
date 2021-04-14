@@ -123,8 +123,7 @@ const CommentListItem = React.memo<CommentListItemProps>(
           <Avatar
             src={commenter?.thumbnailUrl || undefined}
             alt={commenter?.displayName}
-            href={urls.userProfile.href}
-            hrefAs={urls.userProfile.as(commenter?.id ?? '')}
+            href={urls.userProfile(commenter?.id ?? '')}
             component={NextLink}
           />
         </ListItemAvatar>
@@ -132,8 +131,7 @@ const CommentListItem = React.memo<CommentListItemProps>(
           primary={
             <FlexRow>
               <CommenterName
-                href={urls.userProfile.href}
-                hrefAs={urls.userProfile.as(commenter?.id ?? '')}
+                href={urls.userProfile(commenter?.id ?? '')}
                 color="textPrimary"
                 variant="subtitle2"
                 noWrap={true}

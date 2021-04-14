@@ -7,7 +7,7 @@ export const useCategorySlug = (categoriesData: Maybe<GetCategoriesQuery>) => {
   const { categorySlug } = router.query;
   if (typeof categorySlug === 'string') {
     return categorySlug;
-  } else if (router.pathname === urls.home.href) {
+  } else if (router.pathname === urls.home()) {
     const defaultCategory = categoriesData?.categories[0];
     return defaultCategory?.slug;
   }

@@ -47,12 +47,12 @@ function LoginView() {
   ] = useLazyAsync(loginAndRedirect(SocialAccountType.Facebook));
 
   return requireAuth(
-    <Redirect href={urls.home.href} replace />,
+    <Redirect href={urls.home()} replace />,
     <FullScreenView justifyContent="center">
       <NextSeo title="Login" />
       <StyledContainer maxWidth="xs" component={BasePaper}>
         <Box position="absolute" margin={1} top={0} right={0}>
-          <BaseIconButton onClick={() => router.push(urls.home.href)}>
+          <BaseIconButton onClick={() => router.push(urls.home())}>
             <CloseIcon />
           </BaseIconButton>
         </Box>

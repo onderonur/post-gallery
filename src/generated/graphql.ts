@@ -183,17 +183,17 @@ export type CommentConnection = Connection & {
 
 export type GraphImage = {
   __typename?: 'GraphImage';
+  width: Scalars['NonNegativeInt'];
   height: Scalars['NonNegativeInt'];
   url: Scalars['String'];
-  width: Scalars['NonNegativeInt'];
 };
 
 export type GraphMedia = {
   __typename?: 'GraphMedia';
   id: Scalars['ID'];
+  thumbnail: GraphImage;
   smallImage: GraphImage;
   standardImage: GraphImage;
-  thumbnail: GraphImage;
 };
 
 export type Post = Reactable & {
