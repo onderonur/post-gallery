@@ -34,7 +34,7 @@ declare module 'next' {
 const upload = multer({
   storage,
   limits: {
-    fileSize: convertMbToBytes(process.env.MAX_FILE_SIZE_IN_MB),
+    fileSize: convertMbToBytes(parseInt(process.env.MAX_FILE_SIZE_IN_MB)),
   },
   // https://stackoverflow.com/a/60408823/10876256
   fileFilter: (req, file, cb) => {

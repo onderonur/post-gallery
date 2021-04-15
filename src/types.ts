@@ -32,8 +32,7 @@ declare global {
       DB_PASSWORD: string;
       DB_NAME: string;
       STORAGE_DIR: string;
-      MAX_FILE_SIZE_IN_MB: number;
-      MAX_FILES_COUNT: number;
+      MAX_FILE_SIZE_IN_MB: string;
       AUTH_TOKEN_SECRET: string;
       NEXT_PUBLIC_FACEBOOK_OAUTH_APP_ID: string;
       NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID: string;
