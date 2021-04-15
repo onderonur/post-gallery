@@ -1,4 +1,4 @@
-import { ID } from '@src/types';
+import { ID } from '@src/modules/shared/SharedTypes';
 
 export const urls = {
   home: () => '/',

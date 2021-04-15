@@ -1,6 +1,25 @@
 import { PageInfo, Scalars } from '@src/generated/graphql';
 import { FormikConfig } from 'formik';
 
+// Overriding the default process.env type to have type-safe env variables.
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      NEXT_PUBLIC_BASE_URL: string;
+      DB_HOST: string;
+      DB_USER: string;
+      DB_PASSWORD: string;
+      DB_NAME: string;
+      STORAGE_DIR: string;
+      MAX_FILE_SIZE_IN_MB: string;
+      AUTH_TOKEN_SECRET: string;
+      NEXT_PUBLIC_FACEBOOK_OAUTH_APP_ID: string;
+      NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID: string;
+      GOOGLE_OAUTH_CLIENT_SECRET: string;
+    }
+  }
+}
+
 export type ID = Scalars['ID'];
 export type Cursor = Scalars['Cursor'];
 
@@ -20,25 +39,6 @@ export interface GraphEdge<T> {
 export interface GraphConnection<T> {
   pageInfo?: PageInfo;
   edges?: GraphEdge<T>[];
-}
-
-// Overriding the default process.env type to have type-safe env variables.
-declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      NEXT_PUBLIC_BASE_URL: string;
-      DB_HOST: string;
-      DB_USER: string;
-      DB_PASSWORD: string;
-      DB_NAME: string;
-      STORAGE_DIR: string;
-      MAX_FILE_SIZE_IN_MB: string;
-      AUTH_TOKEN_SECRET: string;
-      NEXT_PUBLIC_FACEBOOK_OAUTH_APP_ID: string;
-      NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID: string;
-      GOOGLE_OAUTH_CLIENT_SECRET: string;
-    }
-  }
 }
 
 export type OnSubmitFn<FormValues> = FormikConfig<FormValues>['onSubmit'];

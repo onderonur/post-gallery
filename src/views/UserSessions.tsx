@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from '@src/modules/shared/SharedUtils';
 import { Bold } from '@src/modules/styling/StylingUtils';
 import { useRouter } from 'next/router';
-import { ID } from '@src/types';
+import { ID } from '@src/modules/shared/SharedTypes';
 import UserProfileLayout, {
   UserProfileLayoutFragments,
 } from '@src/modules/user-profile/UserProfileLayout';

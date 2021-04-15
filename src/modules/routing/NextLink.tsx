@@ -1,7 +1,7 @@
 import React from 'react';
 import Link, { LinkProps } from 'next/link';
 import styled from '@emotion/styled';
-import { Omit } from '@src/types';
+import { Omit } from '@src/modules/shared/SharedTypes';
 
 const Anchor = styled.a`
   text-decoration: none;

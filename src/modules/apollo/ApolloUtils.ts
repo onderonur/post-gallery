@@ -1,4 +1,4 @@
-import { GraphConnection, GraphEdge } from '@src/types';
+import { GraphConnection, GraphEdge } from '@src/modules/shared/SharedTypes';
 import produce, { castDraft } from 'immer';
 
 export const addEdgeToConnection = <

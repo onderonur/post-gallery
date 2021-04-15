@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import { urls } from '@src/modules/routing/RoutingUtils';
 import CategorySelect from '../categories/CategorySelect';
 import Stack from '../shared/Stack';
-import { OnSubmitFn } from '@src/types';
+import { OnSubmitFn } from '@src/modules/shared/SharedTypes';
 import { goTry } from 'go-try';
 
 const CREATE_POST = gql`

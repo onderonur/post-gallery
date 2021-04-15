@@ -6,7 +6,7 @@ import { Container } from '@material-ui/core';
 import PostList, { PostListFragments } from '@src/modules/post/PostList';
 import Loading from '@src/modules/shared/Loading';
 import { useRouter } from 'next/router';
-import { ID, Cursor } from '@src/types';
+import { ID, Cursor } from '@src/modules/shared/SharedTypes';
 import { useGetUserWithPostsQuery } from '@src/generated/graphql';
 import { gql } from '@apollo/client';
 

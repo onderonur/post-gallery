@@ -1,7 +1,7 @@
 import React from 'react';
 import { gql } from '@apollo/client';
 import { useGetUserQuery } from '@src/generated/graphql';
-import { ID } from '@src/types';
+import { ID } from '@src/modules/shared/SharedTypes';
 import { Container, Divider } from '@material-ui/core';
 import UserProfileLayout, {
   UserProfileLayoutFragments,

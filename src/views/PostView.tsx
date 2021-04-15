@@ -19,7 +19,7 @@ import { useViewer } from '@src/modules/auth/ViewerContext';
 import Loading from '@src/modules/shared/Loading';
 import { addEdgeToConnection } from '@src/modules/apollo/ApolloUtils';
 import { useRouter } from 'next/router';
-import { ID } from '@src/types';
+import { ID } from '@src/modules/shared/SharedTypes';
 import PostSeo, { PostSeoFragments } from '../modules/post/PostSeo';
 import { gql } from '@apollo/client';
 import AlertError from '@src/modules/shared/AlertError';

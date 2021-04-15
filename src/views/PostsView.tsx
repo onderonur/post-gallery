@@ -7,7 +7,7 @@ import {
   useGetCategoriesQuery,
   useGetCategoryWithPostsQuery,
 } from '@src/generated/graphql';
-import { Cursor } from '@src/types';
+import { Cursor } from '@src/modules/shared/SharedTypes';
 import { NextSeo } from 'next-seo';
 import styled from '@emotion/styled';
 import { GET_CATEGORIES } from '@src/modules/categories/CategoryQueries';

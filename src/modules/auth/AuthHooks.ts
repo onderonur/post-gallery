@@ -1,6 +1,6 @@
 import { Maybe } from '@src/generated/graphql';
 import { useViewer } from '@src/modules/auth/ViewerContext';
-import { ID } from '@src/types';
+import { ID } from '@src/modules/shared/SharedTypes';
 import { urls } from '@src/modules/routing/RoutingUtils';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';

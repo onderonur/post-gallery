@@ -5,7 +5,7 @@ import Post, { PostFragments } from '@src/modules/post/Post';
 import Loading from '@src/modules/shared/Loading';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import { Divider } from '@material-ui/core';
-import { Cursor } from '@src/types';
+import { Cursor } from '@src/modules/shared/SharedTypes';
 import Stack from '@src/modules/shared/Stack';
 import AlertInfo from '@src/modules/shared/AlertInfo';
 import AlertError from '@src/modules/shared/AlertError';

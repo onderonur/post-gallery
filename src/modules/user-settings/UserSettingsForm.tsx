@@ -8,7 +8,7 @@ import {
   UserSettingsForm_UserFragment,
 } from '@src/generated/graphql';
 import BaseFormActions from '@src/modules/formik/BaseFormActions';
-import { OnSubmitFn } from '@src/types';
+import { OnSubmitFn } from '@src/modules/shared/SharedTypes';
 import * as Yup from 'yup';
 import { Box } from '@material-ui/core';
 import Stack from '@src/modules/shared/Stack';

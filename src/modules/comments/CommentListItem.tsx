@@ -20,7 +20,7 @@ import BaseMenu from '@src/modules/base-menu/BaseMenu';
 import BaseIconButton from '@src/modules/shared/BaseIconButton';
 import { useConfirmDialog } from '@src/modules/confirm-dialog/ConfirmDialog';
 import Loading from '@src/modules/shared/Loading';
-import { ID } from '@src/types';
+import { ID } from '@src/modules/shared/SharedTypes';
 import CommentListItemReactionActions, {
   CommentListItemReactionActionsFragments,
 } from './CommentListItemReactionActions';

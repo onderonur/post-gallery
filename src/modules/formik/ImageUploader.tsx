@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ID } from '@src/types';
+import { ID } from '@src/modules/shared/SharedTypes';
 import {
   Box,
   emphasize,

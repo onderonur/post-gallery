@@ -8,7 +8,7 @@ import BaseLink from '@src/modules/routing/BaseLink';
 import { urls } from '@src/modules/routing/RoutingUtils';
 import { useRequireAuth } from '@src/modules/auth/AuthHooks';
 import { Typography } from '@material-ui/core';
-import { OnSubmitFn } from '@src/types';
+import { OnSubmitFn } from '@src/modules/shared/SharedTypes';
 
 interface CommentFormValues {
   text: string;
