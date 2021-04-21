@@ -9,7 +9,7 @@
     "gql-gen": "graphql-codegen --config codegen.yml",
     "prepare": "husky install",
     "typecheck": "tsc --noEmit",
-    "lint:fix": "eslint --fix --max-warnings 0 --ext .js,.jsx,.ts,.tsx .",
+    "lint:fix": "eslint --fix --max-warnings 0 .",
     "migrate:make": "cross-env TS_NODE_PROJECT=tsconfig.knexcli.json knex migrate:make",
     "migrate:latest": "cross-env TS_NODE_PROJECT=tsconfig.knexcli.json knex migrate:latest",
     "migrate:down": "cross-env TS_NODE_PROJECT=tsconfig.knexcli.json knex migrate:down"
@@ -106,7 +106,7 @@
     "typescript": "^4.2.4"
   },
   "lint-staged": {
-    "(api|pages|shared|src)/*.{js,jsx,ts,tsx}": [
+    "*.{js,jsx,ts,tsx}": [
       "npm run lint:fix"
     ]
   }
