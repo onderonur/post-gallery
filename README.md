@@ -69,8 +69,8 @@ When the migrations end, we can start the application in development mode with:
 
 #### `npm run dev`
 
-Application will start at `http://localhost:3000`.  
-GraphQL Playground is at `http://localhost:3000/api/graphql`.
+Application will start on `http://localhost:3000`.  
+GraphQL Playground is on `http://localhost:3000/api/graphql`.
 
 ### Migrations
 
