@@ -1,3 +1,4 @@
+import { ReactionType } from '@api/generated/graphql';
 import * as Knex from 'knex';
 import { generateId } from '../db.utils';
 
@@ -127,7 +128,7 @@ export async function up(knex: Knex): Promise<void> {
         .onDelete('CASCADE');
       table.unique(['reactableId', 'userId']);
       table
-        .enum('type', ['LIKE', 'DISLIKE'], {
+        .enum('type', [ReactionType.Like, ReactionType.Dislike], {
           enumName: 'ReactionType',
           useNative: true,
         })
